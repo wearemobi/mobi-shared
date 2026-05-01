@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MobiLogo, MobiLogoHero, MobiFooter, MobiSentinelMenu, useMobiAuth, MobiAlert, useMobiClipboard } from '../src';
 import { DocsPage } from './DocsPage';
+import pkg from '../package.json';
 import '../src/styles.css';
 
 type AppView = 'home' | 'docs';
@@ -143,7 +144,7 @@ const App: React.FC = () => {
         </main>
       )}
 
-      <MobiFooter />
+      <MobiFooter appName="M.O.B.I.™ Shared" version={`v${pkg.version}`} />
     </div>
   );
 }
