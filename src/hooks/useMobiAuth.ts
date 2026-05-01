@@ -1,11 +1,27 @@
 import { useState, useCallback } from 'react';
 
+/** Authentication state exposed by the useMobiAuth hook. */
 export interface MobiAuthStatus {
+  /** Whether the user is currently authenticated. */
   isAuthenticated: boolean;
+  /** Authenticated user object, or null. */
   user: any | null;
+  /** Whether an auth operation is in progress. */
   loading: boolean;
 }
 
+/**
+ * Authentication hook for the M.O.B.I.™ JS Bridge.
+ * Currently a stub — will integrate with JS Bridge v1.19.
+ *
+ * @param appId - Optional application identifier for multi-app auth scoping.
+ * @returns Auth state (`isAuthenticated`, `user`, `loading`) plus `login()` and `logout()` actions.
+ *
+ * @example
+ * ```tsx
+ * const { isAuthenticated, login, logout } = useMobiAuth('my-app');
+ * ```
+ */
 export const useMobiAuth = (appId?: string) => {
   const [status, setStatus] = useState<MobiAuthStatus>({
     isAuthenticated: false,

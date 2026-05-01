@@ -1,8 +1,19 @@
 import { useState, useCallback } from 'react';
 
 /**
- * useMobiClipboard
- * Standardized logic for copying text to the clipboard within the MOBI ecosystem.
+ * Copies text to the clipboard using the Navigator API.
+ * Provides a transient `isCopied` state that resets after 2 seconds —
+ * useful for "Copied!" feedback in the UI.
+ *
+ * @returns `{ copy, isCopied }` — async copy function and success state.
+ *
+ * @example
+ * ```tsx
+ * const { copy, isCopied } = useMobiClipboard();
+ * <button onClick={() => copy('Hello')}>
+ *   {isCopied ? 'Copied!' : 'Copy'}
+ * </button>
+ * ```
  */
 export const useMobiClipboard = () => {
   const [isCopied, setIsCopied] = useState(false);

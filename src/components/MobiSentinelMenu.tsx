@@ -4,18 +4,29 @@ import { MobiUserBadge } from './MobiUserBadge';
 import { MobiSwitcher } from './MobiSwitcher';
 import type { MobiPlan } from './MobiPlanBadge';
 
+/** User identity data consumed by MobiSentinelMenu. */
 export interface MobiSentinelMenuUser {
+  /** 1-2 character initials for the avatar circle. */
   initials: string;
+  /** User email address. */
   email: string;
+  /** Current subscription plan. */
   plan: MobiPlan;
+  /** Organization name. */
   org?: string;
 }
 
+/** A single action item in the sentinel menu. */
 export interface MobiSentinelMenuItem {
+  /** Unique identifier. */
   id: string;
+  /** Display text. */
   label: string;
+  /** Optional icon (React node) rendered to the left of the label. */
   icon?: React.ReactNode;
+  /** When true, renders in the danger zone (red text, separated at the bottom). @default false */
   danger?: boolean;
+  /** Called when the item is clicked. Menu closes automatically. */
   onClick?: () => void;
 }
 
@@ -28,7 +39,7 @@ export interface MobiSentinelMenuProps {
   showThemeSwitcher?: boolean;
   /** Show language switcher in config section */
   showLangSwitcher?: boolean;
-  /** Current language code */
+  /** Current language code (controlled mode) */
   lang?: string;
   /** Callback when language changes */
   onLangChange?: (lang: string) => void;
@@ -43,6 +54,27 @@ const defaultLangOptions = [
   { id: 'EN', label: 'EN', icon: <span className="text-base leading-none">🇺🇸</span> }
 ];
 
+/**
+ * Data-driven user dropdown menu with identity header, action items,
+ * language selector, and theme switcher.
+ *
+ * Regular items render in the main section. Items with `danger: true`
+ * are automatically separated into a red-tinted footer zone.
+ *
+ * Language state supports both controlled (`lang` + `onLangChange`) and
+ * uncontrolled (internal state) modes.
+ *
+ * @example
+ * ```tsx
+ * <MobiSentinelMenu
+ *   user={{ initials: 'CA', email: 'dev@mobi.com', plan: 'PRO', org: 'Fleet HQ' }}
+ *   items={[
+ *     { id: 'settings', label: 'Settings', onClick: openSettings },
+ *     { id: 'logout', label: 'Logout', danger: true, onClick: handleLogout }
+ *   ]}
+ * />
+ * ```
+ */
 export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
   user,
   items = [],

@@ -1,19 +1,44 @@
 import React from 'react';
 
+/** A single option in a MobiSwitcher group. */
 export interface MobiSwitcherOption {
+  /** Unique identifier for this option. */
   id: string;
+  /** Text label — hidden when `hideLabel` is true on the parent. */
   label: string;
+  /** Optional icon (React node) rendered before the label. */
   icon?: React.ReactNode;
 }
 
 interface MobiSwitcherProps {
+  /** Array of selectable options. */
   options: MobiSwitcherOption[];
+  /** `id` of the currently active option. */
   activeId: string;
+  /** Called with the `id` of the newly selected option. */
   onChange: (id: string) => void;
+  /** When true, only icons are rendered (labels hidden). Adjusts padding automatically. @default false */
   hideLabel?: boolean;
+  /** Additional CSS classes. */
   className?: string;
 }
 
+/**
+ * Compact segmented selector. Used for theme, language, and other configuration toggles.
+ * Supports icon-only mode via `hideLabel` for minimal footprint.
+ *
+ * @example
+ * ```tsx
+ * <MobiSwitcher
+ *   options={[
+ *     { id: 'ES', label: 'ES', icon: '🇸🇻' },
+ *     { id: 'EN', label: 'EN', icon: '🇺🇸' }
+ *   ]}
+ *   activeId="ES"
+ *   onChange={setLang}
+ * />
+ * ```
+ */
 export const MobiSwitcher: React.FC<MobiSwitcherProps> = ({
   options,
   activeId,

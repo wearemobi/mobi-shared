@@ -1,7 +1,21 @@
 import { useState, useEffect } from 'react';
 
+/** Available theme modes. `system` follows the OS preference. */
 export type MobiTheme = 'light' | 'dark' | 'system';
 
+/**
+ * Manages theme state with localStorage persistence and system preference detection.
+ * Applies the `.dark` class to `<html>` automatically. Listens for OS preference changes
+ * when mode is `system`.
+ *
+ * @returns `{ theme, setTheme }` — current theme and setter function.
+ *
+ * @example
+ * ```tsx
+ * const { theme, setTheme } = useMobiTheme();
+ * setTheme('dark');
+ * ```
+ */
 export const useMobiTheme = () => {
   const [theme, setTheme] = useState<MobiTheme>(() => {
     if (typeof window === 'undefined') return 'system';

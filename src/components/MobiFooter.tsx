@@ -1,5 +1,14 @@
 import React from 'react';
 
+/**
+ * Standard "Powered by M.O.B.I.™" footer branding element.
+ * Theme-aware with automatic logo inversion. Zero configuration required.
+ *
+ * @example
+ * ```tsx
+ * <MobiFooter />
+ * ```
+ */
 export const MobiFooter: React.FC = () => (
   <div className="pt-8 pb-4 flex flex-col items-center justify-center gap-2 opacity-60">
     <div className="flex items-center gap-2">

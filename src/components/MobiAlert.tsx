@@ -1,17 +1,39 @@
 import React, { useState, useEffect } from 'react';
 
+/** Visual severity of the alert notification. */
 export type AlertType = 'info' | 'success' | 'warning' | 'error';
 
 export interface MobiAlertProps {
+  /** Optional micro-label displayed above the message. */
   title?: string;
+  /** Main notification text. */
   message: string;
+  /** Visual severity — controls icon color and progress bar tint. @default 'info' */
   type?: AlertType;
+  /** Called when the alert is dismissed (after exit animation). */
   onClose?: () => void;
+  /** If provided, renders a copy-to-clipboard action button. */
   onCopy?: () => void;
+  /** Additional CSS classes. */
   className?: string;
+  /** Auto-close duration in ms. Set to 0 to disable. @default 5000 */
   duration?: number;
 }
 
+/**
+ * Animated toast notification with auto-dismiss, type-based icons, and a progress bar.
+ * Supports close and copy-to-clipboard actions.
+ *
+ * @example
+ * ```tsx
+ * <MobiAlert
+ *   title="Notice"
+ *   message="Operation completed."
+ *   type="success"
+ *   onClose={() => setAlert(null)}
+ * />
+ * ```
+ */
 export const MobiAlert: React.FC<MobiAlertProps> = ({
   title,
   message,

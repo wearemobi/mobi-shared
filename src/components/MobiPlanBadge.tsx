@@ -1,12 +1,25 @@
 import React from 'react';
 
+/** Subscription tier identifiers used across the M.O.B.I.™ fleet. */
 export type MobiPlan = 'FREE' | 'BASIC' | 'PRO' | 'ULTRA' | 'CUSTOM' | 'NOT_AVAILABLE';
 
 interface MobiPlanBadgeProps {
+  /** The active subscription plan. Controls color and label. */
   plan: MobiPlan;
+  /** Additional CSS classes. */
   className?: string;
 }
 
+/**
+ * Color-coded pill badge indicating a subscription tier.
+ * Each plan has a unique color from the MOBI palette.
+ *
+ * @example
+ * ```tsx
+ * <MobiPlanBadge plan="PRO" />
+ * <MobiPlanBadge plan="ULTRA" className="ml-2" />
+ * ```
+ */
 export const MobiPlanBadge: React.FC<MobiPlanBadgeProps> = ({
   plan,
   className = ''

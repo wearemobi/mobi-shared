@@ -2,18 +2,39 @@ import React from 'react';
 import { MobiPlan, MobiPlanBadge } from './MobiPlanBadge';
 import { useMobiTheme } from '../hooks/useMobiTheme';
 
+/** Layout variant for the user badge. */
 export type MobiUserBadgeVariant = 'condensed' | 'expanded';
 
 interface MobiUserBadgeProps {
+  /** User email address — displayed in expanded mode. */
   email: string;
+  /** 1-2 character initials for the avatar circle. */
   initials: string;
+  /** Current subscription plan — rendered as label (condensed) or badge (expanded). */
   plan: MobiPlan;
+  /** Organization name. @default 'M.O.B.I. HQ' */
   org?: string;
+  /** `condensed` = compact trigger button. `expanded` = full header with email and plan badge. @default 'condensed' */
   variant?: MobiUserBadgeVariant;
+  /** Click handler — typically used to toggle a menu in condensed mode. */
   onClick?: () => void;
+  /** Additional CSS classes. */
   className?: string;
 }
 
+/**
+ * Theme-aware user identity badge with two layout variants.
+ * Avatar colors automatically invert based on the active theme (black-on-light, white-on-dark).
+ *
+ * @example
+ * ```tsx
+ * // Compact trigger button
+ * <MobiUserBadge variant="condensed" initials="CA" plan="PRO" email="dev@mobi.com" />
+ *
+ * // Full header with plan badge
+ * <MobiUserBadge variant="expanded" initials="CA" plan="PRO" email="dev@mobi.com" org="Fleet HQ" />
+ * ```
+ */
 export const MobiUserBadge: React.FC<MobiUserBadgeProps> = ({
   email,
   initials,
