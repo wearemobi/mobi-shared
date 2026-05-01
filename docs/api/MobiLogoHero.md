@@ -11,15 +11,15 @@ import { MobiLogoHero } from '@wearemobi/shared';
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `size` | `number \| string` | `128` | Height in pixels (`number`) or Tailwind units (`string`) |
-| `className` | `string` | `""` | Additional CSS classes for the `img` tag |
+| `className` | `string` | `""` | Additional CSS classes for the `img` tag (e.g. `mb-8`) |
 
 ## Usage
 ```tsx
-// Default size (128px)
+// Default size (128px, no margin)
 <MobiLogoHero />
 
-// Custom numeric size
-<MobiLogoHero size={200} />
+// Custom numeric size with custom margin
+<MobiLogoHero size={200} className="mb-12" />
 
 // Tailwind height class
 <MobiLogoHero size="h-48" />

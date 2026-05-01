@@ -20,7 +20,7 @@ The library ships with its own CSS (Tailwind v4 + MOBI design tokens). Styles ar
 |---|---|---|
 | [`MobiLogo`](./MobiLogo.md) | Official brand mark at configurable size |
 | [`MobiLogoHero`](./MobiLogoHero.md) | Theme-aware hero logo for landing pages |
-| [`MobiFooter`](./MobiFooter.md) | "Powered by M.O.B.I.™" branding footer |
+| [`MobiFooter`](./MobiFooter.md) | Parametric branding footer with app metadata support |
 | [`MobiAlert`](./MobiAlert.md) | Toast notification with auto-dismiss and progress bar |
 | [`MobiPlanBadge`](./MobiPlanBadge.md) | Color-coded subscription tier pill |
 | [`MobiUserBadge`](./MobiUserBadge.md) | Theme-aware user identity badge (condensed/expanded) |

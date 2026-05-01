@@ -1,29 +1,34 @@
-import React from 'react';
+import { MobiLogoHero } from './MobiLogoHero';
 
-/**
- * Standard "Powered by M.O.B.I.™" footer branding element.
- * Theme-aware with automatic logo inversion. Zero configuration required.
- *
- * @example
- * ```tsx
- * <MobiFooter />
- * ```
- */
-export const MobiFooter: React.FC = () => (
-  <div className="pt-8 pb-4 flex flex-col items-center justify-center gap-2 opacity-60">
-    <div className="flex items-center gap-2">
-      <span className="text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] font-sans">
-        Powered by
-      </span>
-      <img 
-        src="https://wearemobi.com/logo-light.svg" 
-        alt="M.O.B.I.™" 
-        className="h-4 w-auto object-contain light-invert"
-        referrerPolicy="no-referrer"
-      />
+export interface MobiFooterProps {
+  /** Name of the application (e.g. 'Chassis Vite') */
+  appName?: string;
+  /** Optional version number (e.g. 'v1.2.1') to display in the footer. */
+  version?: string;
+}
+
+export const MobiFooter: React.FC<MobiFooterProps> = ({ appName, version }) => (
+  <div className="pt-10 pb-8 flex flex-col items-center justify-center text-center gap-4 opacity-70 hover:opacity-100 transition-opacity duration-500">
+    {/* Compact Central Logo with Link */}
+    <a href="https://wearemobi.com" target="_blank" rel="noopener noreferrer" className="hover:scale-105 transition-transform duration-300">
+      <MobiLogoHero size={40} className="mb-0 mx-0" />
+    </a>
+    
+    <div className="flex flex-col gap-0.5">
+      <p className="text-[11px] font-bold text-mobi-text font-sans tracking-tight">
+        Copyright © 2026 M.O.B.I.™
+      </p>
+      <p className="text-[10px] font-medium text-mobi-text-muted font-sans tracking-tight">
+        (Machine Oriented Brilliant Ideas™)
+      </p>
+      <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-mobi-text-muted font-sans">
+        Costa Rica, Centro America.
+      </p>
+      {(appName || version) && (
+        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-mobi-text-muted/30 font-sans mt-1">
+          {appName}{appName && version && ' · '}{version}
+        </p>
+      )}
     </div>
-    <p className="text-[10px] text-mobi-text-muted/40 font-bold uppercase tracking-tight font-sans">
-      © 2026 Machine Oriented Brilliant Ideas™
-    </p>
   </div>
 );

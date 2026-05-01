@@ -49,7 +49,7 @@ export const MobiLogoHero: React.FC<MobiLogoHeroProps> = ({ size = 128, classNam
       src={logoUrl} 
       alt="MOBI Logo" 
       style={{ height: typeof size === 'number' ? `${size}px` : size }}
-      className={`w-auto mx-auto mb-8 animate-in fade-in zoom-in duration-700 ${className}`} 
+      className={`w-auto mx-auto animate-in fade-in zoom-in duration-700 ${className}`} 
     />
   );
 };

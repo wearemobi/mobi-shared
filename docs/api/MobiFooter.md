@@ -8,11 +8,18 @@ import { MobiFooter } from '@wearemobi/shared';
 ```
 
 ## Props
-None. This is a zero-configuration component.
+| Prop | Type | Default | Description |
+|---|---|---|---|
+| `appName` | `string` | — | Name of the application to display |
+| `version` | `string` | — | Version string (e.g. 'v1.0.0') |
 
 ## Usage
 ```tsx
+// Simple usage
 <MobiFooter />
+
+// With app details
+<MobiFooter appName="Sentinel Dashboard" version="v2.4.0" />
 ```
 
 ## Notes
