@@ -47,3 +47,8 @@
 .light-invert {
   @apply invert brightness-0 dark:invert-0 dark:brightness-100;
 }
+
+@keyframes mobi-progress {
+  from { width: 0%; }
+  to { width: 100%; }
+}
