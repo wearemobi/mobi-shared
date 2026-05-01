@@ -10,6 +10,7 @@
   "module": "./dist/mobi-shared.js",
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/mobi-shared.js",
       "require": "./dist/mobi-shared.umd.cjs"
     },
