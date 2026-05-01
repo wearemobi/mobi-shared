@@ -17,7 +17,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-mobi-bg text-mobi-text transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-mobi-bg text-mobi-text font-sans transition-colors duration-300">
       {/* Alert Overlay */}
       {alert && (
         <div className="fixed top-24 left-1/2 z-[100] w-full max-w-sm -translate-x-1/2 px-4">
@@ -38,7 +38,7 @@ const App: React.FC = () => {
         <div className="flex items-center gap-3">
           <button onClick={() => setView('home')} className="flex items-center gap-3 transition-opacity hover:opacity-70">
             <MobiLogo size={32} />
-            <h1 className="text-xl font-bold tracking-tight">M.O.B.I.™ Shared</h1>
+            <h1 className="text-xl font-bold tracking-tight font-sans">M.O.B.I.™ Shared</h1>
           </button>
         </div>
         
@@ -111,10 +111,10 @@ const App: React.FC = () => {
       ) : (
         <main className="flex flex-1 flex-col items-center justify-center px-6 py-20">
           <div className="max-w-2xl text-center">
-            <h2 className="mb-6 text-5xl font-black tracking-tighter sm:text-7xl">
+            <h2 className="mb-4 text-4xl md:text-6xl font-bold tracking-tight font-sans">
               M.O.B.I.™ Shared <span className="text-mobi-text-muted">Common UI</span>
             </h2>
-            <p className="mb-12 text-lg leading-relaxed text-mobi-text-muted">
+            <p className="mb-8 text-lg md:text-xl text-mobi-text-muted font-sans font-medium max-w-lg mx-auto leading-relaxed">
               Implementing the <strong>Core Blueprint v1.0.0</strong>. 
               Using the official Chassis assets for seamless integration.
             </p>
