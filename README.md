@@ -18,6 +18,7 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } fro
 |---|---|
 | `MobiNavbar` | Sticky top navigation bar with responsive logo/text |
 | `MobiHero` | High-impact header section for landing pages |
+| `MobiSidebar` | Responsive navigation drawer for app layouts |
 | `MobiButton` | Standard button with variants and icon support |
 | `MobiLogo` | Official brand mark at configurable size |
 | `MobiFooter` | "Powered by M.O.B.I.™" branding footer |
