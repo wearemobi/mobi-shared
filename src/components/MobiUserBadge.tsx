@@ -6,8 +6,10 @@ import { useMobiTheme } from '../hooks/useMobiTheme';
 export type MobiUserBadgeVariant = 'condensed' | 'expanded';
 
 interface MobiUserBadgeProps {
-  /** User email address — displayed in expanded mode. */
+  /** User email address — displayed in expanded mode if name is missing. */
   email: string;
+  /** Full name of the user — prioritized over email in expanded mode. */
+  name?: string;
   /** 1-2 character initials for the avatar circle. */
   initials: string;
   /** Current subscription plan — rendered as label (condensed) or badge (expanded). */
@@ -37,6 +39,7 @@ interface MobiUserBadgeProps {
  */
 export const MobiUserBadge: React.FC<MobiUserBadgeProps> = ({
   email,
+  name,
   initials,
   plan,
   org = 'M.O.B.I. HQ',
@@ -57,7 +60,7 @@ export const MobiUserBadge: React.FC<MobiUserBadgeProps> = ({
         className={`flex h-12 items-center gap-3 rounded-full border border-mobi-border bg-mobi-surface pl-1.5 pr-5 shadow-sm transition-all hover:bg-mobi-surface-hover active:scale-95 ${className}`}
       >
         <div className={`flex h-8 w-8 items-center justify-center rounded-full text-[10px] font-black font-sans tracking-tight shrink-0 ${avatarStyles}`}>
-          {initials}
+          {initials.charAt(0)}
         </div>
         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-mobi-text font-sans">
           {plan}
@@ -74,12 +77,12 @@ export const MobiUserBadge: React.FC<MobiUserBadgeProps> = ({
       <div className="flex flex-col min-w-0 flex-1">
         <div className="flex items-center justify-between gap-2">
           <span className="text-sm font-black text-mobi-text leading-none font-sans tracking-tight truncate">
-            {email}
+            {name || email}
           </span>
           <MobiPlanBadge plan={plan} />
         </div>
         <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-widest mt-1.5 font-sans">
-          {org}
+          {name ? email : org}
         </span>
       </div>
     </div>

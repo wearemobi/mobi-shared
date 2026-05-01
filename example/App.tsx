@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MobiLogo, MobiFooter, MobiSentinelMenu, useMobiAuth, MobiAlert, useMobiClipboard } from '../src';
+import { MobiLogo, MobiLogoHero, MobiFooter, MobiSentinelMenu, useMobiAuth, MobiAlert, useMobiClipboard } from '../src';
 import { DocsPage } from './DocsPage';
 import '../src/styles.css';
 
@@ -60,6 +60,7 @@ const App: React.FC = () => {
           <MobiSentinelMenu 
             user={{
               initials: 'CA',
+              name: 'Carlos Quijano',
               email: 'carlos@wearemobi.com',
               plan: 'ULTRA',
               org: 'M.O.B.I. HQ'
@@ -127,7 +128,7 @@ const App: React.FC = () => {
               <div className="rounded-2xl border border-mobi-border bg-mobi-surface p-8 shadow-sm">
                  <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-mobi-text-muted">Official Brand Icon</p>
                  <div className="flex items-center justify-center">
-                    <img src="https://wearemobi.com/logo-light.svg" alt="MOBI Brand Icon" className="h-16 w-16" />
+                    <MobiLogoHero size={64} className="mb-0" />
                  </div>
               </div>
             </div>

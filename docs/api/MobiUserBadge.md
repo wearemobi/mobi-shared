@@ -12,6 +12,7 @@ import { MobiUserBadge } from '@wearemobi/shared';
 |---|---|---|---|
 | `initials` | `string` | **required** | 1-2 characters for the avatar circle |
 | `email` | `string` | **required** | User email |
+| `name` | `string` | — | User full name |
 | `plan` | `MobiPlan` | **required** | Subscription tier |
 | `org` | `string` | `'M.O.B.I. HQ'` | Organization name |
 | `variant` | `'condensed' \| 'expanded'` | `'condensed'` | Layout mode |
@@ -27,9 +28,16 @@ Compact pill with avatar + plan label. Use as a dropdown trigger.
 ```
 
 ### Expanded (header)
-Full-width card with avatar, email, plan badge, and org name.
+Full-width card with avatar, name (or email), plan badge, and org name.
 ```tsx
-<MobiUserBadge variant="expanded" initials="CA" plan="PRO" email="dev@mobi.com" org="Fleet HQ" />
+<MobiUserBadge 
+  variant="expanded" 
+  initials="CA" 
+  name="Carlos Quijano"
+  email="dev@mobi.com" 
+  plan="PRO" 
+  org="Fleet HQ" 
+/>
 ```
 
 ## Theme Behavior

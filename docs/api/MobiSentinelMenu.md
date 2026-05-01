@@ -25,6 +25,7 @@ import type { MobiSentinelMenuUser, MobiSentinelMenuItem } from '@wearemobi/shar
 |---|---|---|
 | `initials` | `string` | Avatar initials |
 | `email` | `string` | User email |
+| `name` | `string?` | User full name (displayed in header) |
 | `plan` | `MobiPlan` | Subscription tier |
 | `org` | `string?` | Organization name |
 
@@ -42,6 +43,7 @@ import type { MobiSentinelMenuUser, MobiSentinelMenuItem } from '@wearemobi/shar
 <MobiSentinelMenu
   user={{
     initials: 'CA',
+    name: 'Carlos Quijano',
     email: 'carlos@wearemobi.com',
     plan: 'ULTRA',
     org: 'M.O.B.I. HQ'

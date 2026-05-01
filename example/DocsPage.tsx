@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { 
-  MobiLogo, MobiFooter, MobiAlert, MobiPlanBadge, 
+  MobiLogo, MobiLogoHero, MobiFooter, MobiAlert, MobiPlanBadge, 
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu,
   useMobiTheme, useMobiClipboard
 } from '../src';
@@ -28,6 +28,19 @@ const catalog: CatalogEntry[] = [
         <MobiLogo size={32} />
         <MobiLogo size={48} />
         <MobiLogo size={64} />
+      </div>
+    )
+  },
+  {
+    id: 'MobiLogoHero',
+    name: 'MobiLogoHero',
+    category: 'component',
+    description: 'Theme-aware hero logo with entrance animation.',
+    code: `<MobiLogoHero size={160} />`,
+    render: () => (
+      <div className="flex flex-col items-center justify-center p-8 bg-mobi-bg rounded-xl border border-mobi-border">
+        <MobiLogoHero size={120} />
+        <p className="text-[10px] text-mobi-text-muted uppercase tracking-widest mt-4">Theme-aware asset resolution</p>
       </div>
     )
   },
@@ -91,12 +104,12 @@ const catalog: CatalogEntry[] = [
       <div className="space-y-4">
         <div>
           <p className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] mb-2 font-sans">Condensed</p>
-          <MobiUserBadge variant="condensed" initials="CA" plan="ULTRA" email="dev@mobi.com" />
+          <MobiUserBadge variant="condensed" initials="CA" name="Carlos Quijano" plan="ULTRA" email="dev@mobi.com" />
         </div>
         <div>
           <p className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] mb-2 font-sans">Expanded</p>
           <div className="border border-mobi-border rounded-2xl overflow-hidden max-w-xs">
-            <MobiUserBadge variant="expanded" initials="CA" plan="ULTRA" email="dev@mobi.com" org="M.O.B.I. HQ" />
+            <MobiUserBadge variant="expanded" initials="CA" name="Carlos Quijano" plan="ULTRA" email="dev@mobi.com" org="M.O.B.I. HQ" />
           </div>
         </div>
       </div>
@@ -159,6 +172,7 @@ const catalog: CatalogEntry[] = [
     code: `<MobiSentinelMenu
   user={{
     initials: 'CA',
+    name: 'Carlos Quijano',
     email: 'dev@mobi.com',
     plan: 'PRO',
     org: 'Fleet HQ'
@@ -171,7 +185,7 @@ const catalog: CatalogEntry[] = [
     render: () => (
       <div className="flex justify-start">
         <MobiSentinelMenu
-          user={{ initials: 'CA', email: 'carlos@wearemobi.com', plan: 'ULTRA', org: 'M.O.B.I. HQ' }}
+          user={{ initials: 'CA', name: 'Carlos Quijano', email: 'carlos@wearemobi.com', plan: 'ULTRA', org: 'M.O.B.I. HQ' }}
           items={[
             { id: 'profile', label: 'Profile', icon: <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg> },
             { id: 'logout', label: 'Logout', danger: true, icon: <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg> }

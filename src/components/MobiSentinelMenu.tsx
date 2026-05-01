@@ -10,6 +10,8 @@ export interface MobiSentinelMenuUser {
   initials: string;
   /** User email address. */
   email: string;
+  /** Full name of the user. */
+  name?: string;
   /** Current subscription plan. */
   plan: MobiPlan;
   /** Organization name. */
@@ -107,6 +109,7 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
         initials={user.initials}
         plan={user.plan}
         email={user.email}
+        name={user.name}
         onClick={() => setIsOpen(!isOpen)}
       />
 
@@ -125,6 +128,7 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
               initials={user.initials}
               plan={user.plan}
               email={user.email}
+              name={user.name}
               org={user.org}
               className="border-b border-mobi-border/50"
             />
