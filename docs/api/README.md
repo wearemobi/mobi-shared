@@ -18,6 +18,9 @@ The library ships with its own CSS (Tailwind v4 + MOBI design tokens). Styles ar
 
 | Component | Description | Docs |
 |---|---|---|
+| [`MobiNavbar`](./MobiNavbar.md) | Sticky top navigation bar with responsive logo/text |
+| [`MobiHero`](./MobiHero.md) | High-impact header section for landing pages |
+| [`MobiButton`](./MobiButton.md) | Standard button with variants and icon support |
 | [`MobiLogo`](./MobiLogo.md) | Official brand mark at configurable size |
 | [`MobiLogoHero`](./MobiLogoHero.md) | Theme-aware hero logo for landing pages |
 | [`MobiFooter`](./MobiFooter.md) | Parametric branding footer with app metadata support |

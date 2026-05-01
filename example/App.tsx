@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MobiLogo, MobiLogoHero, MobiFooter, MobiSentinelMenu, useMobiAuth, MobiAlert, useMobiClipboard } from '../src';
+import { MobiLogo, MobiLogoHero, MobiFooter, MobiSentinelMenu, MobiNavbar, MobiHero, MobiButton, useMobiAuth, MobiAlert, useMobiClipboard } from '../src';
 import { DocsPage } from './DocsPage';
 import pkg from '../package.json';
 import '../src/styles.css';
@@ -34,91 +34,89 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <header className="sticky top-0 z-10 flex items-center justify-between border-b border-mobi-border bg-mobi-surface/80 px-6 py-4 backdrop-blur-md">
-        <div className="flex items-center gap-3">
-          <button onClick={() => setView('home')} className="flex items-center gap-3 transition-opacity hover:opacity-70">
-            <MobiLogo size={32} />
-            <h1 className="text-xl font-bold tracking-tight font-sans">M.O.B.I.™ Shared</h1>
-          </button>
-        </div>
-        
-        <div className="flex items-center gap-2">
-          {/* View Switcher */}
-          <button 
-            onClick={() => setView(view === 'home' ? 'docs' : 'home')}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] font-sans transition-all active:scale-95 ${
-              view === 'docs'
-                ? 'bg-mobi-primary text-mobi-bg'
-                : 'border border-mobi-border bg-mobi-surface text-mobi-text hover:bg-mobi-surface-hover'
-            }`}
-          >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-            Docs
-          </button>
+      <MobiNavbar 
+        title="M.O.B.I.™ Shared"
+        onLogoClick={() => setView('home')}
+        rightContent={
+          <>
+            <button 
+              onClick={() => setView(view === 'home' ? 'docs' : 'home')}
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] font-sans transition-all active:scale-95 ${
+                view === 'docs'
+                  ? 'bg-mobi-primary text-mobi-bg'
+                  : 'border border-mobi-border bg-mobi-surface text-mobi-text hover:bg-mobi-surface-hover'
+              }`}
+            >
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+              </svg>
+              Docs
+            </button>
 
-          <MobiSentinelMenu 
-            user={{
-              initials: 'CA',
-              name: 'Carlos Quijano',
-              email: 'carlos@wearemobi.com',
-              plan: 'ULTRA',
-              org: 'M.O.B.I. HQ'
-            }}
-            items={[
-              {
-                id: 'login',
-                label: 'Login',
-                icon: (
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                  </svg>
-                ),
-                onClick: () => {
-                  showAlert('Login mechanism is being initialized in the Bridge.', 'info');
+            <MobiSentinelMenu 
+              user={{
+                initials: 'CA',
+                name: 'Carlos Quijano',
+                email: 'carlos@wearemobi.com',
+                plan: 'ULTRA',
+                org: 'M.O.B.I. HQ'
+              }}
+              items={[
+                {
+                  id: 'login',
+                  label: 'Login',
+                  icon: (
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                  ),
+                  onClick: () => {
+                    showAlert('Login mechanism is being initialized in the Bridge.', 'info');
+                  }
+                },
+                {
+                  id: 'register',
+                  label: 'Register',
+                  icon: (
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                    </svg>
+                  ),
+                  onClick: () => showAlert('Registration is restricted to authorized agents.', 'warning')
+                },
+                {
+                  id: 'logout',
+                  label: 'Logout',
+                  danger: true,
+                  icon: (
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
+                    </svg>
+                  ),
+                  onClick: () => showAlert('Logout sequence initiated. Session clearing...', 'error')
                 }
-              },
-              {
-                id: 'register',
-                label: 'Register',
-                icon: (
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
-                  </svg>
-                ),
-                onClick: () => showAlert('Registration is restricted to authorized agents.', 'warning')
-              },
-              {
-                id: 'logout',
-                label: 'Logout',
-                danger: true,
-                icon: (
-                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" />
-                  </svg>
-                ),
-                onClick: () => showAlert('Logout sequence initiated. Session clearing...', 'error')
-              }
-            ]}
-          />
-        </div>
-      </header>
+              ]}
+            />
+          </>
+        }
+      />
 
       {/* View Routing */}
       {view === 'docs' ? (
         <DocsPage />
       ) : (
-        <main className="flex flex-1 flex-col items-center justify-center px-6 py-20">
-          <div className="max-w-2xl text-center">
-            <h2 className="mb-4 text-4xl md:text-6xl font-bold tracking-tight font-sans">
-              M.O.B.I.™ Shared <span className="text-mobi-text-muted">Common UI</span>
-            </h2>
-            <p className="mb-8 text-lg md:text-xl text-mobi-text-muted font-sans font-medium max-w-lg mx-auto leading-relaxed">
-              Implementing the <strong>Core Blueprint v1.0.0</strong>. 
-              Using the official Chassis assets for seamless integration.
-            </p>
-            
+        <main className="flex-1 px-6">
+          <MobiHero
+            logo={<MobiLogoHero size={160} />}
+            title="M.O.B.I.™ Shared"
+            subtitle="Common UI"
+            description={
+              <>
+                Implementing the <strong>Core Blueprint v1.0.0</strong>. 
+                Using the official Chassis assets for seamless integration.
+              </>
+            }
+          >
             <div className="flex flex-wrap justify-center gap-6">
               <div className="rounded-2xl border border-mobi-border bg-mobi-surface p-8 shadow-sm">
                  <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-mobi-text-muted">Official App Icon</p>
@@ -134,13 +132,15 @@ const App: React.FC = () => {
               </div>
             </div>
 
-            <button 
+            <MobiButton 
+              variant="outline"
+              technical
               onClick={() => setView('docs')}
-              className="mt-12 px-6 py-3 rounded-2xl bg-mobi-primary text-mobi-bg text-sm font-black uppercase tracking-[0.2em] font-sans transition-all hover:opacity-90 active:scale-95"
+              className="mt-12"
             >
               View Component Docs →
-            </button>
-          </div>
+            </MobiButton>
+          </MobiHero>
         </main>
       )}
 

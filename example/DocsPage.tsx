@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { 
   MobiLogo, MobiLogoHero, MobiFooter, MobiAlert, MobiPlanBadge, 
-  MobiUserBadge, MobiSwitcher, MobiSentinelMenu,
-  useMobiTheme, useMobiClipboard
+  MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
+  MobiButton, useMobiTheme, useMobiClipboard
 } from '../src';
 
 /* ─── Component catalog entries ─── */
@@ -51,6 +51,114 @@ const catalog: CatalogEntry[] = [
     description: 'Zero-config "Powered by M.O.B.I.™" branding footer.',
     code: `<MobiFooter />`,
     render: () => <MobiFooter />
+  },
+  {
+    id: 'MobiNavbar',
+    name: 'MobiNavbar',
+    category: 'component',
+    description: 'Sticky top navigation bar with responsive logo/text and content slots.',
+    code: `<MobiNavbar 
+  title="My App" 
+  onLogoClick={() => {}} 
+  rightContent={<div className="text-xs">Right Side</div>} 
+/>`,
+    render: () => (
+      <div className="relative border border-mobi-border rounded-xl overflow-hidden bg-mobi-bg" style={{ height: '120px' }}>
+        <MobiNavbar 
+          title="M.O.B.I.™ Demo" 
+          onLogoClick={() => alert('Logo Clicked!')} 
+          rightContent={
+            <div className="flex gap-2">
+              <button className="px-3 py-1 rounded-lg bg-mobi-primary text-mobi-bg text-[10px] font-bold uppercase tracking-widest">Action</button>
+            </div>
+          }
+        />
+        <div className="p-4 text-[10px] text-mobi-text-muted italic">
+          * Navbar is sticky and features a glassmorphism effect.
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'MobiHero',
+    name: 'MobiHero',
+    category: 'component',
+    description: 'High-impact header section for landing pages with title, subtitle, and description slots.',
+    code: `<MobiHero 
+  title="Hero Title" 
+  subtitle="Muted Subtitle"
+  description="Main description text goes here."
+>
+  <button>Action</button>
+</MobiHero>`,
+    render: () => (
+      <div className="border border-mobi-border rounded-xl bg-mobi-bg p-4">
+        <MobiHero 
+          logo={<MobiLogoHero size={120} />}
+          title="M.O.B.I.™" 
+          subtitle="Shared" 
+          description="Implementing the Core Blueprint v1.0.0."
+          className="py-8"
+        >
+          <MobiButton variant="outline" size="sm">
+            Call to Action
+          </MobiButton>
+        </MobiHero>
+      </div>
+    )
+  },
+  {
+    id: 'MobiButton',
+    name: 'MobiButton',
+    category: 'component',
+    description: 'Technical square buttons with multiple variants (solid, outline, ghost, danger) and sizes.',
+    code: `<MobiButton variant="solid">Primary</MobiButton>
+<MobiButton variant="outline">Secondary</MobiButton>
+<MobiButton variant="ghost">Cancel</MobiButton>`,
+    render: () => (
+      <div className="space-y-8">
+        <div>
+          <p className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] mb-4">Standard Style (Sans)</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <MobiButton variant="solid">Solid Action</MobiButton>
+            <MobiButton variant="outline">Outline View</MobiButton>
+            <MobiButton variant="ghost">Ghost/Cancel</MobiButton>
+            <MobiButton variant="danger">Danger</MobiButton>
+          </div>
+        </div>
+
+        <div>
+          <p className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] mb-4">Technical Style (Mono)</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <MobiButton variant="solid" technical>Solid Mono</MobiButton>
+            <MobiButton variant="outline" technical>Outline Mono</MobiButton>
+            <MobiButton variant="ghost" technical>Ghost Mono</MobiButton>
+            <MobiButton variant="danger" technical>Danger Mono</MobiButton>
+          </div>
+        </div>
+
+        <div>
+          <p className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] mb-4">Technical Sizes</p>
+          <div className="flex flex-wrap items-center gap-4">
+            <MobiButton size="sm" variant="outline" technical>Technical SM</MobiButton>
+            <MobiButton size="md" variant="outline" technical>Technical MD</MobiButton>
+            <MobiButton size="lg" variant="outline" technical>Technical LG</MobiButton>
+          </div>
+        </div>
+        <div className="flex flex-wrap items-center gap-4">
+          <MobiButton 
+            variant="secondary" 
+            icon={
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+              </svg>
+            }
+          >
+            With Icon
+          </MobiButton>
+        </div>
+      </div>
+    )
   },
   {
     id: 'MobiAlert',

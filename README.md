@@ -1,4 +1,4 @@
-# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.2.1
+# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.2.5
 
 > Universal UI & Logic Shield for the M.O.B.I.™ Grand Fleet
 
@@ -9,13 +9,16 @@ npm install @wearemobi/shared
 ```
 
 ```tsx
-import { MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } from '@wearemobi/shared';
+import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } from '@wearemobi/shared';
 ```
 
 ## Components
 
 | Component | Description |
 |---|---|
+| `MobiNavbar` | Sticky top navigation bar with responsive logo/text |
+| `MobiHero` | High-impact header section for landing pages |
+| `MobiButton` | Standard button with variants and icon support |
 | `MobiLogo` | Official brand mark at configurable size |
 | `MobiFooter` | "Powered by M.O.B.I.™" branding footer |
 | `MobiAlert` | Toast notification with auto-dismiss and progress bar |
