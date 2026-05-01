@@ -4,6 +4,7 @@ export * from './components/MobiLogo';
 export * from './components/MobiLogoHero';
 export * from './components/MobiHero';
 export * from './components/MobiNavbar';
+export * from './components/MobiSidebar';
 export * from './components/MobiButton';
 export * from './components/MobiFooter';
 export * from './components/MobiSentinelMenu';

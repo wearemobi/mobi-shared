@@ -11,6 +11,7 @@ const App: React.FC = () => {
   const [alert, setAlert] = useState<{ message: string; type: any } | null>(null);
   const { copy } = useMobiClipboard();
   const [view, setView] = useState<AppView>('home');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const showAlert = (message: string, type: 'info' | 'success' | 'warning' | 'error' = 'warning') => {
     setAlert({ message, type });
@@ -39,6 +40,17 @@ const App: React.FC = () => {
         onLogoClick={() => setView('home')}
         rightContent={
           <>
+            {view === 'docs' && (
+              <button 
+                onClick={() => setIsSidebarOpen(true)}
+                className="lg:hidden p-2 -ml-2 text-mobi-text-muted hover:text-mobi-text"
+                aria-label="Open documentation menu"
+              >
+                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16m-7 6h7" />
+                </svg>
+              </button>
+            )}
             <button 
               onClick={() => setView(view === 'home' ? 'docs' : 'home')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] font-sans transition-all active:scale-95 ${
@@ -103,7 +115,10 @@ const App: React.FC = () => {
 
       {/* View Routing */}
       {view === 'docs' ? (
-        <DocsPage />
+        <DocsPage 
+          isSidebarOpen={isSidebarOpen} 
+          setIsSidebarOpen={setIsSidebarOpen} 
+        />
       ) : (
         <main className="flex-1 px-6">
           <MobiHero

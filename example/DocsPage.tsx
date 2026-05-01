@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   MobiLogo, MobiLogoHero, MobiFooter, MobiAlert, MobiPlanBadge, 
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
-  MobiButton, useMobiTheme, useMobiClipboard
+  MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard
 } from '../src';
 
 /* ─── Component catalog entries ─── */
@@ -273,6 +273,42 @@ const catalog: CatalogEntry[] = [
     }
   },
   {
+    id: 'MobiSidebar',
+    name: 'MobiSidebar',
+    category: 'component',
+    description: 'Responsive navigation drawer with mobile overlay support.',
+    code: `<MobiSidebar 
+  isOpen={isOpen} 
+  onClose={() => setIsOpen(false)}
+  title={<MobiLogo size={28} />}
+>
+  <MobiSidebarItem active>Home</MobiSidebarItem>
+  <MobiSidebarItem>Settings</MobiSidebarItem>
+</MobiSidebar>`,
+    render: () => {
+      const SidebarDemo = () => {
+        const [open, setOpen] = useState(false);
+        return (
+          <div className="space-y-4">
+            <MobiButton variant="outline" onClick={() => setOpen(true)} technical>Open Sidebar Preview</MobiButton>
+            <div className="text-[10px] text-mobi-text-muted italic">* Sidebar becomes an overlay on mobile and a fixed column on large screens.</div>
+            {open && (
+              <div className="fixed inset-0 z-[200]">
+                <MobiSidebar isOpen={open} onClose={() => setOpen(false)}>
+                  <p className="px-3 mb-2 text-[10px] font-bold text-mobi-text-muted uppercase tracking-widest">Demo Menu</p>
+                  <MobiSidebarItem active icon={<span>🏠</span>}>Dashboard</MobiSidebarItem>
+                  <MobiSidebarItem icon={<span>⚙️</span>}>Settings</MobiSidebarItem>
+                  <MobiSidebarItem icon={<span>👤</span>}>Profile</MobiSidebarItem>
+                </MobiSidebar>
+              </div>
+            )}
+          </div>
+        );
+      };
+      return <SidebarDemo />;
+    }
+  },
+  {
     id: 'MobiSentinelMenu',
     name: 'MobiSentinelMenu',
     category: 'component',
@@ -350,61 +386,75 @@ const catalog: CatalogEntry[] = [
 ];
 
 /* ─── Docs Page ─── */
-export const DocsPage: React.FC = () => {
+export interface DocsPageProps {
+  isSidebarOpen: boolean;
+  setIsSidebarOpen: (open: boolean) => void;
+}
+
+export const DocsPage: React.FC<DocsPageProps> = ({ 
+  isSidebarOpen, 
+  setIsSidebarOpen 
+}) => {
   const [activeId, setActiveId] = useState(catalog[0].id);
   const active = catalog.find(c => c.id === activeId) || catalog[0];
 
   const components = catalog.filter(c => c.category === 'component');
   const hooks = catalog.filter(c => c.category === 'hook');
 
-  return (
-    <div className="flex flex-1 min-h-0">
-      {/* Sidebar */}
-      <aside className="w-56 shrink-0 border-r border-mobi-border bg-mobi-bg/50 overflow-y-auto">
-        <div className="p-4">
-          <p className="text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] mb-3 font-sans">Components</p>
-          <nav className="space-y-0.5">
-            {components.map(c => (
-              <button
-                key={c.id}
-                onClick={() => setActiveId(c.id)}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-bold font-sans tracking-tight transition-all ${
-                  activeId === c.id 
-                    ? 'bg-mobi-surface text-mobi-text shadow-sm' 
-                    : 'text-mobi-text-muted hover:text-mobi-text hover:bg-mobi-surface/50'
-                }`}
-              >
-                {c.name}
-              </button>
-            ))}
-          </nav>
+  const handleNav = (id: string) => {
+    setActiveId(id);
+    setIsSidebarOpen(false);
+  };
 
-          <p className="text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] mt-6 mb-3 font-sans">Hooks</p>
-          <nav className="space-y-0.5">
-            {hooks.map(c => (
-              <button
-                key={c.id}
-                onClick={() => setActiveId(c.id)}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-bold font-sans tracking-tight transition-all ${
-                  activeId === c.id 
-                    ? 'bg-mobi-surface text-mobi-text shadow-sm' 
-                    : 'text-mobi-text-muted hover:text-mobi-text hover:bg-mobi-surface/50'
-                }`}
-              >
-                {c.name}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </aside>
+  const SidebarContent = (
+    <>
+      <p className="px-3 mb-3 text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Components</p>
+      <div className="space-y-1">
+        {components.map(c => (
+          <MobiSidebarItem
+            key={c.id}
+            active={activeId === c.id}
+            onClick={() => handleNav(c.id)}
+          >
+            {c.name}
+          </MobiSidebarItem>
+        ))}
+      </div>
+
+      <p className="px-3 mt-8 mb-3 text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Hooks</p>
+      <div className="space-y-1">
+        {hooks.map(c => (
+          <MobiSidebarItem
+            key={c.id}
+            active={activeId === c.id}
+            onClick={() => handleNav(c.id)}
+          >
+            {c.name}
+          </MobiSidebarItem>
+        ))}
+      </div>
+    </>
+  );
+
+  return (
+    <div className="flex flex-1 min-h-0 relative">
+      {/* Sidebar (Responsive) */}
+      <MobiSidebar 
+        isOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)}
+        className="lg:static lg:block"
+        footer={<div className="text-[10px] text-mobi-text-muted text-center font-mono">CORE v1.0.0</div>}
+      >
+        {SidebarContent}
+      </MobiSidebar>
 
       {/* Main Content */}
-      <main className="flex-1 overflow-y-auto p-8">
-        <div className="max-w-3xl">
+      <main className="flex-1 overflow-y-auto p-6 lg:p-12">
+        <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-8">
-            <div className="flex items-center gap-3 mb-2">
-              <span className={`text-[9px] font-black uppercase tracking-[0.15em] px-2 py-0.5 rounded-md font-sans ${
+          <div className="mb-10">
+            <div className="flex items-center gap-3 mb-3">
+              <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-2.5 py-1 rounded-md font-mono ${
                 active.category === 'component' 
                   ? 'bg-emerald-500/10 text-emerald-500' 
                   : 'bg-blue-500/10 text-blue-500'
@@ -412,38 +462,41 @@ export const DocsPage: React.FC = () => {
                 {active.category}
               </span>
             </div>
-            <h2 className="text-3xl font-black tracking-tight font-sans">{active.name}</h2>
-            <p className="text-sm text-mobi-text-muted font-sans mt-1">{active.description}</p>
+            <h2 className="text-4xl font-black tracking-tight font-sans text-mobi-text">{active.name}</h2>
+            <p className="text-base text-mobi-text-muted font-sans mt-2 max-w-2xl leading-relaxed">{active.description}</p>
           </div>
 
-          {/* Live Preview */}
-          <div className="mb-8">
-            <p className="text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] mb-3 font-sans">Live Preview</p>
-            <div className="rounded-2xl border border-mobi-border bg-mobi-surface p-6">
-              {active.render()}
-            </div>
-          </div>
-
-          {/* Code */}
-          <div>
-            <p className="text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] mb-3 font-sans">Usage</p>
-            <div className="rounded-2xl border border-mobi-border bg-mobi-bg overflow-hidden">
-              <div className="flex items-center justify-between px-4 py-2 border-b border-mobi-border/50">
-                <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-widest font-sans">TSX</span>
+          <div className="grid grid-cols-1 gap-12">
+            {/* Live Preview */}
+            <section>
+              <p className="text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] mb-4 font-sans">Live Preview</p>
+              <div className="rounded-2xl border border-mobi-border bg-mobi-surface p-8 shadow-sm">
+                {active.render()}
               </div>
-              <pre className="p-4 overflow-x-auto">
-                <code className="text-sm font-mono text-mobi-text leading-relaxed whitespace-pre">{active.code}</code>
-              </pre>
-            </div>
-          </div>
+            </section>
 
-          {/* Import */}
-          <div className="mt-6">
-            <p className="text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] mb-3 font-sans">Import</p>
-            <div className="rounded-2xl border border-mobi-border bg-mobi-bg overflow-hidden">
-              <pre className="p-4 overflow-x-auto">
-                <code className="text-sm font-mono text-mobi-text leading-relaxed">{`import { ${active.name} } from '@wearemobi/shared';`}</code>
-              </pre>
+            {/* Usage & Import */}
+            <div className="grid grid-cols-1 gap-8">
+              <section>
+                <p className="text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] mb-4 font-sans">Usage</p>
+                <div className="rounded-2xl border border-mobi-border bg-mobi-bg overflow-hidden shadow-sm">
+                  <div className="flex items-center justify-between px-5 py-2.5 border-b border-mobi-border/50 bg-mobi-surface/50">
+                    <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-widest font-mono">TSX</span>
+                  </div>
+                  <pre className="p-6 overflow-x-auto">
+                    <code className="text-sm font-mono text-mobi-text leading-relaxed whitespace-pre">{active.code}</code>
+                  </pre>
+                </div>
+              </section>
+
+              <section>
+                <p className="text-[10px] font-black text-mobi-text-muted uppercase tracking-[0.2em] mb-4 font-sans">Import</p>
+                <div className="rounded-2xl border border-mobi-border bg-mobi-bg overflow-hidden shadow-sm">
+                  <pre className="p-6 overflow-x-auto">
+                    <code className="text-sm font-mono text-mobi-text leading-relaxed">{`import { ${active.name} } from '@wearemobi/shared';`}</code>
+                  </pre>
+                </div>
+              </section>
             </div>
           </div>
         </div>
