@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+:root {
+  --mobi-bg: #F8FAFC;
+  --mobi-surface: #ffffff;
+  --mobi-surface-hover: #F1F5F9;
+  --mobi-border: #E2E8F0;
+  --mobi-text: #0F172A;
+  --mobi-text-muted: #64748B;
+  --mobi-primary: #0F172A;
+}
+
+.dark {
+  --mobi-bg: #000000;
+  --mobi-surface: #111111;
+  --mobi-surface-hover: #1f1f1f;
+  --mobi-border: #222222;
+  --mobi-text: #F8FAFC;
+  --mobi-text-muted: #94A3B8;
+  --mobi-primary: #F8FAFC;
+}
+
+@theme {
+  --color-mobi-bg: var(--mobi-bg);
+  --color-mobi-surface: var(--mobi-surface);
+  --color-mobi-surface-hover: var(--mobi-surface-hover);
+  --color-mobi-border: var(--mobi-border);
+  --color-mobi-text: var(--mobi-text);
+  --color-mobi-text-muted: var(--mobi-text-muted);
+  --color-mobi-primary: var(--mobi-primary);
+  
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+@layer base {
+  body {
+    @apply bg-mobi-bg text-mobi-text antialiased font-sans transition-colors duration-200;
+    margin: 0;
+  }
+}
+
+.dark-invert {
+  @apply dark:invert dark:brightness-200;
+}
+
+.light-invert {
+  @apply invert brightness-0 dark:invert-0 dark:brightness-100;
+}
