@@ -23,6 +23,12 @@ export const useMobiTheme = () => {
     return stored || 'system';
   });
 
+  const updateTheme = (newTheme: MobiTheme) => {
+    setTheme(newTheme);
+    window.dispatchEvent(new CustomEvent('mobi-theme-change', { detail: newTheme }));
+  };
+
+
   useEffect(() => {
     const root = window.document.documentElement;
     
@@ -52,5 +58,14 @@ export const useMobiTheme = () => {
     }
   }, [theme]);
 
-  return { theme, setTheme };
+  // Sync state across all hook instances
+  useEffect(() => {
+    const handleGlobalChange = (e: any) => {
+      if (e.detail !== theme) setTheme(e.detail);
+    };
+    window.addEventListener('mobi-theme-change', handleGlobalChange);
+    return () => window.removeEventListener('mobi-theme-change', handleGlobalChange);
+  }, [theme]);
+
+  return { theme, setTheme: updateTheme };
 };

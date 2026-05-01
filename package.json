@@ -1,6 +1,6 @@
 {
   "name": "@wearemobi/shared",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Universal UI & Logic Shield for M.O.B.I.™ Grand Fleet",
   "type": "module",
   "files": [
@@ -13,10 +13,7 @@
       "import": "./dist/mobi-shared.js",
       "require": "./dist/mobi-shared.umd.cjs"
     },
-    "./styles.css": {
-      "import": "./dist/style.css",
-      "default": "./dist/style.css"
-    }
+    "./styles.css": "./dist/style.css"
   },
   "types": "./dist/index.d.ts",
   "scripts": {
