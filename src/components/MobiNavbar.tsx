@@ -25,7 +25,7 @@ export interface MobiNavbarProps {
 /**
  * Standard M.O.B.I.™ Top Navigation Bar.
  * Implements the official design system with a sticky, blurred background.
- * Automatically hides text on mobile to prioritize space.
+ * Automatically hides text on mobile (below md breakpoint) to prioritize space.
  *
  * @example
  * ```tsx
@@ -47,13 +47,14 @@ export const MobiNavbar: React.FC<MobiNavbarProps> = ({
       <div className="flex items-center gap-3">
         <button 
           onClick={onLogoClick} 
-          className="flex items-center gap-3 transition-opacity hover:opacity-70 outline-none cursor-pointer"
+          className="group flex items-center gap-3 transition-opacity hover:opacity-70 outline-none cursor-pointer"
           aria-label="Go home"
         >
           <MobiLogo size={32} />
-          <h1 className="hidden md:block text-xl font-bold tracking-tight font-sans">
+          {/* Title is hidden on mobile (below 768px) and shown on md+ screens */}
+          <span className="max-md:hidden md:inline-block text-xl font-bold tracking-tight font-sans whitespace-nowrap">
             {title}
-          </h1>
+          </span>
         </button>
       </div>
       
