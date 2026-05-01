@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../src";
 
 :root {
   --mobi-bg: #F8FAFC;
