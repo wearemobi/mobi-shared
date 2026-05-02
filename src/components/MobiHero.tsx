@@ -55,21 +55,21 @@ export const MobiHero: React.FC<MobiHeroProps> = ({
 }) => {
   return (
     <section className={`flex flex-col items-center justify-center text-center py-12 md:py-20 ${className}`}>
-      <div className="max-w-3xl">
+      <div className="max-w-2xl">
         {logo && (
-          <div className="mb-10 flex justify-center">
+          <div className="mb-8 flex justify-center">
             {logo}
           </div>
         )}
         
-        <h2 className="mb-4 text-4xl md:text-6xl font-bold tracking-tight font-sans leading-tight">
+        <h1 className="text-4xl md:text-6xl font-sans font-bold tracking-tight mb-4 text-mobi-text">
           {title} {subtitle && <span className="text-mobi-text-muted">{subtitle}</span>}
-        </h2>
+        </h1>
         
         {description && (
-          <div className="mb-8 text-lg md:text-xl text-mobi-text-muted font-sans font-medium max-w-xl mx-auto leading-relaxed">
+          <p className="text-lg md:text-xl text-mobi-text-muted font-sans font-medium mb-8 max-w-lg mx-auto leading-relaxed">
             {description}
-          </div>
+          </p>
         )}
         
         {children && (

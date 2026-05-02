@@ -4,6 +4,8 @@ import {
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard
 } from '../src';
+import pkg from '../package.json';
+
 
 /* ─── Component catalog entries ─── */
 interface CatalogEntry {
@@ -443,10 +445,21 @@ export const DocsPage: React.FC<DocsPageProps> = ({
         isOpen={isSidebarOpen} 
         onClose={() => setIsSidebarOpen(false)}
         className="lg:static lg:block"
-        footer={<div className="text-[10px] text-mobi-text-muted text-center font-mono">CORE v1.0.0</div>}
+        title={
+          <div className="flex items-center gap-3">
+            <MobiLogo size={24} />
+            <span className="text-xs font-black uppercase tracking-widest text-mobi-text">API Docs</span>
+          </div>
+        }
+        footer={
+          <div className="text-[10px] text-mobi-text-muted text-center font-mono opacity-50">
+            {pkg.name} v{pkg.version}
+          </div>
+        }
       >
         {SidebarContent}
       </MobiSidebar>
+
 
       {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-6 lg:p-12">
