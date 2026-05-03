@@ -119,7 +119,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
 
   return (
     <div className={`
-      w-full bg-mobi-surface border border-mobi-border rounded-none
+      w-full bg-mobi-surface border border-mobi-border rounded-sm
       shadow-2xl transition-all duration-300 focus-within:border-mobi-primary focus-within:ring-1 focus-within:ring-mobi-primary/20
       ${className}
     `}>
@@ -187,7 +187,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
           variant="solid" 
           onClick={handleSend}
           disabled={isProcessing || !value.trim()}
-          className="h-8 w-8 min-w-0 p-0 flex items-center justify-center rounded-none"
+          className="h-8 w-8 min-w-0 p-0 flex items-center justify-center rounded-sm"
           icon={isProcessing ? (
             <div className="h-3 w-3 border-2 border-mobi-bg/30 border-t-mobi-bg rounded-full animate-spin" />
           ) : (

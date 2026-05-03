@@ -135,7 +135,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
             {/* Header (Condensed) */}
             <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-2xl">
               <div className="flex items-center gap-3">
-                <div className="bg-mobi-text p-1 rounded-none">
+                <div className="bg-mobi-text p-1 rounded-sm">
                   <MobiLogo size={20} className="text-mobi-bg" />
                 </div>
                 <div>
@@ -172,7 +172,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                 <MobiButton 
                   variant="ghost" 
                   size="sm" 
-                  className="h-8 w-8 p-0 min-w-0 rounded-none"
+                  className="h-8 w-8 p-0 min-w-0 rounded-sm"
                   onClick={() => setIsOpen(false)}
                   icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
                 />
