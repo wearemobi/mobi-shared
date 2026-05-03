@@ -29,15 +29,16 @@ const MyComponent = () => {
 | `placeholder` | `string` | `'Ask M.O.B.I...'` | Placeholder text. |
 | `isProcessing` | `boolean` | `false` | Disables input and shows a thinking state. |
 | `statusMessage` | `string` | `'Powered by MobiAI'` | Technical status text in the footer. |
+| `activeModelId` | `string` | `'fast'` | Currently selected model ID for the switcher. |
+| `onModelChange` | `(id: string) => void` | `undefined` | Callback triggered when a new model is selected. |
 | `onAttachClick` | `() => void` | `undefined` | Handler for the attachment button. |
-| `onToolsClick` | `() => void` | `undefined` | Handler for the tools/config button. |
 | `className` | `string` | `""` | Additional CSS classes. |
 
 ## Features
 
-- **Icon-Only Send**: Minimalist send action using the high-impact arrow icon.
-- **MobiAI Branding**: Integrated footer with the official "mini M" logo and "Powered by MobiAI" signature.
-- **Auto-Expanding**: Textarea grows dynamically with content (up to a max-height).
+- **Condensed Command Action**: The send button has been optimized to a minimalist 32x32px action frame.
+- **Model In-Situ Switching**: Integrated `MobiSwitcher` for seamless transitioning between `Fast`, `Pro`, and `Expert` models.
+- **Status Context**: Dynamic footer that reflects processing states and AI signature.
 
 ## Aesthetic
 

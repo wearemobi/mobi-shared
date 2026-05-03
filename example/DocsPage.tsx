@@ -451,10 +451,12 @@ const catalog: CatalogEntry[] = [
     render: () => {
       const ChatDemo = () => {
         const [isProcessing, setIsProcessing] = useState(false);
+        const [activeModel, setActiveModel] = useState('fast');
+
         const handleSend = (msg: string) => {
           setIsProcessing(true);
           setTimeout(() => {
-            alert(`Command Received: ${msg}`);
+            alert(`[${activeModel}] Command Received: ${msg}`);
             setIsProcessing(false);
           }, 2000);
         };
@@ -464,8 +466,9 @@ const catalog: CatalogEntry[] = [
             <MobiChatInput 
               onSend={handleSend} 
               isProcessing={isProcessing}
+              activeModelId={activeModel}
+              onModelChange={setActiveModel}
               onAttachClick={() => alert('Attach clicked')}
-              onToolsClick={() => alert('Tools clicked')}
             />
           </div>
         );
