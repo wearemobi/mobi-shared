@@ -165,8 +165,8 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
               </div>
             )}
 
-            {/* Config Section */}
-            {(showLangSwitcher || showThemeSwitcher) && (
+            {/* Config Section (Hidden in micro) */}
+            {variant !== 'micro' && (showLangSwitcher || showThemeSwitcher) && (
               <div className="p-3 border-t border-mobi-border/50 space-y-3 bg-mobi-bg/10">
                 {/* Language */}
                 {showLangSwitcher && (
@@ -217,22 +217,6 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
                       ]}
                       activeId={theme}
                       onChange={(id) => setTheme(id as any)}
-                    />
-                  </div>
-                )}
-
-                {/* Font Size */}
-                {showFontSizeSwitcher && (
-                  <div className="flex items-center justify-between px-2">
-                    <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Texto</span>
-                    <MobiSwitcher 
-                      options={[
-                        { id: 'sm', label: 'A-', icon: <span className="text-[10px] font-bold">A</span> },
-                        { id: 'md', label: 'A', icon: <span className="text-[12px] font-bold">A</span> },
-                        { id: 'lg', label: 'A+', icon: <span className="text-[14px] font-bold">A</span> }
-                      ]}
-                      activeId={fontSize}
-                      onChange={(id) => onFontSizeChange?.(id as any)}
                     />
                   </div>
                 )}
