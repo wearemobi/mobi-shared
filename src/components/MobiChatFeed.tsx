@@ -96,12 +96,12 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
             className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
           >
             <div className={`
-              max-w-[90%] px-4 py-2.5 rounded-xl text-[13px] font-sans leading-relaxed relative group/msg
+              max-w-[90%] px-4 py-2.5 rounded-none text-[12px] font-mono leading-relaxed relative group/msg tracking-tight
               ${m.isError 
                 ? 'bg-rose-500/10 border border-rose-500/50 text-rose-200' 
                 : m.role === 'user' 
-                  ? 'bg-mobi-primary text-mobi-bg rounded-tr-none shadow-lg shadow-mobi-primary/10' 
-                  : 'bg-mobi-surface border border-mobi-border text-mobi-text rounded-tl-none shadow-sm'}
+                  ? 'bg-mobi-primary text-mobi-bg shadow-lg shadow-mobi-primary/10' 
+                  : 'bg-mobi-surface border border-mobi-border text-mobi-text shadow-sm'}
             `}>
               {m.content}
               
