@@ -715,7 +715,17 @@ export const DocsPage: React.FC<DocsPageProps> = ({
       </main>
 
       {/* The Widget Popup Preview */}
-      <MobiChatWidget />
+      <MobiChatWidget 
+        userInitials="CQ" 
+        userPlan="PRO" 
+        userEmail="carlos@wearemobi.com"
+        userName="Carlos Quijano"
+        title="MobiAi Tactical Link"
+        initialMessages={[
+          { id: '1', role: 'user', content: 'Iniciando enlace táctico con MobiAi.', timestamp: new Date().toISOString() },
+          { id: '2', role: 'assistant', content: 'Enlace establecido. El sistema está operando bajo parámetros v1.2.6. Todos los vectores de datos están sincronizados.', model: 'pro', timestamp: new Date().toISOString() }
+        ]}
+      />
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MobiChatInput } from './MobiChatInput';
-import { MobiChatFeed } from './MobiChatFeed';
+import { MobiChatFeed, MobiChatMessage } from './MobiChatFeed';
 import { MobiLogo } from './MobiLogo';
 import { MobiLogoHero } from './MobiLogoHero';
 import { useMobiChat } from '../hooks/useMobiChat';
@@ -10,6 +10,8 @@ import { MobiPlan } from './MobiPlanBadge';
 import { MobiErrorBoundary } from './MobiErrorBoundary';
 
 export interface MobiChatWidgetProps {
+  /** Initial messages to populate the feed. */
+  initialMessages?: MobiChatMessage[];
   /**
    * Initial energy level for the widget.
    * @default 100
@@ -97,7 +99,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     energy, 
     sendMessage, 
     setActiveModelId 
-  } = useMobiChat({ initialEnergy });
+  } = useMobiChat({ initialEnergy, initialMessages });
 
   const getModelStatus = () => {
     switch (activeModelId) {
@@ -125,7 +127,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                   <MobiLogo size={20} className="text-mobi-bg" />
                 </div>
                 <div>
-                  <h3 className="text-[13px] font-black tracking-tight text-mobi-text leading-none">{title}</h3>
+                  <h3 className="text-[13px] font-bold tracking-tight text-mobi-text leading-none">{title}</h3>
                   <div className="-mt-1">
                     <span className="text-[8px] font-mono text-mobi-text-muted uppercase tracking-wider font-bold">
                       {getModelStatus()}
