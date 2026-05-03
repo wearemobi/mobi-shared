@@ -76,6 +76,13 @@ export interface MobiChatWidgetProps {
   onAttach?: (source: 'computer' | 'vault') => void;
   /** Suggested questions for empty state. */
   suggestions?: string[];
+  /** 
+   * Externally control if the widget is open. 
+   * If provided, the widget operates in controlled mode.
+   */
+  isOpen?: boolean;
+  /** Callback triggered when the widget wants to change its open state. */
+  onToggle?: (isOpen: boolean) => void;
 }
 
 /**
@@ -106,14 +113,22 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   onAction,
   onError,
   onAttach,
-  suggestions = []
+  suggestions = [],
+  isOpen: controlledIsOpen,
+  onToggle
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+  
   const [currentFontSize, setCurrentFontSize] = useState<'sm' | 'md' | 'lg'>('md');
   
   const handleToggle = () => {
     const nextState = !isOpen;
-    setIsOpen(nextState);
+    if (controlledIsOpen === undefined) {
+      setInternalIsOpen(nextState);
+    }
+    onToggle?.(nextState);
+    
     if (nextState) onOpen?.();
     else onClose?.();
   };
