@@ -19,6 +19,7 @@ export * from './components/MobiChatInput';
 export * from './components/MobiChatFeed';
 export * from './components/MobiEnergyMeter';
 export * from './components/MobiChatWidget';
+export * from './components/MobiErrorBoundary';
 export * from './hooks/useMobiAuth';
 export * from './hooks/useMobiTheme';
 export * from './hooks/useMobiClipboard';

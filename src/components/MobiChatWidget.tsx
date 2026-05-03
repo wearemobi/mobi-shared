@@ -4,8 +4,10 @@ import { MobiChatFeed } from './MobiChatFeed';
 import { MobiLogo } from './MobiLogo';
 import { MobiLogoHero } from './MobiLogoHero';
 import { useMobiChat } from '../hooks/useMobiChat';
+import { MobiButton } from './MobiButton';
 import { MobiUserBadge } from './MobiUserBadge';
 import { MobiPlan } from './MobiPlanBadge';
+import { MobiErrorBoundary } from './MobiErrorBoundary';
 
 export interface MobiChatWidgetProps {
   /**
@@ -115,74 +117,76 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
           shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col
           animate-in fade-in slide-in-from-bottom-4 duration-300
         ">
-          {/* Header (Condensed) */}
-          <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-2xl">
-            <div className="flex items-center gap-3">
-              <div className="bg-mobi-text p-1 rounded-none">
-                <MobiLogo size={20} className="text-mobi-bg" />
-              </div>
-              <div>
-                <h3 className="text-[13px] font-black tracking-tight text-mobi-text leading-none">{title}</h3>
-                <div className="-mt-1">
-                  <span className="text-[8px] font-mono text-mobi-text-muted uppercase tracking-wider font-bold">
-                    {getModelStatus()}
-                  </span>
+          <MobiErrorBoundary>
+            {/* Header (Condensed) */}
+            <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-2xl">
+              <div className="flex items-center gap-3">
+                <div className="bg-mobi-text p-1 rounded-none">
+                  <MobiLogo size={20} className="text-mobi-bg" />
+                </div>
+                <div>
+                  <h3 className="text-[13px] font-black tracking-tight text-mobi-text leading-none">{title}</h3>
+                  <div className="-mt-1">
+                    <span className="text-[8px] font-mono text-mobi-text-muted uppercase tracking-wider font-bold">
+                      {getModelStatus()}
+                    </span>
+                  </div>
                 </div>
               </div>
+              <div className="flex items-center gap-2">
+                {userInitials && (
+                  <>
+                    <MobiUserBadge 
+                      variant="micro" 
+                      initials={userInitials} 
+                      email={userEmail || ''} 
+                      name={userName} 
+                      plan={userPlan || 'FREE'} 
+                    />
+                    <div className="h-4 w-[1px] bg-mobi-border mx-1" />
+                  </>
+                )}
+                <MobiButton 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-8 w-8 p-0 min-w-0 rounded-xl"
+                  onClick={() => setIsOpen(false)}
+                  icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
+                />
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              {userInitials && (
-                <>
-                  <MobiUserBadge 
-                    variant="micro" 
-                    initials={userInitials} 
-                    email={userEmail || ''} 
-                    name={userName} 
-                    plan={userPlan || 'FREE'} 
-                  />
-                  <div className="h-4 w-[1px] bg-mobi-border mx-1" />
-                </>
-              )}
-              <MobiButton 
-                variant="ghost" 
-                size="sm" 
-                className="h-8 w-8 p-0 min-w-0 rounded-xl"
-                onClick={() => setIsOpen(false)}
-                icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
+
+            {/* Messages Area (Now extracted) */}
+            <MobiChatFeed 
+              messages={messages} 
+              isProcessing={isProcessing} 
+              className="bg-mobi-bg/10"
+              userLabel={userLabel}
+              assistantLabel={assistantLabel}
+              processingText={processingText}
+              emptyState={{
+                title: emptyStateTitle,
+                description: emptyStateDescription
+              }}
+            />
+
+            {/* Input Area */}
+            <div className="p-3 bg-mobi-bg border-t border-mobi-border rounded-b-2xl">
+              <MobiChatInput 
+                onSend={sendMessage}
+                isProcessing={isProcessing}
+                activeModelId={activeModelId}
+                onModelChange={setActiveModelId}
+                energy={energy}
+                placeholder={placeholder}
+                statusMessage={statusMessage}
+                processingText={processingText}
+                addFromComputerText={addFromComputerText}
+                addFromVaultText={addFromVaultText}
+                className="border-none shadow-none bg-transparent"
               />
             </div>
-          </div>
-
-          {/* Messages Area (Now extracted) */}
-          <MobiChatFeed 
-            messages={messages} 
-            isProcessing={isProcessing} 
-            className="bg-mobi-bg/10"
-            userLabel={userLabel}
-            assistantLabel={assistantLabel}
-            processingText={processingText}
-            emptyState={{
-              title: emptyStateTitle,
-              description: emptyStateDescription
-            }}
-          />
-
-          {/* Input Area */}
-          <div className="p-3 bg-mobi-bg border-t border-mobi-border rounded-b-2xl">
-            <MobiChatInput 
-              onSend={sendMessage}
-              isProcessing={isProcessing}
-              activeModelId={activeModelId}
-              onModelChange={setActiveModelId}
-              energy={energy}
-              placeholder={placeholder}
-              statusMessage={statusMessage}
-              processingText={processingText}
-              addFromComputerText={addFromComputerText}
-              addFromVaultText={addFromVaultText}
-              className="border-none shadow-none bg-transparent"
-            />
-          </div>
+          </MobiErrorBoundary>
         </div>
       )}
 
