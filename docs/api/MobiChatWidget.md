@@ -9,10 +9,13 @@ import { MobiChatWidget } from '@wearemobi/shared';
 
 const App = () => {
   return (
-    <div>
-      {/* Rest of your app */}
-      <MobiChatWidget title="Agentic Link" initialEnergy={100} />
-    </div>
+    <MobiChatWidget 
+      title="MobiAi Chat"
+      userInitials="CQ"
+      userPlan="PRO"
+      placeholder="Ask me anything..."
+      initialEnergy={100} 
+    />
   );
 };
 ```
@@ -22,6 +25,12 @@ const App = () => {
 | Prop | Type | Default | Description |
 |---|---|---|---|
 | `initialEnergy` | `number` | `100` | Starting energy level for the session. |
+| `title` | `string` | `'MobiAi Chat'` | Title displayed in the chat header. |
+| `userInitials` | `string` | `-` | Initials for the header user badge (renders mini version). |
+| `userPlan` | `MobiPlan` | `'FREE'` | Subscription plan for the user badge. |
+| `placeholder` | `string` | `'Ask M.O.B.I...'` | Input text placeholder. |
+| `userLabel` | `string` | `'COMMAND • SYNC'` | Technical label for user messages. |
+| `assistantLabel` | `string` | `'AGENT • PROCESSED'` | Technical label for assistant messages. |
 
 ## Features
 
