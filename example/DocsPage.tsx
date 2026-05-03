@@ -720,9 +720,9 @@ export const DocsPage: React.FC<DocsPageProps> = ({
         userPlan="PRO" 
         userEmail="carlos@wearemobi.com"
         userName="Carlos Quijano"
-        title="MobiAi Tactical Link"
+        title="MobiAI Chat"
         initialMessages={[
-          { id: '1', role: 'user', content: 'Iniciando enlace táctico con MobiAi.', timestamp: new Date().toISOString() },
+          { id: '1', role: 'user', content: 'Iniciando enlace táctico con MobiAI.', timestamp: new Date().toISOString() },
           { id: '2', role: 'assistant', content: 'Enlace establecido. El sistema está operando bajo parámetros v1.2.6. Todos los vectores de datos están sincronizados.', model: 'pro', timestamp: new Date().toISOString() }
         ]}
         userMenuItems={[

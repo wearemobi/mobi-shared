@@ -64,7 +64,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
   userLabel = 'COMMAND • SYNC',
   assistantLabel = 'AGENT • PROCESSED',
   emptyState = {
-    title: "MobiAi Interface",
+    title: "MobiAI Chat",
     description: "Agentic Link established. System is ready for tactical deployment."
   },
   fontSize = 'md'

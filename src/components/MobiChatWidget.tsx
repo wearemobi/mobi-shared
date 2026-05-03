@@ -30,7 +30,7 @@ export interface MobiChatWidgetProps {
   assistantLabel?: string;
   /**
    * Title of the chat window.
-   * @default 'MobiAi Chat'
+   * @default 'MobiAI Chat'
    */
   title?: string;
   /**
@@ -86,7 +86,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   initialEnergy = 100,
   userLabel,
   assistantLabel,
-  title = 'MobiAi Chat',
+  title = 'MobiAI Chat',
   placeholder,
   statusMessage,
   processingText,
