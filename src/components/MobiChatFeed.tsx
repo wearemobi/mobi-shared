@@ -136,7 +136,6 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                 )}
               </div>
             </div>
-            </div>
           </div>
         ))
       )}
