@@ -99,7 +99,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
       {isOpen && (
         <div className="
           w-[380px] h-[550px] bg-mobi-surface border border-mobi-border rounded-2xl
-          shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col overflow-hidden
+          shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col
           animate-in fade-in slide-in-from-bottom-4 duration-300
         ">
           {/* Header (Condensed) */}
