@@ -47,6 +47,8 @@ export interface MobiSentinelMenuProps {
   onLangChange?: (lang: string) => void;
   /** Language options — defaults to ES/EN */
   langOptions?: { id: string; label: string; icon?: React.ReactNode }[];
+  /** Variant of the trigger badge. @default 'condensed' */
+  variant?: 'condensed' | 'micro';
   /** Additional class name */
   className?: string;
 }
@@ -80,6 +82,7 @@ const defaultLangOptions = [
 export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
   user,
   items = [],
+  variant = 'condensed',
   showThemeSwitcher = true,
   showLangSwitcher = true,
   lang: externalLang,
@@ -105,7 +108,7 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
   return (
     <div className={`relative inline-block text-left ${className}`}>
       <MobiUserBadge 
-        variant="condensed"
+        variant={variant}
         initials={user.initials}
         plan={user.plan}
         email={user.email}

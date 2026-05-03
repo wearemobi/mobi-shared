@@ -8,6 +8,7 @@ import { MobiButton } from './MobiButton';
 import { MobiUserBadge } from './MobiUserBadge';
 import { MobiPlan } from './MobiPlanBadge';
 import { MobiErrorBoundary } from './MobiErrorBoundary';
+import { MobiSentinelMenu, MobiSentinelMenuItem } from './MobiSentinelMenu';
 
 export interface MobiChatWidgetProps {
   /** Initial messages to populate the feed. */
@@ -68,6 +69,12 @@ export interface MobiChatWidgetProps {
   userName?: string;
   /** User plan for the header badge. */
   userPlan?: MobiPlan;
+  /** Optional menu items for the user dropdown in the header. */
+  userMenuItems?: MobiSentinelMenuItem[];
+  /** Callback for language changes in the header menu. */
+  onLangChange?: (lang: string) => void;
+  /** Current language code for the header menu. */
+  lang?: string;
 }
 
 /**
@@ -90,7 +97,10 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   userInitials,
   userEmail,
   userName,
-  userPlan
+  userPlan,
+  userMenuItems = [],
+  onLangChange,
+  lang
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { 
@@ -139,12 +149,18 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
               <div className="flex items-center gap-2">
                 {userInitials && (
                   <>
-                    <MobiUserBadge 
+                    <MobiSentinelMenu 
                       variant="micro" 
-                      initials={userInitials} 
-                      email={userEmail || ''} 
-                      name={userName} 
-                      plan={userPlan || 'FREE'} 
+                      user={{
+                        initials: userInitials,
+                        email: userEmail || '',
+                        name: userName,
+                        plan: userPlan || 'FREE'
+                      }}
+                      items={userMenuItems}
+                      onLangChange={onLangChange}
+                      lang={lang}
+                      showThemeSwitcher={false} // Hidden in widget to keep it clean
                     />
                     <div className="h-4 w-[1px] bg-mobi-border mx-1" />
                   </>
