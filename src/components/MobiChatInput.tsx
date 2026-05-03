@@ -119,7 +119,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
 
   return (
     <div className={`
-      w-full bg-mobi-surface border border-mobi-border rounded-2xl
+      w-full bg-mobi-surface border border-mobi-border rounded-none
       shadow-2xl transition-all duration-300 focus-within:border-mobi-primary focus-within:ring-1 focus-within:ring-mobi-primary/20
       ${className}
     `}>
@@ -155,7 +155,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
           
           {/* Plus Menu Dropdown */}
           {isMenuOpen && (
-            <div className="absolute bottom-full left-0 mb-2 w-56 bg-mobi-surface border border-mobi-border rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2">
+            <div className="absolute bottom-full left-0 mb-2 w-56 bg-mobi-surface border border-mobi-border rounded-none shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2">
               <button 
                 className="w-full px-4 py-3 text-left text-[11px] font-sans font-semibold text-mobi-text hover:bg-mobi-primary hover:text-mobi-bg transition-colors flex items-center gap-3"
                 onClick={() => { setIsMenuOpen(false); onAttachClick?.(); }}
@@ -187,7 +187,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
           variant="solid" 
           onClick={handleSend}
           disabled={isProcessing || !value.trim()}
-          className="h-8 w-8 min-w-0 p-0 flex items-center justify-center rounded-xl"
+          className="h-8 w-8 min-w-0 p-0 flex items-center justify-center rounded-none"
           icon={isProcessing ? (
             <div className="h-3 w-3 border-2 border-mobi-bg/30 border-t-mobi-bg rounded-full animate-spin" />
           ) : (
