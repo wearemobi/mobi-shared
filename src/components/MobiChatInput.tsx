@@ -65,7 +65,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
   onSend,
   placeholder = 'Ask M.O.B.I...',
   isProcessing = false,
-  statusMessage = 'Powered by MobiAI',
+  statusMessage = 'POWERED BY MOBIAI',
   energy = 100,
   activeModelId = 'fast',
   onModelChange,
