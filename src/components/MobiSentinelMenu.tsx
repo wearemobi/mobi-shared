@@ -165,60 +165,55 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
               </div>
             )}
 
-            {/* Config Section (Hidden in micro) */}
-            {variant !== 'micro' && (showLangSwitcher || showThemeSwitcher) && (
+            {/* Settings & Config (Tuned for micro) */}
+            {(showLangSwitcher || showThemeSwitcher || showFontSizeSwitcher) && (
               <div className="p-3 border-t border-mobi-border/50 space-y-3 bg-mobi-bg/10">
-                {/* Language */}
-                {showLangSwitcher && (
+                {/* Font Size (Always visible if requested, even in micro) */}
+                {showFontSizeSwitcher && (
                   <div className="flex items-center justify-between px-2">
-                    <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Idioma</span>
+                    <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Texto</span>
                     <MobiSwitcher 
-                      options={langOptions}
-                      activeId={activeLang}
-                      onChange={handleLangChange}
+                      options={[
+                        { id: 'sm', label: 'A-', icon: <span className="text-[10px] font-bold">A</span> },
+                        { id: 'md', label: 'A', icon: <span className="text-[12px] font-bold">A</span> },
+                        { id: 'lg', label: 'A+', icon: <span className="text-[14px] font-bold">A</span> }
+                      ]}
+                      activeId={fontSize}
+                      onChange={(id) => onFontSizeChange?.(id as any)}
                     />
                   </div>
                 )}
 
-                {/* Theme */}
-                {showThemeSwitcher && (
-                  <div className="flex items-center justify-between px-2">
-                    <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Interfaz</span>
-                    <MobiSwitcher 
-                      hideLabel
-                      options={[
-                        { 
-                          id: 'light', 
-                          label: 'Light', 
-                          icon: (
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <circle cx="12" cy="12" r="5" strokeWidth={2}/><path strokeWidth={2} strokeLinecap="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" />
-                            </svg>
-                          ) 
-                        },
-                        { 
-                          id: 'system', 
-                          label: 'Auto', 
-                          icon: (
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                          ) 
-                        },
-                        { 
-                          id: 'dark', 
-                          label: 'Dark', 
-                          icon: (
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
-                            </svg>
-                          ) 
-                        }
-                      ]}
-                      activeId={theme}
-                      onChange={(id) => setTheme(id as any)}
-                    />
-                  </div>
+                {/* Other settings hidden in micro */}
+                {variant !== 'micro' && (
+                  <>
+                    {showLangSwitcher && (
+                      <div className="flex items-center justify-between px-2">
+                        <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Idioma</span>
+                        <MobiSwitcher 
+                          options={langOptions}
+                          activeId={activeLang}
+                          onChange={handleLangChange}
+                        />
+                      </div>
+                    )}
+
+                    {showThemeSwitcher && (
+                      <div className="flex items-center justify-between px-2">
+                        <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Interfaz</span>
+                        <MobiSwitcher 
+                          hideLabel
+                          options={[
+                            { id: 'light', label: 'Light', icon: <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="5" strokeWidth={2}/><path strokeWidth={2} strokeLinecap="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg> },
+                            { id: 'system', label: 'Auto', icon: <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> },
+                            { id: 'dark', label: 'Dark', icon: <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" /></svg> }
+                          ]}
+                          activeId={theme}
+                          onChange={(id) => setTheme(id as any)}
+                        />
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
             )}
