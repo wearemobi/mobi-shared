@@ -157,14 +157,14 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
           {isMenuOpen && (
             <div className="absolute bottom-full left-0 mb-2 w-56 bg-mobi-surface border border-mobi-border rounded-xl shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2">
               <button 
-                className="w-full px-4 py-3 text-left text-[11px] font-mono text-mobi-text hover:bg-mobi-primary hover:text-mobi-bg transition-colors flex items-center gap-3"
+                className="w-full px-4 py-3 text-left text-[11px] font-sans font-semibold text-mobi-text hover:bg-mobi-primary hover:text-mobi-bg transition-colors flex items-center gap-3"
                 onClick={() => { setIsMenuOpen(false); onAttachClick?.(); }}
               >
                 <svg className="h-4 w-4 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2a4 4 0 014-4h4m-4 4l-4-4m4 4l4-4" /></svg>
                 <span>{addFromComputerText}</span>
               </button>
               <button 
-                className="w-full px-4 py-3 text-left text-[11px] font-mono text-mobi-text hover:bg-mobi-primary hover:text-mobi-bg transition-colors border-t border-mobi-border flex items-center gap-3"
+                className="w-full px-4 py-3 text-left text-[11px] font-sans font-semibold text-mobi-text hover:bg-mobi-primary hover:text-mobi-bg transition-colors border-t border-mobi-border flex items-center gap-3"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <svg className="h-4 w-4 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg>
