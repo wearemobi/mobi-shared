@@ -110,3 +110,26 @@
 .mobi-markdown strong {
   @apply font-black text-mobi-text;
 }
+/* Plan Badges - ULTRA IRIDESCENT */
+.mobi-plan-ultra {
+  background: linear-gradient(
+    110deg,
+    #00f2ff 0%,
+    #7000ff 25%,
+    #00f2ff 50%,
+    #7000ff 75%,
+    #00f2ff 100%
+  );
+  background-size: 200% auto;
+  animation: mobi-iridescent 3s linear infinite;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
+}
+
+@keyframes mobi-iridescent {
+  to {
+    background-position: 200% center;
+  }
+}

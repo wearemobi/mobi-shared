@@ -87,6 +87,8 @@ export interface MobiChatWidgetProps {
   onError?: (error: string) => void;
   /** Analytics: Called when a file is attached. */
   onAttach?: (source: 'computer' | 'vault') => void;
+  /** Suggested questions for empty state. */
+  suggestions?: string[];
 }
 
 /**
@@ -118,7 +120,8 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   onMessageSent,
   onAction,
   onError,
-  onAttach
+  onAttach,
+  suggestions = []
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentFontSize, setCurrentFontSize] = useState<'sm' | 'md' | 'lg'>('md');
@@ -241,6 +244,11 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
               emptyState={{
                 title: emptyStateTitle,
                 description: emptyStateDescription
+              }}
+              suggestions={suggestions}
+              onSuggestionClick={(s) => {
+                handleSendMessage(s);
+                onAction?.('suggestion_click', { suggestion: s });
               }}
             />
 

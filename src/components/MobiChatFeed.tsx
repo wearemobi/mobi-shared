@@ -58,6 +58,10 @@ export interface MobiChatFeedProps {
   onCopy?: (content: string) => void;
   /** Callback for sharing message content. */
   onShare?: (content: string) => void;
+  /** Suggested questions for empty state. */
+  suggestions?: string[];
+  /** Callback when a suggestion is clicked. */
+  onSuggestionClick?: (suggestion: string) => void;
 }
 
 /**
@@ -78,7 +82,9 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
   fontSize = 'md',
   onRetry,
   onCopy,
-  onShare
+  onShare,
+  suggestions = [],
+  onSuggestionClick
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -101,9 +107,32 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
           </div>
           <div className="space-y-2">
             <h4 className="text-[15px] font-black tracking-tight text-mobi-text">{emptyState.title}</h4>
-            <p className="text-[11px] font-sans text-mobi-text-muted leading-relaxed max-w-[220px] mx-auto opacity-80">
+            <p className="text-[11px] font-sans text-mobi-text-muted leading-relaxed max-w-[220px] mx-auto opacity-80 mb-8">
               {emptyState.description}
             </p>
+            
+            {/* Canned Questions / Suggestions */}
+            {suggestions.length > 0 && (
+              <div className="grid grid-cols-1 gap-2 w-full max-w-[280px]">
+                {suggestions.map((s, i) => (
+                  <button
+                    key={i}
+                    onClick={() => onSuggestionClick?.(s)}
+                    className="
+                      w-full px-4 py-2.5 text-left text-[11px] font-bold text-mobi-text-muted
+                      bg-mobi-surface border border-mobi-border rounded-sm
+                      hover:bg-mobi-primary hover:text-mobi-bg hover:border-mobi-primary
+                      transition-all duration-200 group flex items-center justify-between
+                    "
+                  >
+                    <span>{s}</span>
+                    <svg className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       ) : (
@@ -129,13 +158,13 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
               
               {/* Message Actions (Visible on Hover) */}
               <div className={`
-                absolute top-1/2 -translate-y-1/2 flex gap-1 px-2 py-1 bg-mobi-surface border border-mobi-border rounded-lg shadow-xl opacity-0 group-hover/msg:opacity-100 transition-opacity duration-200 z-10
-                ${m.role === 'user' ? 'right-full mr-2' : 'left-full ml-2'}
+                absolute top-full mt-1 flex gap-1 px-1 py-0.5 bg-mobi-bg border border-mobi-border rounded-sm shadow-sm opacity-0 group-hover/msg:opacity-100 transition-opacity duration-200 z-10
+                ${m.role === 'user' ? 'right-0' : 'left-0'}
               `}>
                 <button 
                   title="Copy"
                   aria-label="Copy message content"
-                  className="p-1 hover:bg-mobi-primary/10 rounded text-mobi-text-muted hover:text-mobi-primary transition-colors"
+                  className="p-1 hover:bg-mobi-primary/10 rounded-sm text-mobi-text-muted hover:text-mobi-primary transition-colors"
                   onClick={() => {
                     navigator.clipboard.writeText(m.content);
                     onCopy?.(m.content);
@@ -146,7 +175,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                 <button 
                   title="Share"
                   aria-label="Share message content"
-                  className="p-1 hover:bg-mobi-primary/10 rounded text-mobi-text-muted hover:text-mobi-primary transition-colors"
+                  className="p-1 hover:bg-mobi-primary/10 rounded-sm text-mobi-text-muted hover:text-mobi-primary transition-colors"
                   onClick={() => onShare?.(m.content)}
                 >
                   <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
@@ -155,7 +184,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                   <button 
                     title="Retry"
                     aria-label="Retry message generation"
-                    className="p-1 hover:bg-mobi-primary/10 rounded text-mobi-text-muted hover:text-mobi-primary transition-colors"
+                    className="p-1 hover:bg-mobi-primary/10 rounded-sm text-mobi-text-muted hover:text-mobi-primary transition-colors"
                     onClick={() => onRetry?.(m)}
                   >
                     <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>

@@ -57,11 +57,19 @@ export const MobiPlanBadge: React.FC<MobiPlanBadgeProps> = ({
     }
   };
 
+  const isUltra = plan === 'ULTRA';
   const style = planStyles[plan];
 
   return (
-    <div className={`inline-flex items-center ${style.bg} border border-mobi-border/30 px-2 py-0.5 rounded-md shadow-sm ${className}`}>
-      <span className={`text-[9px] font-black uppercase tracking-[0.15em] ${style.color} font-sans`}>
+    <div className={`
+      inline-flex items-center border px-2 py-0.5 rounded-sm shadow-sm font-sans transition-all
+      ${isUltra ? 'mobi-plan-ultra' : `${style.bg} border-mobi-border/30`}
+      ${className}
+    `}>
+      <span className={`
+        text-[9px] font-black uppercase tracking-[0.15em]
+        ${isUltra ? 'text-white' : style.color}
+      `}>
         {style.label}
       </span>
     </div>
