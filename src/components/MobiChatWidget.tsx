@@ -22,7 +22,6 @@ export interface MobiChatWidgetProps {
  * A floating, pop-up agentic interface that provides immediate access to MobiAI.
  */
 export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
-  title = 'M.O.B.I. Agentic Link',
   initialEnergy = 100
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,6 +34,15 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     setActiveModelId 
   } = useMobiChat({ initialEnergy });
 
+  const getModelStatus = () => {
+    switch (activeModelId) {
+      case 'fast': return 'Fast • Answers Quickly';
+      case 'pro': return 'Pro • Solves Complex Problems';
+      case 'expert': return 'Expert • Deep Agentic Reasoning';
+      default: return 'Online • Secure Connection';
+    }
+  };
+
   return (
     <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-4">
       {/* Chat Window */}
@@ -45,23 +53,22 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
           animate-in fade-in slide-in-from-bottom-4 duration-300
         ">
           {/* Header */}
-          <div className="px-4 py-3 bg-mobi-bg border-b border-mobi-border flex items-center justify-between">
+          <div className="px-4 py-4 bg-mobi-bg border-b border-mobi-border flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="p-1.5 bg-mobi-primary/10 rounded-lg">
-                <MobiLogo className="h-4 w-4" />
-              </div>
+              <MobiLogo className="h-5 w-5" />
               <div>
-                <h3 className="text-[11px] font-black uppercase tracking-widest text-mobi-text leading-none">{title}</h3>
-                <div className="flex items-center gap-1.5 mt-1">
-                  <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
-                  <span className="text-[8px] font-mono text-mobi-text-muted uppercase">Secure Connection Active</span>
+                <h3 className="text-[12px] font-black uppercase tracking-widest text-mobi-text leading-none">MobiAI Chat</h3>
+                <div className="mt-1.5">
+                  <span className="text-[8px] font-mono text-mobi-text-muted uppercase tracking-wider font-bold">
+                    {getModelStatus()}
+                  </span>
                 </div>
               </div>
             </div>
             <MobiButton 
               variant="ghost" 
               size="sm" 
-              className="h-7 w-7 p-0 min-w-0"
+              className="h-8 w-8 p-0 min-w-0 rounded-xl"
               onClick={() => setIsOpen(false)}
               icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
             />
@@ -70,13 +77,16 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
           {/* Messages Area */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-mobi-bg/20">
             {messages.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center text-center p-8 space-y-4">
-                <div className="w-12 h-12 rounded-full border border-mobi-border flex items-center justify-center opacity-20">
-                  <MobiLogo className="h-6 w-6 grayscale" />
+              <div className="h-full flex flex-col items-center justify-center text-center p-8">
+                <div className="mb-6 animate-pulse">
+                  <MobiLogo className="h-10 w-10 opacity-40" />
                 </div>
-                <p className="text-[10px] font-mono text-mobi-text-muted leading-relaxed uppercase tracking-tighter">
-                  M.O.B.I. Agent initialized.<br/>Awaiting tactical commands...
-                </p>
+                <div className="space-y-2">
+                  <h4 className="text-[14px] font-black uppercase tracking-[0.2em] text-mobi-text">MobiAI Interface</h4>
+                  <p className="text-[9px] font-mono text-mobi-text-muted leading-relaxed uppercase tracking-widest max-w-[200px] mx-auto opacity-60">
+                    Agentic Link established. System ready for tactical deployment.
+                  </p>
+                </div>
               </div>
             ) : (
               messages.map((m) => (
@@ -87,12 +97,12 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                   <div className={`
                     max-w-[85%] px-3 py-2 rounded-xl text-[11px] font-sans leading-relaxed
                     ${m.role === 'user' 
-                      ? 'bg-mobi-primary text-mobi-bg rounded-tr-none' 
+                      ? 'bg-mobi-primary text-mobi-bg rounded-tr-none shadow-lg shadow-mobi-primary/10' 
                       : 'bg-mobi-surface border border-mobi-border text-mobi-text rounded-tl-none'}
                   `}>
                     {m.content}
                   </div>
-                  <span className="text-[8px] font-mono text-mobi-text-muted mt-1 uppercase">
+                  <span className="text-[8px] font-mono text-mobi-text-muted mt-1 uppercase tracking-tighter">
                     {m.role === 'user' ? 'Command' : 'Response'} • {m.model}
                   </span>
                 </div>
@@ -125,15 +135,15 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
         </div>
       )}
 
-      {/* Trigger Button */}
+      {/* Trigger Button (Square Aesthetic) */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          w-14 h-14 rounded-full flex items-center justify-center
-          transition-all duration-500 shadow-2xl group
+          w-14 h-14 rounded-2xl flex items-center justify-center
+          transition-all duration-500 shadow-2xl group border
           ${isOpen 
-            ? 'bg-mobi-surface border border-mobi-border rotate-90' 
-            : 'bg-mobi-primary border border-mobi-primary shadow-mobi-primary/20'}
+            ? 'bg-mobi-surface border-mobi-border rotate-90' 
+            : 'bg-mobi-primary border-mobi-primary shadow-mobi-primary/20'}
         `}
       >
         {isOpen ? (
@@ -142,7 +152,6 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
           </svg>
         ) : (
           <div className="relative">
-            <div className="absolute inset-0 bg-mobi-bg rounded-full animate-ping opacity-20 scale-150" />
             <MobiLogo className="h-7 w-7 text-mobi-bg group-hover:scale-110 transition-transform" />
           </div>
         )}

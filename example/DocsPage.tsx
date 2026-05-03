@@ -715,7 +715,7 @@ export const DocsPage: React.FC<DocsPageProps> = ({
       </main>
 
       {/* The Widget Popup Preview */}
-      <MobiChatWidget title="Agentic Link Prototype" />
+      <MobiChatWidget />
     </div>
   );
 };

@@ -21,7 +21,6 @@ const App = () => {
 
 | Prop | Type | Default | Description |
 |---|---|---|---|
-| `title` | `string` | `'M.O.B.I. Agentic Link'` | The header title for the popup. |
 | `initialEnergy` | `number` | `100` | Starting energy level for the session. |
 
 ## Features
