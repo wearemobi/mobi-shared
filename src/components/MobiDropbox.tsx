@@ -192,7 +192,7 @@ export const MobiDropbox: React.FC<MobiDropboxProps> = ({
         multiple={multiple}
         accept={acceptedExtensions.join(',')}
         onChange={handleFileChange}
-        className="hidden"
+        className="absolute inset-0 w-0 h-0 opacity-0 pointer-events-none"
       />
     </div>
   );
