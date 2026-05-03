@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
 import { MobiChatInput } from './MobiChatInput';
 import { MobiChatFeed, MobiChatMessage } from './MobiChatFeed';
-import { MobiLogo } from './MobiLogo';
-import { MobiLogoHero } from './MobiLogoHero';
 import { useMobiChat } from '../hooks/useMobiChat';
 import { MobiButton } from './MobiButton';
-import { MobiUserBadge } from './MobiUserBadge';
 import { MobiPlan } from './MobiPlanBadge';
 import { MobiErrorBoundary } from './MobiErrorBoundary';
 import { MobiSentinelMenu, MobiSentinelMenuItem } from './MobiSentinelMenu';
@@ -18,16 +15,6 @@ export interface MobiChatWidgetProps {
    * @default 100
    */
   initialEnergy?: number;
-  /**
-   * Label for user messages.
-   * @default 'COMMAND • SYNC'
-   */
-  userLabel?: string;
-  /**
-   * Label for assistant messages.
-   * @default 'AGENT • PROCESSED'
-   */
-  assistantLabel?: string;
   /**
    * Title of the chat window.
    * @default 'MobiAI Chat'
@@ -98,8 +85,6 @@ export interface MobiChatWidgetProps {
 export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   initialMessages,
   initialEnergy = 100,
-  userLabel,
-  assistantLabel,
   title = 'MobiAI Chat',
   placeholder,
   statusMessage,
@@ -164,14 +149,6 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     onAction?.('attach', { source });
   };
 
-  const getModelStatus = () => {
-    switch (activeModelId) {
-      case 'fast': return 'Fast • Answers Quickly';
-      case 'pro': return 'Pro • Solves Complex Problems';
-      case 'expert': return 'Expert • Deep Agentic Reasoning';
-      default: return 'Online • Secure Connection';
-    }
-  };
 
   return (
     <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-4">
@@ -227,8 +204,6 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
               messages={messages} 
               isProcessing={isProcessing} 
               className="bg-mobi-bg/10"
-              userLabel={userLabel}
-              assistantLabel={assistantLabel}
               processingText={processingText}
               fontSize={currentFontSize}
               onRetry={(msg) => {

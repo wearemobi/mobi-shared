@@ -7,8 +7,8 @@ export interface MobiChatMessage {
   id: string;
   role: 'user' | 'assistant' | 'system';
   content: string;
+  timestamp: number;
   model?: string;
-  timestamp?: string;
   isError?: boolean;
 }
 
@@ -30,16 +30,6 @@ export interface MobiChatFeedProps {
    * @default 'Processing...'
    */
   processingText?: string;
-  /**
-   * Label shown for user messages.
-   * @default 'COMMAND • SYNC'
-   */
-  userLabel?: string;
-  /**
-   * Label shown for assistant messages.
-   * @default 'AGENT • PROCESSED'
-   */
-  assistantLabel?: string;
   /**
    * Empty state configuration.
    */
@@ -73,8 +63,6 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
   isProcessing = false,
   className = "",
   processingText = "Processing...",
-  userLabel = 'COMMAND • SYNC',
-  assistantLabel = 'AGENT • PROCESSED',
   emptyState = {
     title: "MobiAI Chat",
     description: "Agentic Link established. System is ready for tactical deployment."

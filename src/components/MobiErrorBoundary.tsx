@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { MobiLogo } from './MobiLogo';
 import { MobiButton } from './MobiButton';
 
