@@ -103,7 +103,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
           animate-in fade-in slide-in-from-bottom-4 duration-300
         ">
           {/* Header (Condensed) */}
-          <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between">
+          <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-2xl">
             <div className="flex items-center gap-3">
               <div className="bg-mobi-text p-1 rounded-none">
                 <MobiLogo size={20} className="text-mobi-bg" />
@@ -141,7 +141,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
           />
 
           {/* Input Area */}
-          <div className="p-3 bg-mobi-bg border-t border-mobi-border">
+          <div className="p-3 bg-mobi-bg border-t border-mobi-border rounded-b-2xl">
             <MobiChatInput 
               onSend={sendMessage}
               isProcessing={isProcessing}
