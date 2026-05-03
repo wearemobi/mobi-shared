@@ -136,16 +136,6 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                 )}
               </div>
             </div>
-            <div className="flex items-center gap-1.5 mt-1.5 px-1 opacity-60">
-              <span className={`text-[7px] font-mono uppercase tracking-widest font-bold ${m.isError ? 'text-rose-400' : 'text-mobi-text-muted'}`}>
-                {m.isError ? 'SYSTEM • FAILED' : m.role === 'user' ? userLabel : assistantLabel}
-              </span>
-              {m.model && !m.isError && (
-                <>
-                  <span className="text-[7px] text-mobi-text-muted">•</span>
-                  <span className="text-[7px] font-mono text-mobi-text-muted uppercase">{m.model}</span>
-                </>
-              )}
             </div>
           </div>
         ))
