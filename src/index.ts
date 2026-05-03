@@ -20,3 +20,5 @@ export * from './components/MobiEnergyMeter';
 export * from './hooks/useMobiAuth';
 export * from './hooks/useMobiTheme';
 export * from './hooks/useMobiClipboard';
+export * from './hooks/useMobiChat';
+export * from './hooks/useMobiEnergy';

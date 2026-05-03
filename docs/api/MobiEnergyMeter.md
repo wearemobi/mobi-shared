@@ -23,6 +23,7 @@ const MyComponent = () => {
 |---|---|---|---|
 | `value` | `number` | `undefined` | Current energy level (0-100). |
 | `showPercentage` | `boolean` | `true` | If true, renders the numerical value next to the icon. |
+| `onClick` | `(value: number) => void` | `undefined` | Optional callback when the meter is clicked. |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Scale of the meter icon and typography. |
 | `className` | `string` | `""` | Additional CSS classes. |
 

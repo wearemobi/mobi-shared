@@ -3,7 +3,8 @@ import {
   MobiLogo, MobiLogoHero, MobiFooter, MobiAlert, MobiPlanBadge, 
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
-  MobiCard, MobiDropbox, MobiProgress, MobiChatInput, MobiEnergyMeter
+  MobiCard, MobiDropbox, MobiProgress, MobiChatInput, MobiEnergyMeter,
+  useMobiChat, useMobiEnergy
 } from '../src';
 import pkg from '../package.json';
 
@@ -450,44 +451,43 @@ const catalog: CatalogEntry[] = [
 />`,
     render: () => {
       const ChatDemo = () => {
-        const [isProcessing, setIsProcessing] = useState(false);
-        const [activeModel, setActiveModel] = useState('fast');
-        const [energy, setEnergy] = useState(85);
-
-        const handleSend = (msg: string) => {
-          setIsProcessing(true);
-          setTimeout(() => {
-            alert(`[${activeModel}] Command Received: ${msg}`);
-            setIsProcessing(false);
-            setEnergy(prev => Math.max(0, prev - 10));
-          }, 2000);
-        };
+        const { 
+          messages, 
+          isProcessing, 
+          activeModelId, 
+          energy, 
+          sendMessage, 
+          setActiveModelId,
+          rechargeEnergy 
+        } = useMobiChat({ initialEnergy: 85 });
 
         return (
           <div className="max-w-2xl mx-auto w-full py-8 space-y-8">
             <MobiChatInput 
-              onSend={handleSend} 
+              onSend={sendMessage} 
               isProcessing={isProcessing}
-              activeModelId={activeModel}
-              onModelChange={setActiveModel}
+              activeModelId={activeModelId}
+              onModelChange={setActiveModelId}
               energy={energy}
               onAttachClick={() => alert('Attach clicked')}
             />
             
-            <div className="p-4 bg-mobi-bg/50 border border-mobi-border rounded-xl">
-              <label className="text-[10px] font-black uppercase tracking-widest text-mobi-text-muted mb-4 block">
-                Simulate Energy Drain
-              </label>
-              <input 
-                type="range" 
-                min="0" max="100" 
-                value={energy} 
-                onChange={(e) => setEnergy(parseInt(e.target.value))}
-                className="w-full h-1 bg-mobi-border rounded-lg appearance-none cursor-pointer accent-mobi-primary"
-              />
-              <div className="flex justify-between mt-2 text-[10px] font-mono text-mobi-text-muted">
-                <span>0%</span>
-                <span>100%</span>
+            <div className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h4 className="text-[10px] font-black uppercase tracking-widest text-mobi-text">Command History</h4>
+                <MobiButton variant="ghost" size="sm" onClick={() => rechargeEnergy(20)}>Recharge +20%</MobiButton>
+              </div>
+              <div className="space-y-2 max-h-[200px] overflow-y-auto p-4 bg-mobi-bg/30 border border-mobi-border rounded-xl">
+                {messages.length === 0 && <p className="text-[10px] font-mono text-mobi-text-muted">No commands in buffer.</p>}
+                {messages.map(m => (
+                  <div key={m.id} className="flex gap-2 text-[10px] font-mono">
+                    <span className={m.role === 'user' ? 'text-mobi-primary' : 'text-emerald-500'}>
+                      [{m.role.toUpperCase()}]
+                    </span>
+                    <span className="text-mobi-text-muted">({m.model}):</span>
+                    <span className="text-mobi-text">{m.content}</span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -500,20 +500,30 @@ const catalog: CatalogEntry[] = [
     id: 'MobiEnergyMeter',
     name: 'MobiEnergyMeter',
     category: 'component',
-    description: 'A technical battery indicator for monitoring resource consumption and power states.',
-    code: `<MobiEnergyMeter value={42} size="md" />`,
-    render: () => (
-      <div className="space-y-6">
-        <div className="flex items-center gap-8">
-          <MobiEnergyMeter value={95} size="sm" />
-          <MobiEnergyMeter value={45} size="md" />
-          <MobiEnergyMeter value={15} size="lg" />
-        </div>
-        <p className="text-[10px] font-mono text-mobi-text-muted italic">
-          Tip: Levels below 20% trigger a critical pulse animation.
-        </p>
-      </div>
-    )
+    description: 'A technical battery indicator for monitoring resource consumption and power states. Now interactive.',
+    code: `<MobiEnergyMeter 
+  value={42} 
+  size="md" 
+  onClick={(v) => recharge(v)} 
+/>`,
+    render: () => {
+      const EnergyDemo = () => {
+        const { level, drain, charge } = useMobiEnergy({ initialLevel: 65 });
+        return (
+          <div className="space-y-6">
+            <div className="flex items-center gap-8">
+              <MobiEnergyMeter value={level} size="sm" onClick={() => drain(5)} />
+              <MobiEnergyMeter value={level} size="md" onClick={() => drain(10)} />
+              <MobiEnergyMeter value={level} size="lg" onClick={() => charge(20)} />
+            </div>
+            <p className="text-[10px] font-mono text-mobi-text-muted italic">
+              Click meters to simulate energy drain/charge. Current: {level}%
+            </p>
+          </div>
+        );
+      };
+      return <EnergyDemo />;
+    }
   },
   {
     id: 'useMobiTheme',

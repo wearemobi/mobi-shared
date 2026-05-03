@@ -11,6 +11,10 @@ export interface MobiEnergyMeterProps {
    */
   showPercentage?: boolean;
   /**
+   * Optional click handler.
+   */
+  onClick?: (value: number) => void;
+  /**
    * Additional CSS classes for the container.
    */
   className?: string;
@@ -27,12 +31,13 @@ export interface MobiEnergyMeterProps {
  * 
  * @example
  * ```tsx
- * <MobiEnergyMeter value={45} size="lg" />
+ * <MobiEnergyMeter value={45} size="lg" onClick={(v) => console.log(v)} />
  * ```
  */
 export const MobiEnergyMeter: React.FC<MobiEnergyMeterProps> = ({
   value,
   showPercentage = true,
+  onClick,
   className = "",
   size = 'md'
 }) => {
@@ -52,15 +57,29 @@ export const MobiEnergyMeter: React.FC<MobiEnergyMeterProps> = ({
 
   const currentSize = sizeClasses[size];
 
+  const Component = onClick ? 'button' : 'div';
+
   return (
-    <div className={`flex items-center gap-2 ${className}`}>
+    <Component 
+      onClick={() => onClick?.(level)}
+      className={`
+        flex items-center gap-2 transition-all outline-none group
+        ${onClick ? 'cursor-pointer active:scale-95' : ''}
+        ${className}
+      `}
+    >
       {showPercentage && (
-        <span className={`font-black font-mono text-mobi-text-muted opacity-60 ${currentSize.text}`}>
+        <span className={`
+          font-black font-mono text-mobi-text-muted transition-opacity
+          ${onClick ? 'group-hover:text-mobi-text group-hover:opacity-100' : 'opacity-60'}
+          ${currentSize.text}
+        `}>
           {level}%
         </span>
       )}
       <div className={`
-        relative border border-mobi-text-muted/30 rounded-[2px] p-[1px]
+        relative border border-mobi-text-muted/30 rounded-[2px] p-[1px] transition-colors
+        ${onClick ? 'group-hover:border-mobi-text-muted/60' : ''}
         ${currentSize.container}
       `}>
         <div 
@@ -73,6 +92,6 @@ export const MobiEnergyMeter: React.FC<MobiEnergyMeterProps> = ({
           ${currentSize.pin}
         `} />
       </div>
-    </div>
+    </Component>
   );
 };
