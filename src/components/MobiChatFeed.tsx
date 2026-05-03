@@ -1,4 +1,6 @@
 import React, { useRef, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 import { MobiLogoHero } from './MobiLogoHero';
 
 export interface MobiChatMessage {
@@ -54,6 +56,8 @@ export interface MobiChatFeedProps {
   onRetry?: (message: MobiChatMessage) => void;
   /** Callback for copying message content. */
   onCopy?: (content: string) => void;
+  /** Callback for sharing message content. */
+  onShare?: (content: string) => void;
 }
 
 /**
@@ -73,7 +77,8 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
   },
   fontSize = 'md',
   onRetry,
-  onCopy
+  onCopy,
+  onShare
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -116,7 +121,11 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                   ? 'bg-mobi-primary text-mobi-bg shadow-lg shadow-mobi-primary/10' 
                   : 'bg-mobi-surface border border-mobi-border text-mobi-text shadow-sm'}
             `}>
-              {m.content}
+              <div className="mobi-markdown">
+                <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                  {m.content}
+                </ReactMarkdown>
+              </div>
               
               {/* Message Actions (Visible on Hover) */}
               <div className={`
@@ -133,6 +142,14 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                   }}
                 >
                   <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                </button>
+                <button 
+                  title="Share"
+                  aria-label="Share message content"
+                  className="p-1 hover:bg-mobi-primary/10 rounded text-mobi-text-muted hover:text-mobi-primary transition-colors"
+                  onClick={() => onShare?.(m.content)}
+                >
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
                 </button>
                 {(m.role === 'assistant' || m.isError) && (
                   <button 

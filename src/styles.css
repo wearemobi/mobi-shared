@@ -57,3 +57,56 @@
   from { width: 0%; }
   to { width: 100%; }
 }
+
+/* Mobi Markdown System */
+.mobi-markdown {
+  @apply leading-relaxed;
+}
+
+.mobi-markdown p {
+  @apply mb-4 last:mb-0;
+}
+
+.mobi-markdown ul {
+  @apply list-disc list-inside mb-4 last:mb-0 space-y-1;
+}
+
+.mobi-markdown ol {
+  @apply list-decimal list-inside mb-4 last:mb-0 space-y-1;
+}
+
+.mobi-markdown li {
+  @apply ml-1;
+}
+
+.mobi-markdown h1, .mobi-markdown h2, .mobi-markdown h3 {
+  @apply font-black tracking-tight mb-3 mt-6 first:mt-0 uppercase;
+}
+
+.mobi-markdown h1 { @apply text-lg; }
+.mobi-markdown h2 { @apply text-base; }
+.mobi-markdown h3 { @apply text-sm; }
+
+.mobi-markdown code {
+  @apply px-1.5 py-0.5 bg-mobi-bg/50 rounded-sm font-mono text-[0.9em] border border-mobi-border/30;
+}
+
+.mobi-markdown pre {
+  @apply p-4 bg-mobi-bg/80 border border-mobi-border rounded-sm mb-4 last:mb-0 overflow-x-auto;
+}
+
+.mobi-markdown pre code {
+  @apply p-0 bg-transparent border-none font-mono;
+}
+
+.mobi-markdown blockquote {
+  @apply pl-4 border-l-2 border-mobi-primary italic text-mobi-text-muted mb-4;
+}
+
+.mobi-markdown a {
+  @apply text-mobi-primary underline hover:opacity-80 transition-opacity;
+}
+
+.mobi-markdown strong {
+  @apply font-black text-mobi-text;
+}

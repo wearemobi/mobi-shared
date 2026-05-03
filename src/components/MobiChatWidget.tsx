@@ -139,6 +139,14 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     setActiveModelId 
   } = useMobiChat({ initialEnergy, initialMessages });
 
+  // Monitor for errors to trigger analytics hook
+  React.useEffect(() => {
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage?.isError) {
+      onError?.(lastMessage.content);
+    }
+  }, [messages, onError]);
+
   const handleSendMessage = (content: string) => {
     sendMessage(content);
     onMessageSent?.(content);
@@ -226,6 +234,9 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
               }}
               onCopy={(content) => {
                 onAction?.('copy', { contentLength: content.length });
+              }}
+              onShare={(content) => {
+                onAction?.('share', { contentLength: content.length });
               }}
               emptyState={{
                 title: emptyStateTitle,
