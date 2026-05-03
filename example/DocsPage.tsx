@@ -3,7 +3,7 @@ import {
   MobiLogo, MobiLogoHero, MobiFooter, MobiAlert, MobiPlanBadge, 
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
-  MobiCard, MobiDropbox, MobiProgress
+  MobiCard, MobiDropbox, MobiProgress, MobiChatInput
 } from '../src';
 import pkg from '../package.json';
 
@@ -438,6 +438,41 @@ const catalog: CatalogEntry[] = [
         <MobiProgress value={88} label="Data Ingestion" status="Ready for final sync" technical />
       </div>
     )
+  },
+  {
+    id: 'MobiChatInput',
+    name: 'MobiChatInput',
+    category: 'component',
+    description: 'A premium, technical command center for agentic interactions with auto-resize and toolbar integration.',
+    code: `<MobiChatInput 
+  onSend={(msg) => handleSend(msg)} 
+  placeholder="Type a command..."
+  statusMessage="Operational"
+/>`,
+    render: () => {
+      const ChatDemo = () => {
+        const [isProcessing, setIsProcessing] = useState(false);
+        const handleSend = (msg: string) => {
+          setIsProcessing(true);
+          setTimeout(() => {
+            alert(`Command Received: ${msg}`);
+            setIsProcessing(false);
+          }, 2000);
+        };
+
+        return (
+          <div className="max-w-2xl mx-auto w-full py-8">
+            <MobiChatInput 
+              onSend={handleSend} 
+              isProcessing={isProcessing}
+              onAttachClick={() => alert('Attach clicked')}
+              onToolsClick={() => alert('Tools clicked')}
+            />
+          </div>
+        );
+      };
+      return <ChatDemo />;
+    }
   },
   {
     id: 'useMobiTheme',
