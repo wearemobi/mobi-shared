@@ -103,6 +103,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   lang
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [currentFontSize, setCurrentFontSize] = useState<'sm' | 'md' | 'lg'>('md');
   const { 
     messages, 
     isProcessing, 
@@ -160,7 +161,10 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                       items={userMenuItems}
                       onLangChange={onLangChange}
                       lang={lang}
-                      showThemeSwitcher={false} // Hidden in widget to keep it clean
+                      showThemeSwitcher={false} 
+                      showFontSizeSwitcher={true}
+                      fontSize={currentFontSize}
+                      onFontSizeChange={setCurrentFontSize}
                     />
                     <div className="h-4 w-[1px] bg-mobi-border mx-1" />
                   </>
@@ -183,6 +187,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
               userLabel={userLabel}
               assistantLabel={assistantLabel}
               processingText={processingText}
+              fontSize={currentFontSize}
               emptyState={{
                 title: emptyStateTitle,
                 description: emptyStateDescription

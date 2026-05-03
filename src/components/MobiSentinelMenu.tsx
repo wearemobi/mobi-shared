@@ -41,6 +41,12 @@ export interface MobiSentinelMenuProps {
   showThemeSwitcher?: boolean;
   /** Show language switcher in config section */
   showLangSwitcher?: boolean;
+  /** Show font size switcher in config section */
+  showFontSizeSwitcher?: boolean;
+  /** Current font size code (controlled mode) */
+  fontSize?: 'sm' | 'md' | 'lg';
+  /** Callback when font size changes */
+  onFontSizeChange?: (size: 'sm' | 'md' | 'lg') => void;
   /** Current language code (controlled mode) */
   lang?: string;
   /** Callback when language changes */
@@ -85,6 +91,9 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
   variant = 'condensed',
   showThemeSwitcher = true,
   showLangSwitcher = true,
+  showFontSizeSwitcher = false,
+  fontSize = 'md',
+  onFontSizeChange,
   lang: externalLang,
   onLangChange,
   langOptions = defaultLangOptions,
@@ -208,6 +217,22 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
                       ]}
                       activeId={theme}
                       onChange={(id) => setTheme(id as any)}
+                    />
+                  </div>
+                )}
+
+                {/* Font Size */}
+                {showFontSizeSwitcher && (
+                  <div className="flex items-center justify-between px-2">
+                    <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Texto</span>
+                    <MobiSwitcher 
+                      options={[
+                        { id: 'sm', label: 'A-', icon: <span className="text-[10px] font-bold">A</span> },
+                        { id: 'md', label: 'A', icon: <span className="text-[12px] font-bold">A</span> },
+                        { id: 'lg', label: 'A+', icon: <span className="text-[14px] font-bold">A</span> }
+                      ]}
+                      activeId={fontSize}
+                      onChange={(id) => onFontSizeChange?.(id as any)}
                     />
                   </div>
                 )}

@@ -45,6 +45,11 @@ export interface MobiChatFeedProps {
     title?: string;
     description?: string;
   };
+  /**
+   * Font size scale for messages.
+   * @default 'md'
+   */
+  fontSize?: 'sm' | 'md' | 'lg';
 }
 
 /**
@@ -61,7 +66,8 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
   emptyState = {
     title: "MobiAi Interface",
     description: "Agentic Link established. System is ready for tactical deployment."
-  }
+  },
+  fontSize = 'md'
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -96,7 +102,8 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
             className={`flex flex-col ${m.role === 'user' ? 'items-end' : 'items-start'} animate-in fade-in slide-in-from-bottom-2 duration-300`}
           >
             <div className={`
-              max-w-[90%] px-4 py-2.5 rounded-none text-[13px] font-outfit leading-relaxed relative group/msg tracking-tight
+              max-w-[90%] px-4 py-2.5 rounded-none leading-relaxed relative group/msg tracking-tight font-outfit
+              ${fontSize === 'sm' ? 'text-[13px]' : fontSize === 'lg' ? 'text-[17px]' : 'text-[15px]'}
               ${m.isError 
                 ? 'bg-rose-500/10 border border-rose-500/50 text-rose-200' 
                 : m.role === 'user' 
