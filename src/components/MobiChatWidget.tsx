@@ -75,6 +75,7 @@ export interface MobiChatWidgetProps {
  * A floating, pop-up agentic interface that provides immediate access to MobiAI.
  */
 export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
+  initialMessages,
   initialEnergy = 100,
   userLabel,
   assistantLabel,
