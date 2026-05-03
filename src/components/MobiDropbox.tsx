@@ -39,6 +39,11 @@ export interface MobiDropboxProps {
    * Additional CSS classes.
    */
   className?: string;
+  /**
+   * Whether to allow multiple file selection.
+   * @default false
+   */
+  multiple?: boolean;
 }
 
 /**
@@ -63,9 +68,11 @@ export const MobiDropbox: React.FC<MobiDropboxProps> = ({
   draggingTitle = 'Suelta para procesar',
   progress = 0,
   isUploading = false,
-  className = ""
+  className = "",
+  multiple = false
 }) => {
   const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     if (isUploading) return;
@@ -94,8 +101,28 @@ export const MobiDropbox: React.FC<MobiDropboxProps> = ({
     }
   }, [onUploadSuccess, acceptedExtensions, isUploading]);
 
+  const handleInputToggle = useCallback(() => {
+    if (isUploading) return;
+    fileInputRef.current?.click();
+  }, [isUploading]);
+
+  const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    if (isUploading || !e.target.files) return;
+    const files = Array.from(e.target.files);
+    const validFiles = files.filter(file => 
+      acceptedExtensions.some(ext => file.name.toLowerCase().endsWith(ext))
+    );
+
+    if (validFiles.length > 0) {
+      onUploadSuccess(validFiles);
+    }
+    // Reset input
+    e.target.value = '';
+  }, [onUploadSuccess, acceptedExtensions, isUploading]);
+
   return (
     <div
+      onClick={handleInputToggle}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -158,6 +185,15 @@ export const MobiDropbox: React.FC<MobiDropboxProps> = ({
           />
         </div>
       )}
+
+      <input
+        ref={fileInputRef}
+        type="file"
+        multiple={multiple}
+        accept={acceptedExtensions.join(',')}
+        onChange={handleFileChange}
+        className="hidden"
+      />
     </div>
   );
 };
