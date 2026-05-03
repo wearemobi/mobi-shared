@@ -4,7 +4,7 @@ import {
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
   MobiCard, MobiDropbox, MobiProgress, MobiChatInput, MobiEnergyMeter,
-  useMobiChat, useMobiEnergy
+  useMobiChat, useMobiEnergy, MobiChatWidget
 } from '../src';
 import pkg from '../package.json';
 
@@ -569,6 +569,20 @@ const catalog: CatalogEntry[] = [
       };
       return <ClipDemo />;
     }
+  },
+  {
+    id: 'MobiChatWidget',
+    name: 'MobiChatWidget',
+    category: 'component',
+    description: 'A sovereign agentic interface that floats over the UI. Encapsulates history, models, and input.',
+    code: `<MobiChatWidget title="Agentic Link" initialEnergy={100} />`,
+    render: () => (
+      <div className="p-12 border border-dashed border-mobi-border rounded-2xl text-center">
+        <p className="text-[10px] font-mono text-mobi-text-muted uppercase">
+          Check the bottom-right corner of the screen to interact with the widget.
+        </p>
+      </div>
+    )
   }
 ];
 
@@ -699,6 +713,9 @@ export const DocsPage: React.FC<DocsPageProps> = ({
           </div>
         </div>
       </main>
+
+      {/* The Widget Popup Preview */}
+      <MobiChatWidget title="Agentic Link Prototype" />
     </div>
   );
 };
