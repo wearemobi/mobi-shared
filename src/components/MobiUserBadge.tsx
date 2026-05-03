@@ -3,7 +3,7 @@ import { MobiPlan, MobiPlanBadge } from './MobiPlanBadge';
 import { useMobiTheme } from '../hooks/useMobiTheme';
 
 /** Layout variant for the user badge. */
-export type MobiUserBadgeVariant = 'condensed' | 'expanded';
+export type MobiUserBadgeVariant = 'condensed' | 'expanded' | 'micro';
 
 interface MobiUserBadgeProps {
   /** User email address — displayed in expanded mode if name is missing. */
@@ -16,26 +16,17 @@ interface MobiUserBadgeProps {
   plan: MobiPlan;
   /** Organization name. @default 'M.O.B.I. HQ' */
   org?: string;
-  /** `condensed` = compact trigger button. `expanded` = full header with email and plan badge. @default 'condensed' */
+  /** `micro` = super mini avatar only. `condensed` = compact trigger button. `expanded` = full header. @default 'condensed' */
   variant?: MobiUserBadgeVariant;
-  /** Click handler — typically used to toggle a menu in condensed mode. */
+  /** Click handler. */
   onClick?: () => void;
   /** Additional CSS classes. */
   className?: string;
 }
 
 /**
- * Theme-aware user identity badge with two layout variants.
- * Avatar colors automatically invert based on the active theme (black-on-light, white-on-dark).
- *
- * @example
- * ```tsx
- * // Compact trigger button
- * <MobiUserBadge variant="condensed" initials="CA" plan="PRO" email="dev@mobi.com" />
- *
- * // Full header with plan badge
- * <MobiUserBadge variant="expanded" initials="CA" plan="PRO" email="dev@mobi.com" org="Fleet HQ" />
- * ```
+ * Theme-aware user identity badge with multiple layout variants.
+ * Avatar colors automatically invert based on the active theme.
  */
 export const MobiUserBadge: React.FC<MobiUserBadgeProps> = ({
   email,
@@ -52,6 +43,20 @@ export const MobiUserBadge: React.FC<MobiUserBadgeProps> = ({
   const avatarStyles = theme === 'dark' 
     ? 'bg-white text-slate-950' 
     : 'bg-slate-950 text-white';
+
+  if (variant === 'micro') {
+    return (
+      <button
+        onClick={onClick}
+        title={name || email}
+        className={`flex h-8 w-8 items-center justify-center rounded-full border border-mobi-border bg-mobi-surface shadow-sm transition-all hover:bg-mobi-surface-hover active:scale-95 ${className}`}
+      >
+        <div className={`flex h-6 w-6 items-center justify-center rounded-full text-[9px] font-black font-sans tracking-tight shrink-0 ${avatarStyles}`}>
+          {initials.charAt(0)}
+        </div>
+      </button>
+    );
+  }
 
   if (variant === 'condensed') {
     return (

@@ -4,7 +4,8 @@ import { MobiChatFeed } from './MobiChatFeed';
 import { MobiLogo } from './MobiLogo';
 import { MobiLogoHero } from './MobiLogoHero';
 import { useMobiChat } from '../hooks/useMobiChat';
-import { MobiButton } from './MobiButton';
+import { MobiUserBadge } from './MobiUserBadge';
+import { MobiPlan } from './MobiPlanBadge';
 
 export interface MobiChatWidgetProps {
   /**
@@ -55,6 +56,14 @@ export interface MobiChatWidgetProps {
    * Description for the empty state.
    */
   emptyStateDescription?: string;
+  /** User initials for the header badge. */
+  userInitials?: string;
+  /** User email for the header badge. */
+  userEmail?: string;
+  /** User name for the header badge. */
+  userName?: string;
+  /** User plan for the header badge. */
+  userPlan?: MobiPlan;
 }
 
 /**
@@ -72,7 +81,11 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   addFromComputerText,
   addFromVaultText,
   emptyStateTitle,
-  emptyStateDescription
+  emptyStateDescription,
+  userInitials,
+  userEmail,
+  userName,
+  userPlan
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { 
@@ -117,13 +130,27 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                 </div>
               </div>
             </div>
-            <MobiButton 
-              variant="ghost" 
-              size="sm" 
-              className="h-8 w-8 p-0 min-w-0 rounded-xl"
-              onClick={() => setIsOpen(false)}
-              icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
-            />
+            <div className="flex items-center gap-2">
+              {userInitials && (
+                <>
+                  <MobiUserBadge 
+                    variant="micro" 
+                    initials={userInitials} 
+                    email={userEmail || ''} 
+                    name={userName} 
+                    plan={userPlan || 'FREE'} 
+                  />
+                  <div className="h-4 w-[1px] bg-mobi-border mx-1" />
+                </>
+              )}
+              <MobiButton 
+                variant="ghost" 
+                size="sm" 
+                className="h-8 w-8 p-0 min-w-0 rounded-xl"
+                onClick={() => setIsOpen(false)}
+                icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
+              />
+            </div>
           </div>
 
           {/* Messages Area (Now extracted) */}
