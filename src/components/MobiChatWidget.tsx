@@ -225,7 +225,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
             
             {/* Robot Sentinel Icon */}
             <svg 
-              className="h-8 w-8 text-mobi-bg group-hover:scale-110 transition-transform" 
+              className="h-6 w-6 text-mobi-bg group-hover:scale-110 transition-transform" 
               viewBox="0 0 24 24" 
               fill="none" 
               stroke="currentColor" 
