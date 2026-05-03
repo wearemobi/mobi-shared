@@ -10,9 +10,12 @@ export interface MobiCardProps {
    */
   children: React.ReactNode;
   /**
-   * Additional CSS classes.
    */
   className?: string;
+  /**
+   * Optional footer content.
+   */
+  footer?: React.ReactNode;
 }
 
 /**
@@ -26,7 +29,7 @@ export interface MobiCardProps {
  * </MobiCard>
  * ```
  */
-export const MobiCard: React.FC<MobiCardProps> = ({ title, children, className = '' }) => {
+export const MobiCard: React.FC<MobiCardProps> = ({ title, children, className = '', footer }) => {
   return (
     <div className={`
       bg-mobi-surface border border-mobi-border rounded-2xl overflow-hidden
@@ -44,9 +47,9 @@ export const MobiCard: React.FC<MobiCardProps> = ({ title, children, className =
         {children}
       </div>
       <div className="px-6 py-3 bg-mobi-bg/50 border-t border-mobi-border/50 flex justify-between items-center">
-        <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-widest font-sans">
-          MOBI Asset Container
-        </span>
+        <div className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-widest font-sans">
+          {footer}
+        </div>
         <div className="flex gap-1.5">
           <div className="h-1.5 w-1.5 rounded-full bg-mobi-primary animate-pulse" />
           <div className="h-1.5 w-1.5 rounded-full bg-mobi-primary/30" />
