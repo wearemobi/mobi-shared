@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MobiButton } from './MobiButton';
 import { MobiSwitcher } from './MobiSwitcher';
+import { MobiEnergyMeter } from './MobiEnergyMeter';
 
 export interface MobiChatInputProps {
   /**
@@ -97,12 +98,6 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
     }
   };
 
-  const getBatteryColor = () => {
-    if (energy > 50) return 'bg-emerald-500';
-    if (energy > 20) return 'bg-amber-500';
-    return 'bg-rose-500 animate-pulse';
-  };
-
   return (
     <div className={`
       w-full bg-mobi-surface border border-mobi-border rounded-2xl overflow-hidden
@@ -171,20 +166,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
           </span>
         </div>
 
-        {/* Battery Indicator */}
-        <div className="flex items-center gap-2">
-          <span className="text-[8px] font-black font-mono text-mobi-text-muted opacity-60">
-            {energy}%
-          </span>
-          <div className="relative w-6 h-3 border border-mobi-text-muted/30 rounded-[2px] p-[1px]">
-            <div 
-              className={`h-full rounded-[1px] transition-all duration-1000 ${getBatteryColor()}`}
-              style={{ width: `${energy}%` }}
-            />
-            {/* Battery Pin */}
-            <div className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-[2px] h-1.5 bg-mobi-text-muted/30 rounded-r-[1px]" />
-          </div>
-        </div>
+        <MobiEnergyMeter value={energy} size="md" />
       </div>
     </div>
   );

@@ -3,7 +3,7 @@ import {
   MobiLogo, MobiLogoHero, MobiFooter, MobiAlert, MobiPlanBadge, 
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
-  MobiCard, MobiDropbox, MobiProgress, MobiChatInput
+  MobiCard, MobiDropbox, MobiProgress, MobiChatInput, MobiEnergyMeter
 } from '../src';
 import pkg from '../package.json';
 
@@ -495,6 +495,25 @@ const catalog: CatalogEntry[] = [
       };
       return <ChatDemo />;
     }
+  },
+  {
+    id: 'MobiEnergyMeter',
+    name: 'MobiEnergyMeter',
+    category: 'component',
+    description: 'A technical battery indicator for monitoring resource consumption and power states.',
+    code: `<MobiEnergyMeter value={42} size="md" />`,
+    render: () => (
+      <div className="space-y-6">
+        <div className="flex items-center gap-8">
+          <MobiEnergyMeter value={95} size="sm" />
+          <MobiEnergyMeter value={45} size="md" />
+          <MobiEnergyMeter value={15} size="lg" />
+        </div>
+        <p className="text-[10px] font-mono text-mobi-text-muted italic">
+          Tip: Levels below 20% trigger a critical pulse animation.
+        </p>
+      </div>
+    )
   },
   {
     id: 'useMobiTheme',
