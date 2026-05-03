@@ -50,10 +50,6 @@ export const MobiCard: React.FC<MobiCardProps> = ({ title, children, className =
         <div className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-widest font-sans">
           {footer}
         </div>
-        <div className="flex gap-1.5">
-          <div className="h-1.5 w-1.5 rounded-full bg-mobi-primary animate-pulse" />
-          <div className="h-1.5 w-1.5 rounded-full bg-mobi-primary/30" />
-        </div>
       </div>
     </div>
   );
