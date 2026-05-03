@@ -135,35 +135,29 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
             {/* Header (Condensed) */}
             <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-2xl">
               <div className="flex items-center gap-3">
-                <div className="bg-mobi-text p-1 rounded-sm">
-                  <MobiLogo size={20} className="text-mobi-bg" />
-                </div>
+                {userInitials && (
+                  <MobiSentinelMenu 
+                    variant="micro" 
+                    user={{
+                      initials: userInitials,
+                      email: userEmail || '',
+                      name: userName,
+                      plan: userPlan || 'FREE'
+                    }}
+                    items={userMenuItems}
+                    onLangChange={onLangChange}
+                    lang={lang}
+                    showThemeSwitcher={false} 
+                    showFontSizeSwitcher={true}
+                    fontSize={currentFontSize}
+                    onFontSizeChange={setCurrentFontSize}
+                  />
+                )}
                 <div>
                   <h3 className="text-[14px] font-bold tracking-tight text-mobi-text">{title}</h3>
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {userInitials && (
-                  <>
-                    <MobiSentinelMenu 
-                      variant="micro" 
-                      user={{
-                        initials: userInitials,
-                        email: userEmail || '',
-                        name: userName,
-                        plan: userPlan || 'FREE'
-                      }}
-                      items={userMenuItems}
-                      onLangChange={onLangChange}
-                      lang={lang}
-                      showThemeSwitcher={false} 
-                      showFontSizeSwitcher={true}
-                      fontSize={currentFontSize}
-                      onFontSizeChange={setCurrentFontSize}
-                    />
-                    <div className="h-4 w-[1px] bg-mobi-border mx-1" />
-                  </>
-                )}
                 <MobiButton 
                   variant="ghost" 
                   size="sm" 
