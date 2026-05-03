@@ -139,12 +139,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                   <MobiLogo size={20} className="text-mobi-bg" />
                 </div>
                 <div>
-                  <h3 className="text-[13px] font-bold tracking-tight text-mobi-text leading-none">{title}</h3>
-                  <div className="-mt-1">
-                    <span className="text-[8px] font-mono text-mobi-text-muted uppercase tracking-wider font-bold">
-                      {getModelStatus()}
-                    </span>
-                  </div>
+                  <h3 className="text-[14px] font-bold tracking-tight text-mobi-text">{title}</h3>
                 </div>
               </div>
               <div className="flex items-center gap-2">
