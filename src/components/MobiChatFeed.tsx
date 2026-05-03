@@ -50,6 +50,10 @@ export interface MobiChatFeedProps {
    * @default 'md'
    */
   fontSize?: 'sm' | 'md' | 'lg';
+  /** Callback for retrying a message. */
+  onRetry?: (message: MobiChatMessage) => void;
+  /** Callback for copying message content. */
+  onCopy?: (content: string) => void;
 }
 
 /**
@@ -67,7 +71,9 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
     title: "MobiAI Chat",
     description: "Agentic Link established. System is ready for tactical deployment."
   },
-  fontSize = 'md'
+  fontSize = 'md',
+  onRetry,
+  onCopy
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -121,15 +127,19 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                   title="Copy"
                   aria-label="Copy message content"
                   className="p-1 hover:bg-mobi-primary/10 rounded text-mobi-text-muted hover:text-mobi-primary transition-colors"
-                  onClick={() => navigator.clipboard.writeText(m.content)}
+                  onClick={() => {
+                    navigator.clipboard.writeText(m.content);
+                    onCopy?.(m.content);
+                  }}
                 >
                   <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
                 </button>
-                {m.role === 'assistant' && (
+                {(m.role === 'assistant' || m.isError) && (
                   <button 
                     title="Retry"
                     aria-label="Retry message generation"
                     className="p-1 hover:bg-mobi-primary/10 rounded text-mobi-text-muted hover:text-mobi-primary transition-colors"
+                    onClick={() => onRetry?.(m)}
                   >
                     <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
                   </button>

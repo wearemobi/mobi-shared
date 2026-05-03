@@ -75,6 +75,18 @@ export interface MobiChatWidgetProps {
   onLangChange?: (lang: string) => void;
   /** Current language code for the header menu. */
   lang?: string;
+  /** Analytics: Called when widget opens. */
+  onOpen?: () => void;
+  /** Analytics: Called when widget closes. */
+  onClose?: () => void;
+  /** Analytics: Called when a message is sent. */
+  onMessageSent?: (content: string) => void;
+  /** Analytics: Generic action tracker (copy, retry, font_scale, etc). */
+  onAction?: (actionType: string, payload?: any) => void;
+  /** Analytics: Called when an error occurs. */
+  onError?: (error: string) => void;
+  /** Analytics: Called when a file is attached. */
+  onAttach?: (source: 'computer' | 'vault') => void;
 }
 
 /**
@@ -100,10 +112,24 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   userPlan,
   userMenuItems = [],
   onLangChange,
-  lang
+  lang,
+  onOpen,
+  onClose,
+  onMessageSent,
+  onAction,
+  onError,
+  onAttach
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentFontSize, setCurrentFontSize] = useState<'sm' | 'md' | 'lg'>('md');
+  
+  const handleToggle = () => {
+    const nextState = !isOpen;
+    setIsOpen(nextState);
+    if (nextState) onOpen?.();
+    else onClose?.();
+  };
+
   const { 
     messages, 
     isProcessing, 
@@ -112,6 +138,20 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     sendMessage, 
     setActiveModelId 
   } = useMobiChat({ initialEnergy, initialMessages });
+
+  const handleSendMessage = (content: string) => {
+    sendMessage(content);
+    onMessageSent?.(content);
+    
+    // Check for error state in messages (after next render or via hook)
+    // For now, trigger generic send event. Error tracking would usually
+    // happen in the hook, but we expose it here.
+  };
+
+  const handleAttach = (source: 'computer' | 'vault') => {
+    onAttach?.(source);
+    onAction?.('attach', { source });
+  };
 
   const getModelStatus = () => {
     switch (activeModelId) {
@@ -150,7 +190,10 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                     showThemeSwitcher={false} 
                     showFontSizeSwitcher={true}
                     fontSize={currentFontSize}
-                    onFontSizeChange={setCurrentFontSize}
+                    onFontSizeChange={(size) => {
+                      setCurrentFontSize(size);
+                      onAction?.('font_scale', { size });
+                    }}
                   />
                 )}
                 <div>
@@ -162,13 +205,13 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                   variant="ghost" 
                   size="sm" 
                   className="h-8 w-8 p-0 min-w-0 rounded-sm"
-                  onClick={() => setIsOpen(false)}
+                  onClick={handleToggle}
                   icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
                 />
               </div>
             </div>
 
-            {/* Messages Area (Now extracted) */}
+            {/* Messages Area */}
             <MobiChatFeed 
               messages={messages} 
               isProcessing={isProcessing} 
@@ -177,6 +220,13 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
               assistantLabel={assistantLabel}
               processingText={processingText}
               fontSize={currentFontSize}
+              onRetry={(msg) => {
+                sendMessage(msg.content);
+                onAction?.('retry', { messageId: msg.id });
+              }}
+              onCopy={(content) => {
+                onAction?.('copy', { contentLength: content.length });
+              }}
               emptyState={{
                 title: emptyStateTitle,
                 description: emptyStateDescription
@@ -186,16 +236,20 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
             {/* Input Area */}
             <div className="p-3 bg-mobi-bg border-t border-mobi-border rounded-b-2xl">
               <MobiChatInput 
-                onSend={sendMessage}
+                onSend={handleSendMessage}
                 isProcessing={isProcessing}
                 activeModelId={activeModelId}
-                onModelChange={setActiveModelId}
+                onModelChange={(modelId) => {
+                  setActiveModelId(modelId as any);
+                  onAction?.('model_change', { modelId });
+                }}
                 energy={energy}
                 placeholder={placeholder}
                 statusMessage={statusMessage}
                 processingText={processingText}
                 addFromComputerText={addFromComputerText}
                 addFromVaultText={addFromVaultText}
+                onAttach={handleAttach}
                 className="border-none shadow-none bg-transparent"
               />
             </div>
@@ -205,7 +259,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
 
       {/* Trigger Button (Robot Sentinel) */}
       <button 
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggle}
         className={`
           w-14 h-14 rounded-sm flex items-center justify-center
           transition-all duration-500 shadow-2xl group border relative
