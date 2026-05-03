@@ -452,24 +452,44 @@ const catalog: CatalogEntry[] = [
       const ChatDemo = () => {
         const [isProcessing, setIsProcessing] = useState(false);
         const [activeModel, setActiveModel] = useState('fast');
+        const [energy, setEnergy] = useState(85);
 
         const handleSend = (msg: string) => {
           setIsProcessing(true);
           setTimeout(() => {
             alert(`[${activeModel}] Command Received: ${msg}`);
             setIsProcessing(false);
+            setEnergy(prev => Math.max(0, prev - 10));
           }, 2000);
         };
 
         return (
-          <div className="max-w-2xl mx-auto w-full py-8">
+          <div className="max-w-2xl mx-auto w-full py-8 space-y-8">
             <MobiChatInput 
               onSend={handleSend} 
               isProcessing={isProcessing}
               activeModelId={activeModel}
               onModelChange={setActiveModel}
+              energy={energy}
               onAttachClick={() => alert('Attach clicked')}
             />
+            
+            <div className="p-4 bg-mobi-bg/50 border border-mobi-border rounded-xl">
+              <label className="text-[10px] font-black uppercase tracking-widest text-mobi-text-muted mb-4 block">
+                Simulate Energy Drain
+              </label>
+              <input 
+                type="range" 
+                min="0" max="100" 
+                value={energy} 
+                onChange={(e) => setEnergy(parseInt(e.target.value))}
+                className="w-full h-1 bg-mobi-border rounded-lg appearance-none cursor-pointer accent-mobi-primary"
+              />
+              <div className="flex justify-between mt-2 text-[10px] font-mono text-mobi-text-muted">
+                <span>0%</span>
+                <span>100%</span>
+              </div>
+            </div>
           </div>
         );
       };

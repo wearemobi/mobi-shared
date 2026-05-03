@@ -23,6 +23,11 @@ export interface MobiChatInputProps {
    */
   statusMessage?: string;
   /**
+   * Energy/Battery level (0-100).
+   * @default 100
+   */
+  energy?: number;
+  /**
    * Currently selected model ID.
    */
   activeModelId?: string;
@@ -52,7 +57,7 @@ const DEFAULT_MODELS = [
  * 
  * @example
  * ```tsx
- * <MobiChatInput onSend={(msg) => console.log(msg)} />
+ * <MobiChatInput onSend={(msg) => console.log(msg)} energy={85} />
  * ```
  */
 export const MobiChatInput: React.FC<MobiChatInputProps> = ({
@@ -60,6 +65,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
   placeholder = 'Ask M.O.B.I...',
   isProcessing = false,
   statusMessage = 'Powered by MobiAI',
+  energy = 100,
   activeModelId = 'fast',
   onModelChange,
   className = "",
@@ -89,6 +95,12 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
       onSend(value.trim());
       setValue('');
     }
+  };
+
+  const getBatteryColor = () => {
+    if (energy > 50) return 'bg-emerald-500';
+    if (energy > 20) return 'bg-amber-500';
+    return 'bg-rose-500 animate-pulse';
   };
 
   return (
@@ -151,11 +163,28 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
       </div>
 
       {/* Footer Status */}
-      <div className="px-4 py-1.5 bg-mobi-bg border-t border-mobi-border/50 flex items-center gap-2">
-        <div className={`h-1.5 w-1.5 rounded-full ${isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
-        <span className="text-[9px] font-bold text-mobi-text-muted uppercase tracking-[0.15em] font-mono">
-          {isProcessing ? 'Processing Request...' : statusMessage}
-        </span>
+      <div className="px-4 py-1.5 bg-mobi-bg border-t border-mobi-border/50 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className={`h-1.5 w-1.5 rounded-full ${isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
+          <span className="text-[9px] font-bold text-mobi-text-muted uppercase tracking-[0.15em] font-mono">
+            {isProcessing ? 'Processing Request...' : statusMessage}
+          </span>
+        </div>
+
+        {/* Battery Indicator */}
+        <div className="flex items-center gap-2">
+          <span className="text-[8px] font-black font-mono text-mobi-text-muted opacity-60">
+            {energy}%
+          </span>
+          <div className="relative w-6 h-3 border border-mobi-text-muted/30 rounded-[2px] p-[1px]">
+            <div 
+              className={`h-full rounded-[1px] transition-all duration-1000 ${getBatteryColor()}`}
+              style={{ width: `${energy}%` }}
+            />
+            {/* Battery Pin */}
+            <div className="absolute -right-[3px] top-1/2 -translate-y-1/2 w-[2px] h-1.5 bg-mobi-text-muted/30 rounded-r-[1px]" />
+          </div>
+        </div>
       </div>
     </div>
   );

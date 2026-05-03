@@ -29,6 +29,7 @@ const MyComponent = () => {
 | `placeholder` | `string` | `'Ask M.O.B.I...'` | Placeholder text. |
 | `isProcessing` | `boolean` | `false` | Disables input and shows a thinking state. |
 | `statusMessage` | `string` | `'Powered by MobiAI'` | Technical status text in the footer. |
+| `energy` | `number` | `100` | Energy/Battery level (0-100) shown in the footer. |
 | `activeModelId` | `string` | `'fast'` | Currently selected model ID for the switcher. |
 | `onModelChange` | `(id: string) => void` | `undefined` | Callback triggered when a new model is selected. |
 | `onAttachClick` | `() => void` | `undefined` | Handler for the attachment button. |
