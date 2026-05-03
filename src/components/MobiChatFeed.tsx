@@ -75,7 +75,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
   return (
     <div 
       ref={scrollRef}
-      className={`flex-1 overflow-y-auto p-4 space-y-6 scroll-smooth ${className}`}
+      className={`flex-1 overflow-y-auto overflow-x-hidden p-4 space-y-6 scrollbar-thin scrollbar-thumb-mobi-border scrollbar-track-transparent ${className}`}
     >
       {messages.length === 0 ? (
         <div className="h-full flex flex-col items-center justify-center text-center p-8">
