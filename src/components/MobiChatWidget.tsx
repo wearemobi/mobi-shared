@@ -127,13 +127,13 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
       {/* Chat Window */}
       {isOpen && (
         <div className="
-          w-[380px] h-[550px] bg-mobi-surface border border-mobi-border rounded-2xl
+          w-[380px] h-[550px] bg-mobi-surface border border-mobi-border rounded-xl
           shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col
           animate-in fade-in slide-in-from-bottom-4 duration-300
         ">
           <MobiErrorBoundary>
             {/* Header (Condensed) */}
-            <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-2xl">
+            <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-xl">
               <div className="flex items-center gap-3">
                 {userInitials && (
                   <MobiSentinelMenu 
@@ -203,12 +203,12 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
         </div>
       )}
 
-      {/* Trigger Button (Strictly Square & Black) */}
+      {/* Trigger Button (Robot Sentinel) */}
       <button 
         onClick={() => setIsOpen(!isOpen)}
         className={`
-          w-14 h-14 rounded-none flex items-center justify-center
-          transition-all duration-500 shadow-2xl group border
+          w-14 h-14 rounded-sm flex items-center justify-center
+          transition-all duration-500 shadow-2xl group border relative
           ${isOpen 
             ? 'bg-mobi-surface border-mobi-border rotate-90' 
             : 'bg-mobi-text border-mobi-text shadow-black/20'}
@@ -219,8 +219,26 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
           </svg>
         ) : (
-          <div className="relative">
-            <MobiLogo className="h-8 w-8 text-mobi-bg group-hover:scale-110 transition-transform" />
+          <div className="relative flex items-center justify-center">
+            {/* Ambient Pulse */}
+            <div className="absolute inset-0 h-6 w-6 bg-mobi-bg/20 rounded-full animate-ping group-hover:hidden" />
+            
+            {/* Robot Sentinel Icon */}
+            <svg 
+              className="h-8 w-8 text-mobi-bg group-hover:scale-110 transition-transform" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              <rect x="3" y="11" width="18" height="10" rx="2" />
+              <circle cx="12" cy="5" r="2" />
+              <path d="M12 7v4" />
+              <line x1="8" y1="16" x2="8" y2="16" />
+              <line x1="16" y1="16" x2="16" y2="16" />
+            </svg>
           </div>
         )}
       </button>
