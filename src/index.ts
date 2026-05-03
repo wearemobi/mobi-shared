@@ -14,6 +14,7 @@ export * from './components/MobiUserBadge';
 export * from './components/MobiSwitcher';
 export * from './components/MobiCard';
 export * from './components/MobiDropbox';
+export * from './components/MobiProgress';
 export * from './hooks/useMobiAuth';
 export * from './hooks/useMobiTheme';
 export * from './hooks/useMobiClipboard';

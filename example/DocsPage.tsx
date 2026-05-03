@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { 
   MobiLogo, MobiLogoHero, MobiFooter, MobiAlert, MobiPlanBadge, 
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
-  MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard
+  MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
+  MobiCard, MobiDropbox, MobiProgress
 } from '../src';
 import pkg from '../package.json';
 
@@ -337,6 +338,104 @@ const catalog: CatalogEntry[] = [
             { id: 'logout', label: 'Logout', danger: true, icon: <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg> }
           ]}
         />
+      </div>
+    )
+  },
+  {
+    id: 'MobiCard',
+    name: 'MobiCard',
+    category: 'component',
+    description: 'Premium asset container with header and technical footer.',
+    code: `<MobiCard title="Data Analytics">
+  <p>Content goes here.</p>
+</MobiCard>`,
+    render: () => (
+      <div className="max-w-md">
+        <MobiCard title="System Node v1.2.6">
+          <div className="space-y-3">
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium text-mobi-text-muted">Status</span>
+              <span className="text-xs font-bold text-emerald-500 uppercase tracking-widest">Active</span>
+            </div>
+            <div className="h-2 bg-mobi-bg rounded-full overflow-hidden">
+              <div className="h-full bg-mobi-primary w-[65%]" />
+            </div>
+            <p className="text-sm text-mobi-text leading-relaxed">
+              Real-time synchronization with the Command Bridge is active.
+            </p>
+          </div>
+        </MobiCard>
+      </div>
+    )
+  },
+  {
+    id: 'MobiDropbox',
+    name: 'MobiDropbox',
+    category: 'component',
+    description: 'High-performance drag-and-drop file ingestion vector with configurable texts and progress tracking.',
+    code: `<MobiDropbox 
+  title="Subir Facturas"
+  description="Solo archivos .xml o .pdf"
+  onUploadSuccess={(files) => handleUpload(files)} 
+  acceptedExtensions={['.xml', '.pdf']} 
+  isUploading={isLoading}
+  progress={progress}
+/>`,
+    render: () => {
+      const DropboxDemo = () => {
+        const [loading, setLoading] = useState(false);
+        const [progress, setProgress] = useState(0);
+
+        const simulateUpload = () => {
+          setLoading(true);
+          setProgress(0);
+          const interval = setInterval(() => {
+            setProgress(prev => {
+              if (prev >= 100) {
+                clearInterval(interval);
+                setTimeout(() => setLoading(false), 1000);
+                return 100;
+              }
+              return prev + 5;
+            });
+          }, 100);
+        };
+
+        return (
+          <div className="space-y-6">
+            <MobiDropbox 
+              title="Facturación Ingest"
+              description="Arrastra tus documentos tributarios aquí"
+              onUploadSuccess={simulateUpload} 
+              acceptedExtensions={['.json', '.csv', '.pdf']} 
+              isUploading={loading}
+              progress={progress}
+            />
+            {loading && (
+              <p className="text-[10px] font-mono text-center text-mobi-text-muted animate-pulse">
+                INTERNAL PIPELINE SYNC IN PROGRESS...
+              </p>
+            )}
+          </div>
+        );
+      };
+      return <DropboxDemo />;
+    }
+  },
+  {
+    id: 'MobiProgress',
+    name: 'MobiProgress',
+    category: 'component',
+    description: 'High-precision progress indicator for technical workflows.',
+    code: `<MobiProgress 
+  value={65} 
+  label="Processing..." 
+  status="650/1000 items" 
+/>`,
+    render: () => (
+      <div className="space-y-8 max-w-md">
+        <MobiProgress value={33} label="System Optimization" status="33% optimized" />
+        <MobiProgress value={88} label="Data Ingestion" status="Ready for final sync" technical />
       </div>
     )
   },
