@@ -33,12 +33,13 @@ const MyComponent = () => {
 | `isUploading` | `boolean` | `false` | If true, shows progress bar and disables zone. |
 | `progress` | `number` | `0` | Current progress percentage (0-100). |
 | `className` | `string` | `""` | Additional CSS classes. |
+| `multiple` | `boolean` | `false` | Whether to allow selecting multiple files. |
 
 ## Features
 
+- **Multi-Vector Ingestion**: Supports both drag-and-drop and manual file selection (click-to-trigger).
+- **Batch Processing**: Enable `multiple` mode to process several assets in a single pipeline cycle.
 - **Progress Integration**: Automatically renders a `MobiProgress` bar when `isUploading` is active.
-- **Visual Feedback**: Dynamic scaling and color shifting when files are dragged over the target area.
-- **Customizable Ingestion**: Configure all labels to match the specific context of the module (e.g., "Facturación Ingest").
 
 ## Aesthetic
 

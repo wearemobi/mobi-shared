@@ -23,11 +23,12 @@ const MyComponent = () => {
 | `title` | `string` | `undefined` | Optional title rendered in the card header. |
 | `children` | `React.ReactNode` | `undefined` | The content to render inside the card. |
 | `className` | `string` | `""` | Additional CSS classes. |
+| `footer` | `React.ReactNode` | `undefined` | Optional content for the technical footer area. |
 
 ## Aesthetic
 
 The `MobiCard` represents the premium "Asset Container" of the M.O.B.I. fleet. It features:
 - **Header**: Separated by a subtle border with a light background (`mobi-bg/30`).
-- **Footer**: Includes "MOBI Asset Container" metadata and a pulsing status indicator.
+- **Footer**: A clean metadata area at the bottom. It allows injecting custom text or components via the `footer` prop.
 - **Rounding**: Uses `rounded-2xl` for a high-impact, premium feel while maintaining professional boundaries.
 - **Shadow**: Deep shadow with a ring-1 highlight for depth.

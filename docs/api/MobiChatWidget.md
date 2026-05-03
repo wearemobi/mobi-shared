@@ -31,9 +31,12 @@ const App = () => {
 | `placeholder` | `string` | `'Ask M.O.B.I...'` | Input text placeholder. |
 | `userLabel` | `string` | `'COMMAND • SYNC'` | Technical label for user messages. |
 | `assistantLabel` | `string` | `'AGENT • PROCESSED'` | Technical label for assistant messages. |
+| `isOpen` | `boolean` | `undefined` | Controlled mode: force open/closed state. |
+| `onToggle` | `(isOpen: boolean) => void` | `undefined` | Callback for state changes. |
 
 ## Features
 
+- **Controlled Orchestration**: Can be opened externally from dashboard menus or sidebar links using the `isOpen` prop.
 - **Floating Trigger**: A circular, high-visibility button with a technical pulse animation.
 - **Autonomous State**: Internally manages chat history and energy using `useMobiChat`.
 - **Responsive Popup**: A fixed-width, animated window optimized for desktop and mobile viewports.
