@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MobiButton } from './MobiButton';
+import { MobiLogo } from './MobiLogo';
 
 export interface MobiChatInputProps {
   /**
@@ -18,7 +19,7 @@ export interface MobiChatInputProps {
   isProcessing?: boolean;
   /**
    * Optional status message shown in the footer.
-   * @default 'Connected to M.O.B.I.™ Pipeline'
+   * @default 'Powered by MobiAI'
    */
   statusMessage?: string;
   /**
@@ -48,7 +49,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
   onSend,
   placeholder = 'Ask M.O.B.I...',
   isProcessing = false,
-  statusMessage = 'Connected to M.O.B.I.™ Pipeline',
+  statusMessage = 'Powered by MobiAI',
   className = "",
   onAttachClick,
   onToolsClick
@@ -110,7 +111,6 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
           <MobiButton 
             variant="ghost" 
             size="sm" 
-            technical 
             onClick={onAttachClick}
             disabled={isProcessing}
             icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>}
@@ -118,7 +118,6 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
           <MobiButton 
             variant="ghost" 
             size="sm" 
-            technical 
             onClick={onToolsClick}
             disabled={isProcessing}
             icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>}
@@ -130,7 +129,6 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
         <MobiButton 
           variant="solid" 
           size="sm" 
-          technical 
           onClick={handleSend}
           disabled={isProcessing || !value.trim()}
           icon={isProcessing ? (
@@ -138,17 +136,21 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
           ) : (
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
           )}
-        >
-          {isProcessing ? 'Thinking' : 'Send'}
-        </MobiButton>
+        />
       </div>
 
       {/* Footer Status */}
-      <div className="px-4 py-1.5 bg-mobi-bg border-t border-mobi-border/50 flex items-center gap-2">
-        <div className={`h-1.5 w-1.5 rounded-full ${isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
-        <span className="text-[9px] font-bold text-mobi-text-muted uppercase tracking-[0.15em] font-mono">
-          {statusMessage}
-        </span>
+      <div className="px-4 py-1.5 bg-mobi-bg border-t border-mobi-border/50 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className={`h-1.5 w-1.5 rounded-full ${isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
+          <span className="text-[9px] font-bold text-mobi-text-muted uppercase tracking-[0.15em] font-mono">
+            {statusMessage}
+          </span>
+        </div>
+        <div className="flex items-center gap-1 opacity-40">
+          <span className="text-[8px] font-black uppercase tracking-tighter text-mobi-text-muted">MOBI</span>
+          <MobiLogo size={10} />
+        </div>
       </div>
     </div>
   );

@@ -447,7 +447,6 @@ const catalog: CatalogEntry[] = [
     code: `<MobiChatInput 
   onSend={(msg) => handleSend(msg)} 
   placeholder="Type a command..."
-  statusMessage="Operational"
 />`,
     render: () => {
       const ChatDemo = () => {

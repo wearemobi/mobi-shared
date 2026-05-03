@@ -28,17 +28,16 @@ const MyComponent = () => {
 | `onSend` | `(message: string) => void` | `undefined` | Callback triggered on Send or Enter key. |
 | `placeholder` | `string` | `'Ask M.O.B.I...'` | Placeholder text. |
 | `isProcessing` | `boolean` | `false` | Disables input and shows a thinking state. |
-| `statusMessage` | `string` | `...` | Technical status text in the footer. |
+| `statusMessage` | `string` | `'Powered by MobiAI'` | Technical status text in the footer. |
 | `onAttachClick` | `() => void` | `undefined` | Handler for the attachment button. |
 | `onToolsClick` | `() => void` | `undefined` | Handler for the tools/config button. |
 | `className` | `string` | `""` | Additional CSS classes. |
 
 ## Features
 
+- **Icon-Only Send**: Minimalist send action using the high-impact arrow icon.
+- **MobiAI Branding**: Integrated footer with the official "mini M" logo and "Powered by MobiAI" signature.
 - **Auto-Expanding**: Textarea grows dynamically with content (up to a max-height).
-- **Integrated Actions**: Built-in support for attachments and tool configurations using standard `MobiButton` elements.
-- **Visual Feedback**: Real-time status dot and animated "Thinking" state during processing.
-- **MOBI Keyboard Support**: `Enter` to send, `Shift+Enter` for new lines.
 
 ## Aesthetic
 
