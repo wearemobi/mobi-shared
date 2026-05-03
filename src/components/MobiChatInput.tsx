@@ -44,6 +44,21 @@ export interface MobiChatInputProps {
    * Callback for the attachment button click.
    */
   onAttachClick?: () => void;
+  /**
+   * Text for the computer upload option.
+   * @default 'ADD FROM COMPUTER'
+   */
+  addFromComputerText?: string;
+  /**
+   * Text for the vault upload option.
+   * @default 'ADD FROM MOBIVAULT'
+   */
+  addFromVaultText?: string;
+  /**
+   * Text shown when processing.
+   * @default 'Processing Request...'
+   */
+  processingText?: string;
 }
 
 const DEFAULT_MODELS = [
@@ -70,7 +85,10 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
   activeModelId = 'fast',
   onModelChange,
   className = "",
-  onAttachClick
+  onAttachClick,
+  addFromComputerText = 'ADD FROM COMPUTER',
+  addFromVaultText = 'ADD FROM MOBIVAULT',
+  processingText = 'Processing Request...'
 }) => {
   const [value, setValue] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -143,14 +161,14 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
                 onClick={() => { setIsMenuOpen(false); onAttachClick?.(); }}
               >
                 <svg className="h-4 w-4 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 17v-2a4 4 0 014-4h4m-4 4l-4-4m4 4l4-4" /></svg>
-                <span>ADD FROM COMPUTER</span>
+                <span>{addFromComputerText}</span>
               </button>
               <button 
                 className="w-full px-4 py-3 text-left text-[11px] font-mono text-mobi-text hover:bg-mobi-primary hover:text-mobi-bg transition-colors border-t border-mobi-border flex items-center gap-3"
                 onClick={() => setIsMenuOpen(false)}
               >
                 <svg className="h-4 w-4 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg>
-                <span>ADD FROM MOBIVAULT</span>
+                <span>{addFromVaultText}</span>
               </button>
             </div>
           )}
@@ -183,7 +201,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
         <div className="flex items-center gap-2">
           <div className={`h-1.5 w-1.5 rounded-full ${isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
           <span className="text-[9px] font-bold text-mobi-text-muted uppercase tracking-[0.15em] font-mono">
-            {isProcessing ? 'Processing Request...' : statusMessage}
+            {isProcessing ? processingText : statusMessage}
           </span>
         </div>
 

@@ -24,6 +24,11 @@ export interface MobiChatFeedProps {
    */
   className?: string;
   /**
+   * Text shown when processing.
+   * @default 'Processing...'
+   */
+  processingText?: string;
+  /**
    * Label shown for user messages.
    * @default 'COMMAND • SYNC'
    */
@@ -50,6 +55,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
   messages,
   isProcessing = false,
   className = "",
+  processingText = "Processing...",
   userLabel = 'COMMAND • SYNC',
   assistantLabel = 'AGENT • PROCESSED',
   emptyState = {
@@ -146,7 +152,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
               <div className="w-1 h-1 bg-mobi-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
               <div className="w-1 h-1 bg-mobi-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
             </div>
-            <span className="text-[9px] font-mono text-mobi-text-muted uppercase tracking-widest ml-2 animate-pulse">Processing...</span>
+            <span className="text-[9px] font-mono text-mobi-text-muted uppercase tracking-widest ml-2 animate-pulse">{processingText}</span>
           </div>
         </div>
       )}

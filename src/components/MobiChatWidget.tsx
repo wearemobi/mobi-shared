@@ -14,12 +14,47 @@ export interface MobiChatWidgetProps {
   initialEnergy?: number;
   /**
    * Label for user messages.
+   * @default 'COMMAND • SYNC'
    */
   userLabel?: string;
   /**
    * Label for assistant messages.
+   * @default 'AGENT • PROCESSED'
    */
   assistantLabel?: string;
+  /**
+   * Title of the chat window.
+   * @default 'MobiAi Chat'
+   */
+  title?: string;
+  /**
+   * Placeholder for the input.
+   */
+  placeholder?: string;
+  /**
+   * Status message in the footer.
+   */
+  statusMessage?: string;
+  /**
+   * Text shown when processing.
+   */
+  processingText?: string;
+  /**
+   * Text for computer upload.
+   */
+  addFromComputerText?: string;
+  /**
+   * Text for vault upload.
+   */
+  addFromVaultText?: string;
+  /**
+   * Title for the empty state.
+   */
+  emptyStateTitle?: string;
+  /**
+   * Description for the empty state.
+   */
+  emptyStateDescription?: string;
 }
 
 /**
@@ -29,7 +64,15 @@ export interface MobiChatWidgetProps {
 export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   initialEnergy = 100,
   userLabel,
-  assistantLabel
+  assistantLabel,
+  title = 'MobiAi Chat',
+  placeholder,
+  statusMessage,
+  processingText,
+  addFromComputerText,
+  addFromVaultText,
+  emptyStateTitle,
+  emptyStateDescription
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { 
@@ -66,7 +109,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                 <MobiLogo size={20} className="text-mobi-bg" />
               </div>
               <div>
-                <h3 className="text-[13px] font-black tracking-tight text-mobi-text leading-none">MobiAi Chat</h3>
+                <h3 className="text-[13px] font-black tracking-tight text-mobi-text leading-none">{title}</h3>
                 <div className="-mt-1">
                   <span className="text-[8px] font-mono text-mobi-text-muted uppercase tracking-wider font-bold">
                     {getModelStatus()}
@@ -90,6 +133,11 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
             className="bg-mobi-bg/10"
             userLabel={userLabel}
             assistantLabel={assistantLabel}
+            processingText={processingText}
+            emptyState={{
+              title: emptyStateTitle,
+              description: emptyStateDescription
+            }}
           />
 
           {/* Input Area */}
@@ -100,6 +148,11 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
               activeModelId={activeModelId}
               onModelChange={setActiveModelId}
               energy={energy}
+              placeholder={placeholder}
+              statusMessage={statusMessage}
+              processingText={processingText}
+              addFromComputerText={addFromComputerText}
+              addFromVaultText={addFromVaultText}
               className="border-none shadow-none bg-transparent"
             />
           </div>
