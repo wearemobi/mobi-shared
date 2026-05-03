@@ -24,6 +24,16 @@ export interface MobiChatFeedProps {
    */
   className?: string;
   /**
+   * Label shown for user messages.
+   * @default 'COMMAND • SYNC'
+   */
+  userLabel?: string;
+  /**
+   * Label shown for assistant messages.
+   * @default 'AGENT • PROCESSED'
+   */
+  assistantLabel?: string;
+  /**
    * Empty state configuration.
    */
   emptyState?: {
@@ -40,6 +50,8 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
   messages,
   isProcessing = false,
   className = "",
+  userLabel = 'COMMAND • SYNC',
+  assistantLabel = 'AGENT • PROCESSED',
   emptyState = {
     title: "MobiAi Interface",
     description: "Agentic Link established. System is ready for tactical deployment."
@@ -113,7 +125,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
             </div>
             <div className="flex items-center gap-1.5 mt-1.5 px-1 opacity-60">
               <span className={`text-[7px] font-mono uppercase tracking-widest font-bold ${m.isError ? 'text-rose-400' : 'text-mobi-text-muted'}`}>
-                {m.isError ? 'SYSTEM • FAILED' : m.role === 'user' ? 'COMMAND • SYNC' : 'AGENT • PROCESSED'}
+                {m.isError ? 'SYSTEM • FAILED' : m.role === 'user' ? userLabel : assistantLabel}
               </span>
               {m.model && !m.isError && (
                 <>

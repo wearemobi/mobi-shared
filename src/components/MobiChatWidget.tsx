@@ -12,6 +12,14 @@ export interface MobiChatWidgetProps {
    * @default 100
    */
   initialEnergy?: number;
+  /**
+   * Label for user messages.
+   */
+  userLabel?: string;
+  /**
+   * Label for assistant messages.
+   */
+  assistantLabel?: string;
 }
 
 /**
@@ -19,7 +27,9 @@ export interface MobiChatWidgetProps {
  * A floating, pop-up agentic interface that provides immediate access to MobiAI.
  */
 export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
-  initialEnergy = 100
+  initialEnergy = 100,
+  userLabel,
+  assistantLabel
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { 
@@ -78,6 +88,8 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
             messages={messages} 
             isProcessing={isProcessing} 
             className="bg-mobi-bg/10"
+            userLabel={userLabel}
+            assistantLabel={assistantLabel}
           />
 
           {/* Input Area */}
