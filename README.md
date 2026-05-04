@@ -1,4 +1,4 @@
-# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.2.5
+# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.1
 
 > Universal UI & Logic Shield for the M.O.B.I.™ Grand Fleet
 
@@ -27,6 +27,7 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } fro
 | `MobiUserBadge` | Theme-aware identity badge (condensed/expanded) |
 | `MobiSwitcher` | Compact segmented selector (theme, language, etc.) |
 | `MobiSentinelMenu` | Data-driven user dropdown with identity + config |
+| `MobiDropbox` | **(Updated)** High-performance drag-and-drop with Automated Vault Ingestion support |
 
 ## Hooks
 
@@ -35,6 +36,30 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } fro
 | `useMobiTheme` | Theme persistence + system preference detection |
 | `useMobiAuth` | Authentication stub for JS Bridge v1.19 |
 | `useMobiClipboard` | Copy-to-clipboard with feedback state |
+| `useMobiVault` | **(New)** Sovereign client for the M.O.B.I.™ Vault microservice |
+| `useMobiReactor` | **(New)** Sovereign client for the M.O.B.I.™ Energy Reactor |
+
+## Fleet Integration (v1.3.1)
+
+Standardized clients for the M.O.B.I.™ microservice ecosystem.
+
+### Mobi-Vault
+Automate file ingestion via `MobiDropbox`.
+
+```tsx
+<MobiDropbox 
+  vaultUrl="http://localhost:8081"
+  onVaultSuccess={(metadata) => console.log(metadata)}
+/>
+```
+
+### Mobi-Reactor
+Track energy consumption and query history.
+
+```tsx
+const { consume } = useMobiReactor();
+consume({ entityId: 'A1', entityType: 'AGENT', hakiAmount: 50 });
+```
 
 ## Documentation
 
@@ -68,4 +93,4 @@ As a project derived from the **M.O.B.I.™ Grand Fleet**, you must stay aligned
 Copyright © 2026 **M.O.B.I.™** (Machine Oriented Brilliant Ideas™)  
 Transforming ideas into high-impact digital solutions. 🚀  
 [wearemobi.com](https://wearemobi.com) · contact@wearemobi.com
-<!-- M.O.B.I. Core: SDD-Compliant-V1.7 | Sentinel-Status: ACTIVE -->
+<!-- M.O.B.I. Core: SDD-Compliant-V2.0 | Sentinel-Status: ACTIVE -->

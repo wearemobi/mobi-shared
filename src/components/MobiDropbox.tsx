@@ -1,12 +1,13 @@
 import React, { useState, useCallback } from 'react';
 
 import { MobiProgress } from './MobiProgress';
+import { useMobiVault, FileMetadata } from '../hooks/useMobiVault';
 
 export interface MobiDropboxProps {
   /**
    * Callback triggered when files are successfully dropped or selected.
    */
-  onUploadSuccess: (files: File[]) => void;
+  onUploadSuccess?: (files: File[]) => void;
   /**
    * List of allowed file extensions (e.g., ['.json', '.pdf']).
    */
@@ -44,6 +45,19 @@ export interface MobiDropboxProps {
    * @default false
    */
   multiple?: boolean;
+  /**
+   * Optional URL for the Mobi-Vault service. If provided, the component will
+   * automatically handle the upload to the vault.
+   */
+  vaultUrl?: string;
+  /**
+   * Callback triggered when files are successfully ingested into the vault.
+   */
+  onVaultSuccess?: (metadata: FileMetadata[]) => void;
+  /**
+   * Callback triggered when vault ingestion fails.
+   */
+  onVaultError?: (error: Error) => void;
 }
 
 /**
@@ -69,56 +83,68 @@ export const MobiDropbox: React.FC<MobiDropboxProps> = ({
   progress = 0,
   isUploading = false,
   className = "",
-  multiple = false
+  multiple = false,
+  vaultUrl,
+  onVaultSuccess,
+  onVaultError
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
+  const { upload, isUploading: isVaultUploading } = useMobiVault({
+    baseUrl: vaultUrl,
+    onSuccess: onVaultSuccess,
+    onError: onVaultError
+  });
+
+  const activeUploading = isUploading || isVaultUploading;
+
+  const handleFiles = useCallback((files: File[]) => {
+    const validFiles = files.filter(file => 
+      acceptedExtensions.some(ext => file.name.toLowerCase().endsWith(ext))
+    );
+
+    if (validFiles.length > 0) {
+      if (vaultUrl) {
+        upload(validFiles);
+      }
+      onUploadSuccess?.(validFiles);
+    }
+  }, [acceptedExtensions, onUploadSuccess, upload, vaultUrl]);
+
   const handleDragOver = useCallback((e: React.DragEvent) => {
-    if (isUploading) return;
+    if (activeUploading) return;
     e.preventDefault();
     setIsDragging(true);
-  }, [isUploading]);
+  }, [activeUploading]);
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
-    if (isUploading) return;
+    if (activeUploading) return;
     e.preventDefault();
     setIsDragging(false);
-  }, [isUploading]);
+  }, [activeUploading]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {
-    if (isUploading) return;
+    if (activeUploading) return;
     e.preventDefault();
     setIsDragging(false);
     
     const files = Array.from(e.dataTransfer.files);
-    const validFiles = files.filter(file => 
-      acceptedExtensions.some(ext => file.name.toLowerCase().endsWith(ext))
-    );
-
-    if (validFiles.length > 0) {
-      onUploadSuccess(validFiles);
-    }
-  }, [onUploadSuccess, acceptedExtensions, isUploading]);
+    handleFiles(files);
+  }, [handleFiles, activeUploading]);
 
   const handleInputToggle = useCallback(() => {
-    if (isUploading) return;
+    if (activeUploading) return;
     fileInputRef.current?.click();
-  }, [isUploading]);
+  }, [activeUploading]);
 
   const handleFileChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (isUploading || !e.target.files) return;
+    if (activeUploading || !e.target.files) return;
     const files = Array.from(e.target.files);
-    const validFiles = files.filter(file => 
-      acceptedExtensions.some(ext => file.name.toLowerCase().endsWith(ext))
-    );
-
-    if (validFiles.length > 0) {
-      onUploadSuccess(validFiles);
-    }
+    handleFiles(files);
     // Reset input
     e.target.value = '';
-  }, [onUploadSuccess, acceptedExtensions, isUploading]);
+  }, [handleFiles, activeUploading]);
 
   return (
     <div
@@ -129,14 +155,14 @@ export const MobiDropbox: React.FC<MobiDropboxProps> = ({
       className={`
         w-full max-w-2xl p-12 border-2 border-dashed rounded-3xl transition-all duration-500
         flex flex-col items-center justify-center gap-6
-        ${isUploading ? 'cursor-wait opacity-80' : 'cursor-pointer'}
-        ${isDragging && !isUploading
+        ${activeUploading ? 'cursor-wait opacity-80' : 'cursor-pointer'}
+        ${isDragging && !activeUploading
           ? 'border-mobi-primary bg-mobi-primary/5 shadow-2xl scale-[1.02]' 
           : 'border-mobi-border bg-mobi-surface/50 hover:bg-mobi-surface hover:border-mobi-text-muted shadow-sm'}
         ${className}
       `}
     >
-      {!isUploading ? (
+      {!activeUploading ? (
         <>
           <div className={`
             p-6 rounded-2xl border transition-colors duration-300
