@@ -8,6 +8,8 @@ export interface MobiSwitcherOption {
   label: string;
   /** Optional icon (React node) rendered before the label. */
   icon?: React.ReactNode;
+  /** Custom CSS classes to apply to the option when active. */
+  activeClassName?: string;
 }
 
 interface MobiSwitcherProps {
@@ -59,7 +61,7 @@ export const MobiSwitcher: React.FC<MobiSwitcherProps> = ({
               hideLabel ? 'p-2' : 'px-2.5 py-1.5'
             } ${
               isActive 
-                ? 'bg-mobi-surface shadow-sm text-mobi-text' 
+                ? (option.activeClassName || 'bg-mobi-surface shadow-sm text-mobi-text') 
                 : 'text-mobi-text-muted/50 hover:text-mobi-text-muted hover:bg-mobi-surface/20'
             }`}
           >

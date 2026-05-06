@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MobiLogo, MobiLogoHero, MobiFooter, MobiSentinelMenu, MobiNavbar, MobiHero, MobiButton, useMobiAuth, MobiAlert, useMobiClipboard, MobiChatWidget, useMobiAgentic } from '../src';
+import { MobiLogo, MobiLogoHero, MobiFooter, MobiSentinelMenu, MobiNavbar, MobiHero, MobiButton, useMobiAuth, MobiAlert, useMobiClipboard, MobiChatWidget, useMobiAgentic, useMobiGemini } from '../src';
 import { DocsPage } from './DocsPage';
 import pkg from '../package.json';
 import '../src/styles.css';
@@ -12,12 +12,19 @@ const App: React.FC = () => {
   const { copy } = useMobiClipboard();
   const [view, setView] = useState<AppView>('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const { chat } = useMobiAgentic({ baseUrl: '/proxy/agentic' });
+  
+  const { chat: chatMobi } = useMobiAgentic({ baseUrl: '/proxy/agentic' });
+  const { chat: chatGemini } = useMobiGemini();
 
-  const handleSendMessage = async (msg: string) => {
+  const handleSendMessage = async (msg: string, model: string, engine: 'mobi' | 'gemini') => {
     try {
-      const res = await chat(msg);
-      return res.response;
+      if (engine === 'gemini') {
+        const res = await chatGemini(msg);
+        return res.response;
+      } else {
+        const res = await chatMobi(msg);
+        return res.response;
+      }
     } catch (error) {
       throw error;
     }
