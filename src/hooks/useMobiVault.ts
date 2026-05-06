@@ -20,7 +20,7 @@ export interface UseMobiVaultOptions {
  */
 export const useMobiVault = (options: UseMobiVaultOptions = {}) => {
   const { 
-    baseUrl = 'http://localhost:8081',
+    baseUrl = 'http://vault.engine.sandbox.grandfleet.local',
     onSuccess,
     onError
   } = options;
