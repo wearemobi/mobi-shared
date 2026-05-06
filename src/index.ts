@@ -17,6 +17,7 @@ export * from './components/MobiDropbox';
 export * from './components/MobiProgress';
 export * from './components/MobiChatInput';
 export * from './components/MobiChatFeed';
+export * from './components/MobiMarkdown';
 export * from './components/MobiEnergyMeter';
 export * from './components/MobiChatWidget';
 export * from './components/MobiErrorBoundary';

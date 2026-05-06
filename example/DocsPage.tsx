@@ -4,7 +4,7 @@ import {
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
   MobiCard, MobiDropbox, MobiProgress, MobiChatInput, MobiEnergyMeter,
-  useMobiChat, useMobiEnergy, MobiChatWidget, useMobiAgentic
+  useMobiChat, useMobiEnergy, MobiChatWidget, useMobiAgentic, MobiMarkdown
 } from '../src';
 import pkg from '../package.json';
 
@@ -591,6 +591,20 @@ const catalog: CatalogEntry[] = [
         <p className="text-[10px] font-mono text-mobi-text-muted uppercase">
           Check the bottom-right corner of the screen to interact with the widget.
         </p>
+      </div>
+    )
+  },
+  {
+    id: 'MobiMarkdown',
+    name: 'MobiMarkdown',
+    category: 'component',
+    description: 'Standardized markdown rendering with GitHub Flavored Markdown support and M.O.B.I.™ styling.',
+    code: `<MobiMarkdown>\n  # Title\\n\\nSome **bold** text and \`code\`.\n</MobiMarkdown>`,
+    render: () => (
+      <div className="max-w-xl">
+        <MobiMarkdown>
+          {`# Heading 1\n\n## Heading 2\n\nThis is a paragraph with **bold** and *italic* text. \n\n- List item 1\n- List item 2\n\n\`\`\`javascript\nconst a = 1;\nconsole.log(a);\n\`\`\`\n\n> Blockquote example`}
+        </MobiMarkdown>
       </div>
     )
   },
