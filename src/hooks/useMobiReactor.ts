@@ -50,7 +50,7 @@ export interface UseMobiReactorOptions {
  */
 export const useMobiReactor = (options: UseMobiReactorOptions = {}) => {
   const { 
-    baseUrl = 'http://localhost:8080',
+    baseUrl = 'http://reactor.engine.sandbox.grandfleet.local',
     onSuccess,
     onError
   } = options;
