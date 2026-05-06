@@ -8,6 +8,15 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
+  server: {
+    proxy: {
+      '/proxy/agentic': {
+        target: 'http://agentic.engine.sandbox.grandfleet.local',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/proxy\/agentic/, '')
+      }
+    }
+  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),

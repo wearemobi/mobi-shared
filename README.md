@@ -1,4 +1,4 @@
-# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.1
+# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.2
 
 > Universal UI & Logic Shield for the M.O.B.I.™ Grand Fleet
 
@@ -36,19 +36,28 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } fro
 | `useMobiTheme` | Theme persistence + system preference detection |
 | `useMobiAuth` | Authentication stub for JS Bridge v1.19 |
 | `useMobiClipboard` | Copy-to-clipboard with feedback state |
-| `useMobiVault` | **(New)** Sovereign client for the M.O.B.I.™ Vault microservice |
-| `useMobiReactor` | **(New)** Sovereign client for the M.O.B.I.™ Energy Reactor |
+| `useMobiVault` | **(Updated)** Sovereign client for the M.O.B.I.™ Vault microservice |
+| `useMobiReactor` | **(Updated)** Sovereign client for the M.O.B.I.™ Energy Reactor |
+| `useMobiAgentic` | **(New)** Sovereign client for the M.O.B.I.™ Agentic AI |
 
-## Fleet Integration (v1.3.1)
+## Fleet Integration (v1.3.2)
 
-Standardized clients for the M.O.B.I.™ microservice ecosystem.
+Standardized clients for the local M.O.B.I.™ k8s sandbox microservice ecosystem.
+
+### Mobi-Agentic
+Interact with the sovereign AI engine.
+
+```tsx
+const { chat } = useMobiAgentic();
+const response = await chat("Analyze this structure.");
+```
 
 ### Mobi-Vault
 Automate file ingestion via `MobiDropbox`.
 
 ```tsx
 <MobiDropbox 
-  vaultUrl="http://localhost:8081"
+  vaultUrl="http://vault.engine.sandbox.grandfleet.local"
   onVaultSuccess={(metadata) => console.log(metadata)}
 />
 ```
