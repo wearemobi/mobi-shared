@@ -29,3 +29,4 @@ export * from './hooks/useMobiEnergy';
 export * from './hooks/useMobiVault';
 export * from './hooks/useMobiReactor';
 export * from './hooks/useMobiAgentic';
+export * from './hooks/useMobiGemini';

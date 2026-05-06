@@ -84,7 +84,7 @@ export interface MobiChatWidgetProps {
   /** Callback triggered when the widget wants to change its open state. */
   onToggle?: (isOpen: boolean) => void;
   /** Callback to handle the actual sending of the message and returning the response text. */
-  onSendMessage?: (message: string, model: string) => Promise<string>;
+  onSendMessage?: (message: string, model: string, engine: 'mobi' | 'gemini') => Promise<string>;
 }
 
 /**
@@ -140,9 +140,11 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     messages, 
     isProcessing, 
     activeModelId, 
+    activeEngine,
     energy, 
     sendMessage, 
-    setActiveModelId 
+    setActiveModelId,
+    setActiveEngine
   } = useMobiChat({ initialEnergy, initialMessages, onSendMessage });
 
   // Monitor for errors to trigger analytics hook
@@ -254,6 +256,11 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                 onModelChange={(modelId) => {
                   setActiveModelId(modelId as any);
                   onAction?.('model_change', { modelId });
+                }}
+                activeEngine={activeEngine}
+                onEngineChange={(engineId) => {
+                  setActiveEngine(engineId);
+                  onAction?.('engine_change', { engineId });
                 }}
                 energy={energy}
                 placeholder={placeholder}

@@ -1,4 +1,4 @@
-# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.2
+# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.3
 
 > Universal UI & Logic Shield for the M.O.B.I.™ Grand Fleet
 
@@ -39,8 +39,9 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } fro
 | `useMobiVault` | **(Updated)** Sovereign client for the M.O.B.I.™ Vault microservice |
 | `useMobiReactor` | **(Updated)** Sovereign client for the M.O.B.I.™ Energy Reactor |
 | `useMobiAgentic` | **(New)** Sovereign client for the M.O.B.I.™ Agentic AI |
+| `useMobiGemini` | **(New)** Direct cloud client for Google Gemini Backup AI |
 
-## Fleet Integration (v1.3.2)
+## Fleet Integration (v1.3.3)
 
 Standardized clients for the local M.O.B.I.™ k8s sandbox microservice ecosystem.
 
@@ -50,6 +51,17 @@ Interact with the sovereign AI engine.
 ```tsx
 const { chat } = useMobiAgentic();
 const response = await chat("Analyze this structure.");
+```
+
+### Mobi-Gemini (Cloud Backup Core)
+Direct-to-cloud connection bypassing local sandboxes, configured as the default engine in the Chat Widget.
+
+```tsx
+const { chat } = useMobiGemini({
+  apiKey: "YOUR_GEMINI_API_KEY", // Optional: Defaults to development backup key
+  modelName: "gemini-2.5-flash"  // Optional: Defaults to high-performance flash core
+});
+const response = await chat("Analyze backup status.");
 ```
 
 ### Mobi-Vault
