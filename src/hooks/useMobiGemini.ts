@@ -15,7 +15,7 @@ export interface UseMobiGeminiOptions {
   onError?: (error: Error) => void;
 }
 
-const getEnvApiKey = (): string => {
+export const getEnvApiKey = (): string => {
   // Try Vite/Rollup environment variables
   if (typeof import.meta !== 'undefined' && (import.meta as any).env?.VITE_GEMINI_API_KEY) {
     return (import.meta as any).env.VITE_GEMINI_API_KEY;
@@ -36,7 +36,7 @@ const getEnvApiKey = (): string => {
   return 'AIzaSyB2IF-eAMuC6vv13VsqsTBCAfzQ6MFWcSw';
 };
 
-const DEFAULT_SYSTEM_INSTRUCTION = `You are MobiAI Support Agent, the official cloud-assisted intelligent backup of M.O.B.I.™ (Mobile Operations & Bridge Infrastructure). Your purpose is to assist operators and users with any questions regarding MOBI products, services, telemetry integrations, and technical assistance.
+export const DEFAULT_SYSTEM_INSTRUCTION = `You are MobiAI Support Agent, the official cloud-assisted intelligent backup of M.O.B.I.™ (Mobile Operations & Bridge Infrastructure). Your purpose is to assist operators and users with any questions regarding MOBI products, services, telemetry integrations, and technical assistance.
 
 Tone and Persona Guidelines:
 - Professional, highly technical, helpful, sovereign, and extremely efficient.
