@@ -4,7 +4,7 @@ import {
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
   MobiCard, MobiDropbox, MobiProgress, MobiChatInput, MobiEnergyMeter,
-  useMobiChat, useMobiEnergy, MobiChatWidget
+  useMobiChat, useMobiEnergy, MobiChatWidget, useMobiAgentic
 } from '../src';
 import pkg from '../package.json';
 
@@ -451,6 +451,13 @@ const catalog: CatalogEntry[] = [
 />`,
     render: () => {
       const ChatDemo = () => {
+        const { chat } = useMobiAgentic({ baseUrl: '/proxy/agentic' });
+        
+        const handleSendMessage = async (msg: string) => {
+          const res = await chat(msg);
+          return res.response;
+        };
+
         const { 
           messages, 
           isProcessing, 
@@ -459,7 +466,10 @@ const catalog: CatalogEntry[] = [
           sendMessage, 
           setActiveModelId,
           rechargeEnergy 
-        } = useMobiChat({ initialEnergy: 85 });
+        } = useMobiChat({ 
+          initialEnergy: 85,
+          onSendMessage: handleSendMessage
+        });
 
         return (
           <div className="max-w-2xl mx-auto w-full py-8 space-y-8">
@@ -583,6 +593,33 @@ const catalog: CatalogEntry[] = [
         </p>
       </div>
     )
+  },
+  {
+    id: 'useMobiAgentic',
+    name: 'useMobiAgentic',
+    category: 'hook',
+    description: 'Sovereign client for the M.O.B.I.™ Agentic AI microservice.',
+    code: `const { chat, isProcessing, lastResponse } = useMobiAgentic();\n\nchat("Analyze this code.").then(res => console.log(res.response));`,
+    render: () => {
+      const AgenticDemo = () => {
+        const { chat, isProcessing, lastResponse, lastError } = useMobiAgentic({ baseUrl: '/proxy/agentic' });
+        return (
+          <div className="space-y-4 max-w-md">
+            <p className="text-sm">Status: {isProcessing ? 'Processing...' : 'Idle'}</p>
+            <MobiButton variant="outline" size="sm" onClick={() => chat("Hello from the example sandbox!")} technical>
+              Send "Hello" Ping
+            </MobiButton>
+            {lastError && <MobiAlert title="Error" message={lastError.message} type="error" duration={0} />}
+            {lastResponse && (
+              <div className="p-4 bg-mobi-bg rounded border border-mobi-border text-[10px] font-mono whitespace-pre-wrap text-mobi-text">
+                {lastResponse.response}
+              </div>
+            )}
+          </div>
+        );
+      }
+      return <AgenticDemo />;
+    }
   }
 ];
 

@@ -83,6 +83,8 @@ export interface MobiChatWidgetProps {
   isOpen?: boolean;
   /** Callback triggered when the widget wants to change its open state. */
   onToggle?: (isOpen: boolean) => void;
+  /** Callback to handle the actual sending of the message and returning the response text. */
+  onSendMessage?: (message: string, model: string) => Promise<string>;
 }
 
 /**
@@ -115,7 +117,8 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   onAttach,
   suggestions = [],
   isOpen: controlledIsOpen,
-  onToggle
+  onToggle,
+  onSendMessage
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
@@ -140,7 +143,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     energy, 
     sendMessage, 
     setActiveModelId 
-  } = useMobiChat({ initialEnergy, initialMessages });
+  } = useMobiChat({ initialEnergy, initialMessages, onSendMessage });
 
   // Monitor for errors to trigger analytics hook
   React.useEffect(() => {
