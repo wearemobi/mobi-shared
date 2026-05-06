@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { getEnvApiKey, DEFAULT_SYSTEM_INSTRUCTION } from './useMobiGemini';
 
 export interface ChatResponse {
   instanceId: string;
@@ -52,10 +53,59 @@ export const useMobiAgentic = (options: UseMobiAgenticOptions = {}) => {
       onSuccess?.(data);
       return data;
     } catch (err) {
-      const error = err instanceof Error ? err : new Error(String(err));
-      setLastError(error);
-      onError?.(error);
-      throw error;
+      const originError = err instanceof Error ? err : new Error(String(err));
+      
+      console.warn(
+        "M.O.B.I.™ Sovereign Local Agentic connection failed. Attempting automatic recovery via Backup Cloud Core...",
+        originError
+      );
+
+      try {
+        const apiKey = getEnvApiKey();
+        const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+        const payload = {
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: message }]
+            }
+          ],
+          systemInstruction: {
+            parts: [{ text: DEFAULT_SYSTEM_INSTRUCTION }]
+          }
+        };
+
+        const geminiResponse = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (!geminiResponse.ok) {
+          throw new Error(`Cloud Backup Error: ${geminiResponse.status} ${geminiResponse.statusText}`);
+        }
+
+        const geminiData = await geminiResponse.json();
+        const responseText = geminiData.candidates?.[0]?.content?.parts?.[0]?.text || '';
+
+        const backupData: ChatResponse = {
+          instanceId: 'backup-cloud-core',
+          agentName: 'MobiAI Support Agent',
+          thread: 'cloud-backup-thread',
+          response: responseText
+        };
+
+        setLastResponse(backupData);
+        onSuccess?.(backupData);
+        return backupData;
+      } catch (backupErr) {
+        const error = backupErr instanceof Error ? backupErr : new Error(String(backupErr));
+        setLastError(error);
+        onError?.(error);
+        throw error;
+      }
     } finally {
       setIsProcessing(false);
     }
