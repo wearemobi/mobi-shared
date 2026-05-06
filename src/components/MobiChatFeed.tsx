@@ -1,7 +1,6 @@
 import React, { useRef, useEffect } from 'react';
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
 import { MobiLogoHero } from './MobiLogoHero';
+import { MobiMarkdown } from './MobiMarkdown';
 
 export interface MobiChatMessage {
   id: string;
@@ -138,11 +137,9 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                   ? 'bg-mobi-primary text-mobi-bg shadow-lg shadow-mobi-primary/10' 
                   : 'bg-mobi-surface border border-mobi-border text-mobi-text shadow-sm'}
             `}>
-              <div className="mobi-markdown">
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {m.content}
-                </ReactMarkdown>
-              </div>
+              <MobiMarkdown>
+                {m.content}
+              </MobiMarkdown>
               
               {/* Message Actions (Visible on Hover) */}
               <div className={`
