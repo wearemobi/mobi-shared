@@ -54,11 +54,11 @@ const response = await chat("Analyze this structure.");
 ```
 
 ### Mobi-Gemini (Cloud Backup Core)
-Direct-to-cloud connection bypassing local sandboxes, configured as the default engine in the Chat Widget.
+Direct-to-cloud connection bypassing local sandboxes, configured as the default engine in the Chat Widget. Requires a Gemini API Key via options or environment variables.
 
 ```tsx
 const { chat } = useMobiGemini({
-  apiKey: "YOUR_GEMINI_API_KEY", // Optional: Defaults to development backup key
+  apiKey: "YOUR_GEMINI_API_KEY", // Required (can also be set via VITE_GEMINI_API_KEY or GEMINI_API_KEY env vars)
   modelName: "gemini-2.5-flash"  // Optional: Defaults to high-performance flash core
 });
 const response = await chat("Analyze backup status.");
