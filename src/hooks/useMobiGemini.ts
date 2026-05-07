@@ -101,7 +101,16 @@ export const useMobiGemini = (options: UseMobiGeminiOptions = {}) => {
       });
 
       if (!response.ok) {
-        throw new Error(`Gemini Cloud API Error: ${response.status} ${response.statusText}`);
+        let errorMessage = `Gemini Cloud API Error: ${response.status} ${response.statusText || ''}`;
+        try {
+          const errorData = await response.json();
+          if (errorData?.error?.message) {
+            errorMessage = `Gemini Cloud API Error: ${errorData.error.message}`;
+          }
+        } catch (e) {
+          // Fallback if parsing JSON fails
+        }
+        throw new Error(errorMessage.trim());
       }
 
       const data = await response.json();
