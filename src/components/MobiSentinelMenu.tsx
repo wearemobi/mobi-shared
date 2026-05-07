@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useMobiTheme } from '../hooks/useMobiTheme';
 import { MobiUserBadge } from './MobiUserBadge';
 import { MobiSwitcher } from './MobiSwitcher';
+import { MobiThemeSwitcher } from './MobiThemeSwitcher';
 import type { MobiPlan } from './MobiPlanBadge';
 
 /** User identity data consumed by MobiSentinelMenu. */
@@ -59,10 +59,7 @@ export interface MobiSentinelMenuProps {
   className?: string;
 }
 
-const defaultLangOptions = [
-  { id: 'ES', label: 'ES', icon: <span className="text-base leading-none">🇸🇻</span> },
-  { id: 'EN', label: 'EN', icon: <span className="text-base leading-none">🇺🇸</span> }
-];
+
 
 /**
  * Data-driven user dropdown menu with identity header, action items,
@@ -90,25 +87,12 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
   items = [],
   variant = 'condensed',
   showThemeSwitcher = true,
-  showLangSwitcher = true,
   showFontSizeSwitcher = false,
   fontSize = 'md',
   onFontSizeChange,
-  lang: externalLang,
-  onLangChange,
-  langOptions = defaultLangOptions,
   className = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [internalLang, setInternalLang] = useState('ES');
-  const { theme, setTheme } = useMobiTheme();
-
-  // Support both controlled and uncontrolled language state
-  const activeLang = externalLang ?? internalLang;
-  const handleLangChange = (id: string) => {
-    setInternalLang(id);
-    onLangChange?.(id);
-  };
 
   // Split items into regular and danger items
   const regularItems = items.filter(i => !i.danger);
@@ -166,7 +150,7 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
             )}
 
             {/* Settings & Config (Tuned for micro) */}
-            {(showLangSwitcher || showThemeSwitcher || showFontSizeSwitcher) && (
+            {(showThemeSwitcher || showFontSizeSwitcher) && (
               <div className="p-3 border-t border-mobi-border/50 space-y-3 bg-mobi-bg/10">
                 {/* Font Size (Always visible if requested, even in micro) */}
                 {showFontSizeSwitcher && (
@@ -187,30 +171,9 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
                 {/* Other settings hidden in micro */}
                 {variant !== 'micro' && (
                   <>
-                    {showLangSwitcher && (
-                      <div className="flex items-center justify-between px-2">
-                        <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Idioma</span>
-                        <MobiSwitcher 
-                          options={langOptions}
-                          activeId={activeLang}
-                          onChange={handleLangChange}
-                        />
-                      </div>
-                    )}
-
                     {showThemeSwitcher && (
-                      <div className="flex items-center justify-between px-2">
-                        <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Interfaz</span>
-                        <MobiSwitcher 
-                          hideLabel
-                          options={[
-                            { id: 'light', label: 'Light', icon: <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><circle cx="12" cy="12" r="5" strokeWidth={2}/><path strokeWidth={2} strokeLinecap="round" d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></svg> },
-                            { id: 'system', label: 'Auto', icon: <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg> },
-                            { id: 'dark', label: 'Dark', icon: <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" /></svg> }
-                          ]}
-                          activeId={theme}
-                          onChange={(id) => setTheme(id as any)}
-                        />
+                      <div className="flex items-center justify-center px-2 py-1">
+                        <MobiThemeSwitcher />
                       </div>
                     )}
                   </>
