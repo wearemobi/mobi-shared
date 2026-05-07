@@ -147,11 +147,16 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     setActiveEngine
   } = useMobiChat({ initialEnergy, initialMessages, onSendMessage });
 
+  const lastErrorIdRef = React.useRef<string | null>(null);
+
   // Monitor for errors to trigger analytics hook
   React.useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     if (lastMessage?.isError) {
-      onError?.(lastMessage.content);
+      if (lastMessage.id !== lastErrorIdRef.current) {
+        lastErrorIdRef.current = lastMessage.id;
+        onError?.(lastMessage.content);
+      }
     }
   }, [messages, onError]);
 
