@@ -176,17 +176,21 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
 
 
   return (
-    <div className="fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-4">
+    <div className={
+      isOpen 
+        ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col sm:items-end sm:gap-4" 
+        : "fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-4"
+    }>
       {/* Chat Window */}
       {isOpen && (
         <div className="
-          w-[380px] h-[550px] bg-mobi-surface border border-mobi-border rounded-xl
-          shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col
+          w-full h-full sm:w-[380px] sm:h-[550px] bg-mobi-surface border-0 sm:border border-mobi-border rounded-none sm:rounded-xl
+          shadow-none sm:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col
           animate-in fade-in slide-in-from-bottom-4 duration-300
         ">
           <MobiErrorBoundary>
             {/* Header (Condensed) */}
-            <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-xl">
+            <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-none sm:rounded-t-xl">
               <div className="flex items-center gap-3">
                 {userInitials && (
                   <MobiSentinelMenu 
@@ -253,7 +257,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
             />
 
             {/* Input Area */}
-            <div className="p-3 bg-mobi-bg border-t border-mobi-border rounded-b-2xl">
+            <div className="p-3 bg-mobi-bg border-t border-mobi-border rounded-b-none sm:rounded-b-2xl">
               <MobiChatInput 
                 onSend={handleSendMessage}
                 isProcessing={isProcessing}
@@ -288,7 +292,7 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
           w-14 h-14 rounded-sm flex items-center justify-center
           transition-all duration-500 shadow-2xl group border relative
           ${isOpen 
-            ? 'bg-mobi-surface border-mobi-border rotate-90' 
+            ? 'bg-mobi-surface border-mobi-border rotate-90 hidden sm:flex' 
             : 'bg-mobi-text border-mobi-text shadow-black/20'}
         `}
       >
