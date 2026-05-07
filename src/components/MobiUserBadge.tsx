@@ -62,14 +62,11 @@ export const MobiUserBadge: React.FC<MobiUserBadgeProps> = ({
     return (
       <button
         onClick={onClick}
-        className={`flex h-12 items-center gap-3 rounded-full border border-mobi-border bg-mobi-surface pl-1.5 pr-5 shadow-sm transition-all hover:bg-mobi-surface-hover active:scale-95 ${className}`}
+        className={`flex h-12 w-12 items-center justify-center rounded-full border border-mobi-border bg-mobi-surface shadow-sm transition-all hover:bg-mobi-surface-hover active:scale-95 ${className}`}
       >
         <div className={`flex h-8 w-8 items-center justify-center rounded-full text-[10px] font-black font-sans tracking-tight shrink-0 ${avatarStyles}`}>
           {initials.charAt(0)}
         </div>
-        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-mobi-text font-sans">
-          {plan}
-        </span>
       </button>
     );
   }
