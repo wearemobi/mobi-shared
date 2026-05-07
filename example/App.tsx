@@ -90,6 +90,9 @@ const App: React.FC = () => {
                 plan: 'ULTRA',
                 org: 'M.O.B.I. HQ'
               }}
+              showThemeSwitcher={true}
+              showLangSwitcher={true}
+              showFontSizeSwitcher={true}
               items={[
                 {
                   id: 'login',
