@@ -62,6 +62,11 @@ export const useMobiAgentic = (options: UseMobiAgenticOptions = {}) => {
 
       try {
         const apiKey = getEnvApiKey();
+        if (!apiKey) {
+          throw new Error(
+            "Gemini API Key is not configured. Please set the VITE_GEMINI_API_KEY, NEXT_PUBLIC_GEMINI_API_KEY, or GEMINI_API_KEY environment variable."
+          );
+        }
         const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
         const payload = {
           contents: [

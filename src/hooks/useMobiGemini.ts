@@ -32,8 +32,8 @@ export const getEnvApiKey = (): string => {
     }
   }
 
-  // Fallback to default development key
-  return 'AIzaSyB2IF-eAMuC6vv13VsqsTBCAfzQ6MFWcSw';
+  // Fallback to empty string if no env variables found
+  return '';
 };
 
 export const DEFAULT_SYSTEM_INSTRUCTION = `You are MobiAI Support Agent, the official cloud-assisted intelligent backup of M.O.B.I.™ (Mobile Operations & Bridge Infrastructure). Your purpose is to assist operators and users with any questions regarding MOBI products, services, telemetry integrations, and technical assistance.
@@ -70,6 +70,11 @@ export const useMobiGemini = (options: UseMobiGeminiOptions = {}) => {
     setLastError(null);
 
     try {
+      if (!apiKey) {
+        throw new Error(
+          "M.O.B.I.™ Gemini Error: Gemini API Key is not configured. Please set the VITE_GEMINI_API_KEY, NEXT_PUBLIC_GEMINI_API_KEY, or GEMINI_API_KEY environment variable."
+        );
+      }
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
 
       const response = await fetch(url, {
