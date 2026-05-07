@@ -15,6 +15,9 @@ import type { MobiSentinelMenuUser, MobiSentinelMenuItem } from '@wearemobi/shar
 | `items` | `MobiSentinelMenuItem[]` | `[]` | Menu actions |
 | `showThemeSwitcher` | `boolean` | `true` | Show theme toggle |
 | `showLangSwitcher` | `boolean` | `true` | Show language toggle |
+| `showFontSizeSwitcher` | `boolean` | `false` | Show font size switcher toggle |
+| `fontSize` | `'sm' \| 'md' \| 'lg'` | `'md'` | Active font size selection code |
+| `onFontSizeChange` | `(size: 'sm' \| 'md' \| 'lg') => void` | — | Font size change callback |
 | `lang` | `string` | — | Controlled language code |
 | `onLangChange` | `(lang: string) => void` | — | Language change callback |
 | `langOptions` | `{ id, label, icon }[]` | ES/EN | Language options |

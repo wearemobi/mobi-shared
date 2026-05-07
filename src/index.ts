@@ -13,6 +13,7 @@ export * from './components/MobiPlanBadge';
 export * from './components/MobiUserBadge';
 export * from './components/MobiSwitcher';
 export * from './components/MobiThemeSwitcher';
+export * from './components/MobiLangSwitcher';
 export * from './components/MobiCard';
 export * from './components/MobiDropbox';
 export * from './components/MobiProgress';

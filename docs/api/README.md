@@ -29,6 +29,8 @@ The library ships with its own CSS (Tailwind v4 + MOBI design tokens). Styles ar
 | [`MobiUserBadge`](./MobiUserBadge.md) | Theme-aware user identity badge (condensed/expanded) |
 | [`MobiSwitcher`](./MobiSwitcher.md) | Compact segmented selector (theme, language, etc.) |
 | [`MobiSentinelMenu`](./MobiSentinelMenu.md) | Data-driven user dropdown with identity + config |
+| [`MobiThemeSwitcher`](./MobiThemeSwitcher.md) | Standalone premium theme selector with light, auto, dark modes |
+| [`MobiLangSwitcher`](./MobiLangSwitcher.md) | Standalone premium language selector with EN and ES text buttons |
 
 ## Hooks
 

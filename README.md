@@ -1,4 +1,4 @@
-# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.3
+# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.5
 
 > Universal UI & Logic Shield for the M.O.B.I.™ Grand Fleet
 
@@ -27,6 +27,8 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } fro
 | `MobiUserBadge` | Theme-aware identity badge (condensed/expanded) |
 | `MobiSwitcher` | Compact segmented selector (theme, language, etc.) |
 | `MobiSentinelMenu` | Data-driven user dropdown with identity + config |
+| `MobiThemeSwitcher` | Standalone premium theme selector with light, auto, dark modes |
+| `MobiLangSwitcher` | Standalone premium language selector with EN and ES text buttons |
 | `MobiDropbox` | **(Updated)** High-performance drag-and-drop with Automated Vault Ingestion support |
 
 ## Hooks

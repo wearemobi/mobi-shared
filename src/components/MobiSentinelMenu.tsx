@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MobiUserBadge } from './MobiUserBadge';
 import { MobiSwitcher } from './MobiSwitcher';
 import { MobiThemeSwitcher } from './MobiThemeSwitcher';
+import { MobiLangSwitcher } from './MobiLangSwitcher';
 import type { MobiPlan } from './MobiPlanBadge';
 
 /** User identity data consumed by MobiSentinelMenu. */
@@ -87,9 +88,12 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
   items = [],
   variant = 'condensed',
   showThemeSwitcher = true,
+  showLangSwitcher = true,
   showFontSizeSwitcher = false,
   fontSize = 'md',
   onFontSizeChange,
+  lang: externalLang,
+  onLangChange,
   className = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -150,7 +154,7 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
             )}
 
             {/* Settings & Config (Tuned for micro) */}
-            {(showThemeSwitcher || showFontSizeSwitcher) && (
+            {(showThemeSwitcher || showLangSwitcher || showFontSizeSwitcher) && (
               <div className="p-3 border-t border-mobi-border/50 space-y-3 bg-mobi-bg/10">
                 {/* Font Size (Always visible if requested, even in micro) */}
                 {showFontSizeSwitcher && (
@@ -170,13 +174,23 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
 
                 {/* Other settings hidden in micro */}
                 {variant !== 'micro' && (
-                  <>
+                  <div className="space-y-3">
                     {showThemeSwitcher && (
-                      <div className="flex items-center justify-center px-2 py-1">
+                      <div className="flex items-center justify-between px-2">
+                        <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Tema</span>
                         <MobiThemeSwitcher />
                       </div>
                     )}
-                  </>
+                    {showLangSwitcher && (
+                      <div className="flex items-center justify-between px-2">
+                        <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Idioma</span>
+                        <MobiLangSwitcher 
+                          lang={externalLang as any}
+                          onChange={onLangChange as any}
+                        />
+                      </div>
+                    )}
+                  </div>
                 )}
               </div>
             )}
