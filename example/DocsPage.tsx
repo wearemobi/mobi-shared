@@ -875,7 +875,7 @@ const catalog: CatalogEntry[] = [
             setAlertType('success');
             setAlertMessage(`INITIATING ENGINE LAUNCH SEQUENCE: Fleet "${data.fleetName}" successfully registered with budget $${data.operatingBudget} USD on cluster node ${data.reactorNode.toUpperCase()}!`);
           }
-        };
+        });
 
         const handleReset = () => {
           resetForm();
