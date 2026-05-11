@@ -8,7 +8,7 @@ export interface MobiHeroProps {
   /**
    * Muted subtitle text shown after the title.
    */
-  subtitle?: string;
+  subtitle?: React.ReactNode;
   /**
    * Optional logo or image to render above the title.
    * Can be the official <MobiLogoHero /> or any React element.
