@@ -51,3 +51,9 @@ export * from './components/MobiBadge';
 export * from './components/MobiSkeleton';
 export * from './components/MobiTooltip';
 export * from './components/MobiPagination';
+// v1.3.8 — loaders, wizards & list views
+export * from './components/MobiLoader';
+export * from './components/MobiWizard';
+export * from './hooks/useMobiWizard';
+export * from './components/MobiListView';
+

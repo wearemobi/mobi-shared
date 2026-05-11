@@ -8,7 +8,8 @@ import {
   MobiFormLabel, MobiInput, MobiDropdown, useMobiForm, mobiValidators,
   MobiModal, MobiToastProvider, useMobiToast, MobiCheckbox, MobiTable, MobiTabs,
   MobiBadge, MobiSkeleton, MobiSkeletonGroup, MobiTooltip, MobiPagination,
-  MobiAnalytics, useMobiAnalytics
+  MobiAnalytics, useMobiAnalytics,
+  MobiLoader, MobiWizard, useMobiWizard, MobiListView
 } from '../src';
 import pkg from '../package.json';
 
@@ -1551,6 +1552,292 @@ trackEvent('click', { event_category: 'CTA' });`,
         );
       };
       return <AnalyticsDemo />;
+    }
+  },
+  {
+    id: 'MobiLoader',
+    name: 'MobiLoader',
+    category: 'component',
+    description: 'Highly configurable status loaders featuring the official M.O.B.I.™ brand mark with spinner, pulsing, vertical audio/telemetry bars, and screen overlay variants.',
+    code: `<MobiLoader variant="spinner" size="md" label="SYNCHRONIZING SECURE TUNNELS..." />
+<MobiLoader variant="pulse" size="lg" />
+<MobiLoader variant="bars" label="TUNING ENGINES..." />`,
+    render: () => {
+      const LoaderDemo = () => {
+        const [showScreen, setShowScreen] = useState(false);
+
+        const handleTriggerScreen = () => {
+          setShowScreen(true);
+          setTimeout(() => {
+            setShowScreen(false);
+          }, 3000);
+        };
+
+        return (
+          <div className="space-y-8">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+              <div className="flex flex-col items-center justify-center p-6 border border-mobi-border bg-mobi-bg/30 rounded-2xl gap-3">
+                <span className="text-[10px] font-black uppercase text-mobi-text-muted">Spinner (sm)</span>
+                <MobiLoader variant="spinner" size="sm" label="Calibrating..." />
+              </div>
+
+              <div className="flex flex-col items-center justify-center p-6 border border-mobi-border bg-mobi-bg/30 rounded-2xl gap-3">
+                <span className="text-[10px] font-black uppercase text-mobi-text-muted">Pulse (md)</span>
+                <MobiLoader variant="pulse" size="md" label="Synchronizing..." />
+              </div>
+
+              <div className="flex flex-col items-center justify-center p-6 border border-mobi-border bg-mobi-bg/30 rounded-2xl gap-3">
+                <span className="text-[10px] font-black uppercase text-mobi-text-muted">Telemetry Bars (lg)</span>
+                <MobiLoader variant="bars" size="lg" label="Propulsing..." />
+              </div>
+            </div>
+
+            <div className="pt-4 border-t border-mobi-border/40 text-center">
+              <MobiButton variant="outline" size="sm" onClick={handleTriggerScreen}>
+                Trigger Screen Overlay Loader (3s)
+              </MobiButton>
+            </div>
+
+            {showScreen && (
+              <MobiLoader variant="screen" label="CALIBRATING WARP MATRIX SIGNATURES..." />
+            )}
+          </div>
+        );
+      };
+      return <LoaderDemo />;
+    }
+  },
+  {
+    id: 'MobiWizard',
+    name: 'MobiWizard',
+    category: 'component',
+    description: 'Guided sequential setup container with progress indicators, built-in validation locks, and smooth step navigation controls.',
+    code: `const steps = [
+  { id: '1', title: 'Setup Node', content: <Step1 />, isValid: true },
+  { id: '2', title: 'Authorize Key', content: <Step2 />, isValid: false }
+];
+
+const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizard({ totalSteps: steps.length });
+
+<MobiWizard
+  steps={steps}
+  activeStepIndex={activeStep}
+  onNext={nextStep}
+  onPrev={prevStep}
+  isFirstStep={isFirstStep}
+  isLastStep={isLastStep}
+/>`,
+    render: () => {
+      const WizardDemo = () => {
+        const [reactorName, setReactorName] = useState('');
+        const [selectedCore, setSelectedCore] = useState('nuclear');
+        const [agreed, setAgreed] = useState(false);
+
+        const steps = [
+          {
+            id: 'node-naming',
+            title: 'Registry Coordinates',
+            subtitle: 'Establish target node identifiers.',
+            isValid: reactorName.trim().length >= 4,
+            content: (
+              <div className="space-y-4">
+                <p className="text-xs text-mobi-text-muted leading-relaxed">
+                  Provide a highly unique administrative handle for this reactor stack. Minimum 4 characters required to pass validation locks.
+                </p>
+                <MobiInput
+                  label="Reactor Administrative ID"
+                  placeholder="e.g. OMEGA-IV-MATRIX"
+                  value={reactorName}
+                  onChange={(e) => setReactorName(e.target.value)}
+                  required
+                />
+              </div>
+            )
+          },
+          {
+            id: 'core-selection',
+            title: 'Proton Cores Configuration',
+            subtitle: 'Select fuel rods chemistry.',
+            isValid: true,
+            content: (
+              <div className="space-y-4">
+                <p className="text-xs text-mobi-text-muted leading-relaxed">
+                  Select the appropriate fission materials. Heavy isotopes require strict security clearings.
+                </p>
+                <div className="space-y-2">
+                  {[
+                    { id: 'nuclear', label: 'Thorium-Fluoride Fission Core (Highly Stable)' },
+                    { id: 'proton', label: 'Magneto-Inertial Fusion Cluster (High Load)' },
+                    { id: 'quantum', label: 'Zero-Point Singularity Lattice (Experimental)' }
+                  ].map(c => (
+                    <MobiCheckbox
+                      key={c.id}
+                      variant="radio"
+                      name="wizard-reactor-core"
+                      label={c.label}
+                      checked={selectedCore === c.id}
+                      onChange={() => setSelectedCore(c.id)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )
+          },
+          {
+            id: 'verification',
+            title: 'Operational Ignition',
+            subtitle: 'Finalize terms and ignite plasma.',
+            isValid: agreed,
+            content: (
+              <div className="space-y-4">
+                <p className="text-xs text-mobi-text-muted leading-relaxed">
+                  Confirm all coordinates before firing. Singularities can trigger uncontainable event horizons if miscalibrated.
+                </p>
+                <div className="p-3.5 border border-mobi-border/40 bg-mobi-bg/35 rounded-xl font-mono text-[11px] space-y-1">
+                  <div><span className="text-mobi-text-muted">Target ID:</span> <span className="text-mobi-primary">{reactorName.toUpperCase()}</span></div>
+                  <div><span className="text-mobi-text-muted">Isotope Core:</span> <span className="text-mobi-primary">{selectedCore.toUpperCase()}</span></div>
+                </div>
+                <MobiCheckbox
+                  variant="checkbox"
+                  label="I authorize reactor ignition sequences."
+                  description="Acknowledge accountability for localized spacetime warping."
+                  checked={agreed}
+                  onChange={(e) => setAgreed(e.target.checked)}
+                />
+              </div>
+            )
+          }
+        ];
+
+        const { activeStep, nextStep, prevStep, isFirstStep, isLastStep, resetWizard } = useMobiWizard({
+          totalSteps: steps.length,
+          onComplete: () => {
+            alert(`SUCCESS: Node ${reactorName.toUpperCase()} with fuel chemistry ${selectedCore.toUpperCase()} is officially synchronized!`);
+            setReactorName('');
+            setSelectedCore('nuclear');
+            setAgreed(false);
+            resetWizard();
+          }
+        });
+
+        return (
+          <div className="max-w-xl mx-auto">
+            <MobiWizard
+              steps={steps}
+              activeStepIndex={activeStep}
+              onNext={nextStep}
+              onPrev={prevStep}
+              isFirstStep={isFirstStep}
+              isLastStep={isLastStep}
+              onCancel={() => {
+                setReactorName('');
+                setSelectedCore('nuclear');
+                setAgreed(false);
+                resetWizard();
+                alert('Onboarding sequence canceled.');
+              }}
+            />
+          </div>
+        );
+      };
+      return <WizardDemo />;
+    }
+  },
+  {
+    id: 'MobiListView',
+    name: 'MobiListView',
+    category: 'component',
+    description: 'Vertical scrollable listings offering clean headline/leading/trailing slots with selectable border Card modes or classical clean line list layouts.',
+    code: `<MobiListView
+  items={[
+    {
+      id: '1',
+      headline: 'Alpha Fleet Unit',
+      description: 'Sector 4 patrol active.',
+      leading: <MobiLogo size={18} />,
+      trailing: <MobiBadge variant="success">Nominal</MobiBadge>,
+      onClick: () => handleSelect('1')
+    }
+  ]}
+  variant="cards"
+/>`,
+    render: () => {
+      const ListViewDemo = () => {
+        const [selectedId, setSelectedId] = useState<string | number>('f-1');
+        const [layout, setLayout] = useState<'list' | 'cards'>('list');
+
+        const items = [
+          {
+            id: 'f-1',
+            headline: 'Flagship Horizon Alpha',
+            description: 'En-route to sector 9-B. Fuel reserves at 98.4%.',
+            leading: <MobiLogo size={20} />,
+            trailing: <MobiBadge variant="success" dot size="sm">Active</MobiBadge>,
+            onClick: () => setSelectedId('f-1')
+          },
+          {
+            id: 'f-2',
+            headline: 'Battleship Vindicator IV',
+            description: 'Maintenance bay 4-C. Replacing localized graviton relays.',
+            leading: <MobiLogo size={20} className="grayscale opacity-55" />,
+            trailing: <MobiBadge variant="warning" size="sm">Docked</MobiBadge>,
+            onClick: () => setSelectedId('f-2')
+          },
+          {
+            id: 'f-3',
+            headline: 'Subsector Transporter Beta',
+            description: 'Offline. Emergency thermal buffers exhausted.',
+            leading: <MobiLogo size={20} className="opacity-30" />,
+            trailing: <MobiBadge variant="error" size="sm">Offline</MobiBadge>,
+            onClick: () => setSelectedId('f-3')
+          },
+          {
+            id: 'f-4',
+            headline: 'Secured AI Core Link',
+            description: 'Encrypted communication channel with sentinel grid (Restricted).',
+            leading: <MobiLogo size={20} />,
+            trailing: <MobiBadge variant="outline" size="sm">Restricted</MobiBadge>,
+            disabled: true
+          }
+        ];
+
+        return (
+          <div className="space-y-6 max-w-lg mx-auto">
+            <div className="flex justify-between items-center bg-mobi-bg/30 border border-mobi-border p-3 rounded-xl">
+              <span className="text-xs font-black uppercase text-mobi-text-muted">Display Variant:</span>
+              <div className="flex gap-2">
+                <MobiButton
+                  size="sm"
+                  variant={layout === 'list' ? 'solid' : 'outline'}
+                  technical
+                  onClick={() => setLayout('list')}
+                >
+                  Classic List
+                </MobiButton>
+                <MobiButton
+                  size="sm"
+                  variant={layout === 'cards' ? 'solid' : 'outline'}
+                  technical
+                  onClick={() => setLayout('cards')}
+                >
+                  Stacked Cards
+                </MobiButton>
+              </div>
+            </div>
+
+            <MobiListView
+              items={items.map(i => ({ ...i, selected: selectedId === i.id }))}
+              variant={layout}
+              maxHeight={320}
+            />
+
+            <p className="text-[10px] text-mobi-text-muted font-mono pl-1">
+              Currently Selected Node: <span className="text-mobi-primary">{selectedId.toUpperCase()}</span>
+            </p>
+          </div>
+        );
+      };
+      return <ListViewDemo />;
     }
   }
 ];
