@@ -5,7 +5,10 @@ import {
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
   MobiCard, MobiDropbox, MobiProgress, MobiChatInput, MobiEnergyMeter,
   useMobiChat, useMobiEnergy, MobiChatWidget, useMobiAgentic, MobiMarkdown,
-  MobiFormLabel, MobiInput, MobiDropdown, useMobiForm, mobiValidators
+  MobiFormLabel, MobiInput, MobiDropdown, useMobiForm, mobiValidators,
+  MobiModal, MobiToastProvider, useMobiToast, MobiCheckbox, MobiTable, MobiTabs,
+  MobiBadge, MobiSkeleton, MobiSkeletonGroup, MobiTooltip, MobiPagination,
+  MobiAnalytics, useMobiAnalytics
 } from '../src';
 import pkg from '../package.json';
 
@@ -1124,6 +1127,431 @@ const catalog: CatalogEntry[] = [
       };
       return <FormDemo />;
     }
+  },
+  {
+    id: 'MobiModal',
+    name: 'MobiModal',
+    category: 'component',
+    description: 'Accessible modal/dialog with focus trap, body scroll lock, Escape key dismiss, and size presets.',
+    code: `const [open, setOpen] = useState(false);
+
+<MobiButton onClick={() => setOpen(true)}>Open Modal</MobiButton>
+
+<MobiModal
+  isOpen={open}
+  onClose={() => setOpen(false)}
+  title="Tactical System Access"
+  description="Authorized personnel only. Reactor matrix sync pending."
+  size="md"
+  footer={
+    <div className="flex justify-end gap-3">
+      <MobiButton variant="ghost" onClick={() => setOpen(false)}>Cancel</MobiButton>
+      <MobiButton variant="solid" onClick={() => { alert('Access Granted'); setOpen(false); }}>Authenticate</MobiButton>
+    </div>
+  }
+>
+  <p className="text-sm">Please verify the quantum key configuration before continuing.</p>
+</MobiModal>`,
+    render: () => {
+      const ModalDemo = () => {
+        const [isOpen, setIsOpen] = useState(false);
+        const [size, setSize] = useState<'sm' | 'md' | 'lg' | 'xl' | 'full'>('md');
+        const triggerOpen = (selectedSize: typeof size) => {
+          setSize(selectedSize);
+          setIsOpen(true);
+        };
+        return (
+          <div className="space-y-4">
+            <p className="text-xs text-mobi-text-muted font-bold uppercase tracking-wider">Select Modal Size Preset:</p>
+            <div className="flex flex-wrap gap-2">
+              {(['sm', 'md', 'lg', 'xl', 'full'] as const).map(s => (
+                <MobiButton key={s} size="sm" variant="outline" technical onClick={() => triggerOpen(s)}>
+                  Open {s.toUpperCase()}
+                </MobiButton>
+              ))}
+            </div>
+
+            <MobiModal
+              isOpen={isOpen}
+              onClose={() => setIsOpen(false)}
+              title={`${size.toUpperCase()} Modal Overlay`}
+              description="A premium overlay built with full focus trapping and accessibilities."
+              size={size}
+              footer={
+                <div className="flex justify-end gap-3">
+                  <MobiButton variant="ghost" size="sm" onClick={() => setIsOpen(false)}>Close</MobiButton>
+                  <MobiButton variant="solid" size="sm" onClick={() => setIsOpen(false)}>Confirm Action</MobiButton>
+                </div>
+              }
+            >
+              <div className="space-y-3">
+                <p>This is a standard M.O.B.I.™ Modal viewport rendered via React Portal.</p>
+                <div className="p-4 rounded-xl border border-mobi-border bg-mobi-bg/50 font-mono text-xs">
+                  {`size="${size}"`}<br />
+                  aria-modal="true"<br />
+                  role="dialog"
+                </div>
+              </div>
+            </MobiModal>
+          </div>
+        );
+      };
+      return <ModalDemo />;
+    }
+  },
+  {
+    id: 'MobiToast',
+    name: 'useMobiToast',
+    category: 'hook',
+    description: 'High-performance toast notifications with auto-dismiss timers, semantic accents, and progress indicators.',
+    code: `const { toast } = useMobiToast();
+
+toast.success('System parameters optimized.', 'Operation Success');
+toast.error('Reactor breach detected!', 'Critical Error');`,
+    render: () => {
+      const ToastDemo = () => {
+        const ToastButtons = () => {
+          const { toast, clearAll } = useMobiToast();
+          return (
+            <div className="space-y-4">
+              <div className="flex flex-wrap gap-3">
+                <MobiButton variant="solid" className="bg-emerald-600 hover:bg-emerald-700 border-none" size="sm" onClick={() => toast.success('Fleet connection stabilized.', 'Success')}>
+                  Success Toast
+                </MobiButton>
+                <MobiButton variant="solid" className="bg-rose-600 hover:bg-rose-700 border-none" size="sm" onClick={() => toast.error('Shield voltage critical!', 'Danger')}>
+                  Error Toast
+                </MobiButton>
+                <MobiButton variant="solid" className="bg-amber-600 hover:bg-amber-700 border-none" size="sm" onClick={() => toast.warning('Low power in subsector 4.', 'Warning')}>
+                  Warning Toast
+                </MobiButton>
+                <MobiButton variant="solid" className="bg-blue-600 hover:bg-blue-700 border-none" size="sm" onClick={() => toast.info('Syncing planetary matrix...', 'Info')}>
+                  Info Toast
+                </MobiButton>
+                <MobiButton variant="outline" size="sm" onClick={() => toast.custom({ message: 'Persistent communication link opened.', title: 'CUSTOM LINK', duration: 0 })}>
+                  Persistent Toast
+                </MobiButton>
+              </div>
+              <div className="flex gap-2">
+                <MobiButton variant="ghost" size="sm" className="text-rose-500 hover:bg-rose-500/10" onClick={clearAll}>
+                  Clear All Toasts
+                </MobiButton>
+              </div>
+            </div>
+          );
+        };
+
+        return (
+          <MobiToastProvider>
+            <ToastButtons />
+          </MobiToastProvider>
+        );
+      };
+      return <ToastDemo />;
+    }
+  },
+  {
+    id: 'MobiCheckbox',
+    name: 'MobiCheckbox',
+    category: 'component',
+    description: 'Unified checkbox, radio, and toggle switch component featuring full accessibility, semantic validation, and description fields.',
+    code: `<MobiCheckbox
+  variant="toggle"
+  label="Autopilot Mode"
+  description="Enable automated course corrections."
+  checked={enabled}
+  onChange={(e) => setEnabled(e.target.checked)}
+/>`,
+    render: () => {
+      const CheckboxDemo = () => {
+        const [check, setCheck] = useState(true);
+        const [toggle, setToggle] = useState(false);
+        const [radio, setRadio] = useState('alpha');
+        return (
+          <div className="space-y-6 max-w-sm">
+            <MobiCheckbox
+              variant="checkbox"
+              label="Sync Sector Logs"
+              description="Upload real-time flight data to the command bridge."
+              checked={check}
+              onChange={(e) => setCheck(e.target.checked)}
+            />
+
+            <MobiCheckbox
+              variant="toggle"
+              label="Proton Shield Matrix"
+              description="Redirect surplus energy to thermal buffers."
+              checked={toggle}
+              onChange={(e) => setToggle(e.target.checked)}
+            />
+
+            <div className="space-y-2.5">
+              <p className="text-xs font-black uppercase tracking-wider text-mobi-text-muted font-sans">Active Fleet Node Selection:</p>
+              <div className="space-y-2">
+                {['alpha', 'beta', 'gamma'].map(r => (
+                  <MobiCheckbox
+                    key={r}
+                    variant="radio"
+                    name="fleet-node"
+                    label={`Fleet Node ${r.toUpperCase()}`}
+                    checked={radio === r}
+                    onChange={() => setRadio(r)}
+                  />
+                ))}
+              </div>
+            </div>
+
+            <MobiCheckbox
+              variant="checkbox"
+              label="Required Validation State"
+              error="You must agree to terms before propulsion ignites."
+              checked={false}
+              onChange={() => {}}
+            />
+          </div>
+        );
+      };
+      return <CheckboxDemo />;
+    }
+  },
+  {
+    id: 'MobiTable',
+    name: 'MobiTable',
+    category: 'component',
+    description: 'Premium fully-typed data table with skeleton loaders, striped columns, compact layouts, technical modes, and row click callbacks.',
+    code: `<MobiTable<Fleet>
+  columns={[
+    { key: 'id', title: 'Node ID' },
+    { key: 'name', title: 'Fleet Unit' },
+    { key: 'power', title: 'Power Load', align: 'right' }
+  ]}
+  data={fleetData}
+  keyExtractor={(row) => row.id}
+  striped
+/>`,
+    render: () => {
+      const TableDemo = () => {
+        const [loading, setLoading] = useState(false);
+        const [striped, setStriped] = useState(true);
+        const [technical, setTechnical] = useState(true);
+
+        const data = [
+          { id: 'FL-902', name: 'Fleet Matrix Alpha', load: '98.4%', status: 'nominal' },
+          { id: 'FL-411', name: 'Grand Fleet Horizon', load: '62.1%', status: 'degraded' },
+          { id: 'FL-039', name: 'Sub-Sector Vanguard', load: '0.0%', status: 'offline' }
+        ];
+
+        return (
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-4 items-center mb-4">
+              <MobiCheckbox variant="toggle" label="Loading State" checked={loading} onChange={(e) => setLoading(e.target.checked)} />
+              <MobiCheckbox variant="toggle" label="Striped Rows" checked={striped} onChange={(e) => setStriped(e.target.checked)} />
+              <MobiCheckbox variant="toggle" label="Technical Mode" checked={technical} onChange={(e) => setTechnical(e.target.checked)} />
+            </div>
+
+            <MobiTable
+              columns={[
+                { key: 'id', title: 'Registry ID', width: '120px' },
+                { key: 'name', title: 'Fleet Division' },
+                { key: 'load', title: 'Engine Load', align: 'right', width: '120px' },
+                {
+                  key: 'status',
+                  title: 'Vitals',
+                  align: 'center',
+                  width: '120px',
+                  render: (row: any) => (
+                    <MobiBadge
+                      variant={row.status === 'nominal' ? 'success' : row.status === 'degraded' ? 'warning' : 'error'}
+                      dot
+                      size="sm"
+                    >
+                      {row.status}
+                    </MobiBadge>
+                  )
+                }
+              ]}
+              data={data}
+              keyExtractor={(r: any) => r.id}
+              loading={loading}
+              striped={striped}
+              technical={technical}
+              onRowClick={(row: any) => alert(`Selected Fleet Unit: ${row.name}`)}
+            />
+          </div>
+        );
+      };
+      return <TableDemo />;
+    }
+  },
+  {
+    id: 'MobiTabs',
+    name: 'MobiTabs',
+    category: 'component',
+    description: 'Segmented navigation bar with badge counters, disabled states, tab layouts, and keyboard arrow controls.',
+    code: `<MobiTabs
+  tabs={[
+    { id: 'overview', label: 'Overview' },
+    { id: 'metrics', label: 'Metrics', badge: 4 },
+    { id: 'configs', label: 'Configuration', disabled: true }
+  ]}
+  activeId={activeTab}
+  onChange={setActiveTab}
+  variant="underline"
+/>`,
+    render: () => {
+      const TabsDemo = () => {
+        const [activeDefault, setActiveDefault] = useState('overview');
+        const [activePills, setActivePills] = useState('overview');
+        const [activeUnderline, setActiveUnderline] = useState('overview');
+
+        const tabItems = [
+          { id: 'overview', label: 'Fleet Overview' },
+          { id: 'matrix', label: 'Shield Matrix', badge: '12' },
+          { id: 'auth', label: 'Core Security', disabled: true }
+        ];
+
+        return (
+          <div className="space-y-8">
+            <div className="space-y-2">
+              <p className="text-[10px] font-black uppercase tracking-wider text-mobi-text-muted">Segmented Default:</p>
+              <MobiTabs tabs={tabItems} activeId={activeDefault} onChange={setActiveDefault} variant="default" />
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-[10px] font-black uppercase tracking-wider text-mobi-text-muted">Pill Buttons:</p>
+              <MobiTabs tabs={tabItems} activeId={activePills} onChange={setActivePills} variant="pills" />
+            </div>
+
+            <div className="space-y-2">
+              <p className="text-[10px] font-black uppercase tracking-wider text-mobi-text-muted">Underline Indicator:</p>
+              <MobiTabs tabs={tabItems} activeId={activeUnderline} onChange={setActiveUnderline} variant="underline" />
+            </div>
+          </div>
+        );
+      };
+      return <TabsDemo />;
+    }
+  },
+  {
+    id: 'MobiBadge',
+    name: 'MobiBadge',
+    category: 'component',
+    description: 'Compact semantic indicator capsules supporting dot highlights, leading icons, and color presets.',
+    code: `<MobiBadge variant="success" dot>Nominal</MobiBadge>`,
+    render: () => (
+      <div className="flex flex-wrap gap-3">
+        <MobiBadge variant="default">v1.3.7 Spec</MobiBadge>
+        <MobiBadge variant="success" dot>Stablized</MobiBadge>
+        <MobiBadge variant="error" dot>Critical</MobiBadge>
+        <MobiBadge variant="warning">Alert Threshold</MobiBadge>
+        <MobiBadge variant="info">Sync Pending</MobiBadge>
+        <MobiBadge variant="outline">Unlinked</MobiBadge>
+      </div>
+    )
+  },
+  {
+    id: 'MobiSkeleton',
+    name: 'MobiSkeleton',
+    category: 'component',
+    description: 'Animated pulse placeholders simulating complex layouts during network transactions.',
+    code: `<MobiSkeletonGroup avatar title lines={3} />`,
+    render: () => (
+      <div className="space-y-6 max-w-sm p-4 border border-mobi-border rounded-2xl bg-mobi-surface/50">
+        <p className="text-[10px] font-black uppercase tracking-wider text-mobi-text-muted">Composite Group Loader:</p>
+        <MobiSkeletonGroup avatar title lines={3} />
+        
+        <div className="pt-4 border-t border-mobi-border/50 space-y-2">
+          <p className="text-[10px] font-black uppercase tracking-wider text-mobi-text-muted">Custom Skeletons:</p>
+          <MobiSkeleton variant="rect" height={80} />
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'MobiTooltip',
+    name: 'MobiTooltip',
+    category: 'component',
+    description: 'Floating contextual help bubbles triggering on hover and keyboard focus with full arrow indicators.',
+    code: `<MobiTooltip content="Verifying Proton Buffers" position="top">
+  <MobiButton>Hover Me</MobiButton>
+</MobiTooltip>`,
+    render: () => (
+      <div className="flex flex-wrap gap-8 justify-center py-8">
+        <MobiTooltip content="Deploy quantum lock" position="top">
+          <MobiButton size="sm" variant="outline" technical>Top</MobiButton>
+        </MobiTooltip>
+        <MobiTooltip content="Decrypt reactor signatures" position="bottom">
+          <MobiButton size="sm" variant="outline" technical>Bottom</MobiButton>
+        </MobiTooltip>
+        <MobiTooltip content="Voltage stabilizer active" position="left">
+          <MobiButton size="sm" variant="outline" technical>Left</MobiButton>
+        </MobiTooltip>
+        <MobiTooltip content="Subsector matrix link active" position="right">
+          <MobiButton size="sm" variant="outline" technical>Right</MobiButton>
+        </MobiTooltip>
+      </div>
+    )
+  },
+  {
+    id: 'MobiPagination',
+    name: 'MobiPagination',
+    category: 'component',
+    description: 'Responsive pagination controller with layout ellipsis calculations, direct first/last navigations, and active pages state.',
+    code: `<MobiPagination
+  currentPage={page}
+  totalPages={12}
+  onChange={setPage}
+  showEdges
+/>`,
+    render: () => {
+      const PaginationDemo = () => {
+        const [page, setPage] = useState(4);
+        return (
+          <div className="space-y-4">
+            <MobiPagination currentPage={page} totalPages={12} onChange={setPage} showEdges />
+            <p className="text-xs font-mono text-mobi-text-muted pl-1">
+              Active Page State: {page} / 12
+            </p>
+          </div>
+        );
+      };
+      return <PaginationDemo />;
+    }
+  },
+  {
+    id: 'MobiAnalytics',
+    name: 'MobiAnalytics',
+    category: 'component',
+    description: 'Google Analytics 4 dynamic injection component with CSP Nonce support and fully-typed tracking hook helper.',
+    code: `// Placement at root level
+<MobiAnalytics measurementId="G-D4GHWY7TJM" />
+
+// Event trigger anywhere:
+const { trackEvent } = useMobiAnalytics({ measurementId: 'G-D4GHWY7TJM' });
+trackEvent('click', { event_category: 'CTA' });`,
+    render: () => {
+      const AnalyticsDemo = () => {
+        const { isReady, trackEvent } = useMobiAnalytics({ measurementId: 'G-D4GHWY7TJM', disabled: true });
+        return (
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <span className="text-xs font-black uppercase text-mobi-text">GA4 Measurement Status:</span>
+              <MobiBadge variant="info" size="sm" dot>SANDBOX MODE (DISABLED)</MobiBadge>
+            </div>
+            <MobiButton
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                trackEvent('click_test', { value: 1 });
+                alert('Fired simulated custom GA4 event: click_test');
+              }}
+            >
+              Simulate trackEvent()
+            </MobiButton>
+          </div>
+        );
+      };
+      return <AnalyticsDemo />;
+    }
   }
 ];
 
@@ -1132,6 +1560,7 @@ export interface DocsPageProps {
   isSidebarOpen: boolean;
   setIsSidebarOpen: (open: boolean) => void;
 }
+
 
 export const DocsPage: React.FC<DocsPageProps> = ({ 
   isSidebarOpen, 
