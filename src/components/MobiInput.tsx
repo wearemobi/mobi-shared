@@ -1,8 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { MobiFormLabel } from './MobiFormLabel';
+import { FormError } from './FormError';
 
-export interface MobiInputProps 
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'type' | 'prefix'> {
+export interface MobiInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'prefix'> {
   /**
    * The input type format.
    * - `text`: Generic text input
@@ -39,13 +40,22 @@ export interface MobiInputProps
    * Custom element rendered to the right inside the input field.
    */
   suffixIcon?: React.ReactNode;
+  /**
+   * If true, allows negative values in number/money inputs.
+   * @default false
+   */
+  allowNegative?: boolean;
+  /**
+   * Textarea-specific props (only relevant when type='textarea').
+   */
+  textareaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>;
 }
 
 /**
  * M.O.B.I.™ Unified Input Component.
  * Encapsulates text formats, passwords, financials (money), and textareas into a premium package.
  * Integrates error handling with smooth CSS animations and interactive states.
- * 
+ *
  * @example
  * ```tsx
  * <MobiInput label="Secret Token" type="password" error={tokenError} required />
@@ -60,6 +70,8 @@ export const MobiInput: React.FC<MobiInputProps> = ({
   technical = false,
   prefixIcon,
   suffixIcon,
+  allowNegative = false,
+  textareaProps,
   className = '',
   disabled = false,
   required = false,
@@ -68,24 +80,27 @@ export const MobiInput: React.FC<MobiInputProps> = ({
   const [showPassword, setShowPassword] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-resize for textarea to prevent ugly scrollbars on premium views
+  const togglePassword = useCallback(() => setShowPassword(v => !v), []);
+
+  // Auto-resize only when type is textarea
   useEffect(() => {
-    if (type === 'textarea' && textareaRef.current) {
-      const textarea = textareaRef.current;
-      textarea.style.height = 'auto';
-      textarea.style.height = `${Math.min(textarea.scrollHeight, 300)}px`;
-    }
+    if (type !== 'textarea') return;
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+    textarea.style.height = 'auto';
+    textarea.style.height = `${Math.min(textarea.scrollHeight, 300)}px`;
   }, [type, props.value]);
 
   const fontStyles = technical ? 'font-mono' : 'font-sans';
   const hasError = !!error;
+  const errorId = props.id ? `${props.id}-error` : undefined;
 
   const baseInputStyles = `
     w-full bg-mobi-surface border rounded-xl px-4 py-3 text-sm font-medium
     text-mobi-text placeholder:text-mobi-text-muted outline-none transition-all duration-200
     disabled:opacity-50 disabled:cursor-not-allowed
-    ${hasError 
-      ? 'border-red-500/40 focus:border-red-500 focus:ring-1 focus:ring-red-500/20 bg-red-500/[0.01]' 
+    ${hasError
+      ? 'border-red-500/40 focus:border-red-500 focus:ring-1 focus:ring-red-500/20 bg-red-500/[0.01]'
       : 'border-mobi-border focus:border-mobi-primary focus:ring-1 focus:ring-mobi-primary/20'
     }
     ${prefixIcon || type === 'money' ? 'pl-10' : ''}
@@ -95,64 +110,70 @@ export const MobiInput: React.FC<MobiInputProps> = ({
 
   const renderInput = () => {
     if (type === 'textarea') {
+      const { onKeyDown: _omit, ...textareaCompatProps } = props as React.TextareaHTMLAttributes<HTMLTextAreaElement>;
       return (
         <textarea
           ref={textareaRef}
           className={`${baseInputStyles} resize-none min-h-[90px]`}
           disabled={disabled}
           required={required}
-          {...(props as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+          aria-invalid={hasError || undefined}
+          aria-describedby={hasError ? errorId : undefined}
+          {...textareaCompatProps}
+          {...textareaProps}
         />
       );
     }
 
-    let inputType = type === 'money' ? 'text' : type;
+    let inputType: string = type === 'money' ? 'text' : type;
     if (type === 'password' && showPassword) {
       inputType = 'text';
     }
 
+    // Compose keydown: numerical filter first, then consumer's handler
+    const consumerKeyDown = props.onKeyDown;
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-      // Allow numerical filter for numbers/money
       if (type === 'number' || type === 'money') {
         const allowedKeys = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab', 'Enter', '.'];
-        if (!allowedKeys.includes(e.key) && isNaN(Number(e.key)) && e.key !== '-') {
+        if (allowNegative) allowedKeys.push('-');
+        if (!allowedKeys.includes(e.key) && isNaN(Number(e.key))) {
           e.preventDefault();
         }
       }
-      if (props.onKeyDown) {
-        props.onKeyDown(e);
-      }
+      consumerKeyDown?.(e);
     };
 
     return (
       <input
+        {...props}
         type={inputType}
         className={baseInputStyles}
         disabled={disabled}
         required={required}
+        aria-invalid={hasError || undefined}
+        aria-describedby={hasError ? errorId : undefined}
         onKeyDown={handleKeyDown}
-        {...(props as React.InputHTMLAttributes<HTMLInputElement>)}
       />
     );
   };
 
-  // Determine prefix icon for money
-  const resolvedPrefixIcon = type === 'money' && !prefixIcon 
+  // Prefix icon for money type
+  const resolvedPrefixIcon = type === 'money' && !prefixIcon
     ? <span className="text-mobi-text-muted font-bold text-sm select-none">$</span>
     : prefixIcon;
 
-  // Determine suffix icon for money
-  const resolvedSuffixIcon = type === 'money' && !suffixIcon 
+  // Suffix icon for money type
+  const resolvedSuffixIcon = type === 'money' && !suffixIcon
     ? <span className="text-[9px] font-black text-mobi-text-muted tracking-wider uppercase select-none">USD</span>
     : suffixIcon;
 
   return (
     <div className={`w-full flex flex-col mb-4 ${className}`}>
       {label && (
-        <MobiFormLabel 
-          label={label} 
-          description={description} 
-          required={required} 
+        <MobiFormLabel
+          label={label}
+          description={description}
+          required={required}
           htmlFor={props.id}
         />
       )}
@@ -162,16 +183,17 @@ export const MobiInput: React.FC<MobiInputProps> = ({
             {resolvedPrefixIcon}
           </div>
         )}
-        
+
         {renderInput()}
 
         {type === 'password' && (
           <button
             type="button"
-            onClick={() => setShowPassword(!showPassword)}
+            onClick={togglePassword}
             disabled={disabled}
             className="absolute right-3.5 top-1/2 -translate-y-1/2 p-1.5 text-mobi-text-muted hover:text-mobi-text transition-colors flex items-center justify-center cursor-pointer disabled:opacity-50 hover:bg-mobi-surface-hover rounded-lg"
             title={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? 'Hide password' : 'Show password'}
           >
             {showPassword ? (
               <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -193,14 +215,7 @@ export const MobiInput: React.FC<MobiInputProps> = ({
         )}
       </div>
 
-      {hasError && (
-        <span className="text-red-500 font-bold font-sans text-[10px] mt-1.5 animate-in fade-in slide-in-from-top-1 flex items-center gap-1.5">
-          <svg className="h-3.5 w-3.5 shrink-0 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          {error}
-        </span>
-      )}
+      {hasError && <FormError id={errorId} message={error!} />}
     </div>
   );
 };
