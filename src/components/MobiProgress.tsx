@@ -27,7 +27,8 @@ export interface MobiProgressProps {
 /**
  * M.O.B.I.™ Standard Progress Indicator.
  * High-precision progress bar for monitoring ingestion and processing tasks.
- * 
+ * Fully accessible via `role="progressbar"` and ARIA value attributes.
+ *
  * @example
  * ```tsx
  * <MobiProgress value={45} label="Uploading..." status="4.2MB / 10MB" />
@@ -58,12 +59,19 @@ export const MobiProgress: React.FC<MobiProgressProps> = ({
           )}
         </div>
       )}
-      
-      <div className={`
-        relative w-full overflow-hidden bg-mobi-bg border border-mobi-border
-        ${technical ? 'h-1.5 rounded-sm' : 'h-3 rounded-lg'}
-      `}>
-        <div 
+
+      <div
+        role="progressbar"
+        aria-valuenow={percentage}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-label={label ?? 'Progress'}
+        className={`
+          relative w-full overflow-hidden bg-mobi-bg border border-mobi-border
+          ${technical ? 'h-1.5 rounded-sm' : 'h-3 rounded-lg'}
+        `}
+      >
+        <div
           className="h-full bg-mobi-primary transition-all duration-500 ease-out"
           style={{ width: `${percentage}%` }}
         >
@@ -73,7 +81,7 @@ export const MobiProgress: React.FC<MobiProgressProps> = ({
       </div>
 
       <div className="flex justify-end mt-1 px-1">
-        <span className="text-[10px] font-black font-mono text-mobi-text">
+        <span className="text-[10px] font-black font-mono text-mobi-text" aria-hidden="true">
           {percentage}%
         </span>
       </div>

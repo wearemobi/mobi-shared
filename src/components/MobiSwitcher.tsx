@@ -12,7 +12,8 @@ export interface MobiSwitcherOption {
   activeClassName?: string;
 }
 
-interface MobiSwitcherProps {
+/** Props for the MobiSwitcher component. */
+export interface MobiSwitcherProps {
   /** Array of selectable options. */
   options: MobiSwitcherOption[];
   /** `id` of the currently active option. */
@@ -28,6 +29,7 @@ interface MobiSwitcherProps {
 /**
  * Compact segmented selector. Used for theme, language, and other configuration toggles.
  * Supports icon-only mode via `hideLabel` for minimal footprint.
+ * Accessible via `role="group"` and `aria-pressed` on each button.
  *
  * @example
  * ```tsx
@@ -49,24 +51,29 @@ export const MobiSwitcher: React.FC<MobiSwitcherProps> = ({
   className = ''
 }) => {
   return (
-    <div className={`flex items-center gap-1 rounded-lg border border-mobi-border bg-mobi-bg/50 p-1 ${className}`}>
+    <div
+      role="group"
+      className={`flex items-center gap-1 rounded-lg border border-mobi-border bg-mobi-bg/50 p-1 ${className}`}
+    >
       {options.map((option) => {
         const isActive = option.id === activeId;
-        
+
         return (
           <button
             key={option.id}
             onClick={() => onChange(option.id)}
+            aria-pressed={isActive}
+            aria-label={option.label}
             className={`flex items-center gap-1.5 rounded-md transition-all text-[9px] font-black uppercase tracking-widest font-sans active:scale-95 ${
               hideLabel ? 'p-2' : 'px-2.5 py-1.5'
             } ${
-              isActive 
-                ? (option.activeClassName || 'bg-mobi-surface shadow-sm text-mobi-text') 
+              isActive
+                ? (option.activeClassName || 'bg-mobi-surface shadow-sm text-mobi-text')
                 : 'text-mobi-text-muted/50 hover:text-mobi-text-muted hover:bg-mobi-surface/20'
             }`}
           >
-            {option.icon && <span className="flex-shrink-0 opacity-80">{option.icon}</span>}
-            {!hideLabel && option.label}
+            {option.icon && <span className="flex-shrink-0 opacity-80" aria-hidden="true">{option.icon}</span>}
+            {!hideLabel && <span>{option.label}</span>}
           </button>
         );
       })}
