@@ -40,3 +40,14 @@ export * from './hooks/useMobiForm';
 export * from './utils/validators';
 export * from './components/MobiAnalytics';
 export * from './hooks/useMobiAnalytics';
+// v1.3.7 — blocking components
+export * from './components/MobiModal';
+export * from './components/MobiToast';
+export * from './components/MobiCheckbox';
+export * from './components/MobiTable';
+export * from './components/MobiTabs';
+// v1.3.7 — important components
+export * from './components/MobiBadge';
+export * from './components/MobiSkeleton';
+export * from './components/MobiTooltip';
+export * from './components/MobiPagination';
