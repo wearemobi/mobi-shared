@@ -38,4 +38,5 @@ export * from './components/MobiInput';
 export * from './components/MobiDropdown';
 export * from './hooks/useMobiForm';
 export * from './utils/validators';
-
+export * from './components/MobiAnalytics';
+export * from './hooks/useMobiAnalytics';
