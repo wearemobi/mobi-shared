@@ -778,33 +778,36 @@ const catalog: CatalogEntry[] = [
   ]} 
 />`,
     render: () => {
-      const [val, setVal] = useState('med');
-      return (
-        <div className="space-y-6 max-w-xl">
-          <MobiDropdown 
-            label="Propulsion Node Cluster" 
-            value={val}
-            onChange={(e) => setVal(e.target.value)}
-            description="Controls active thruster matrices across the flagship."
-            options={[
-              { value: 'low', label: 'Sub-Light Core - Minimal Drain' },
-              { value: 'med', label: 'Warp Matrix Alpha - Balanced' },
-              { value: 'high', label: 'Hyperspace Induction - Overcharge [DISABLED]', disabled: true }
-            ]}
-          />
+      const DropdownDemo = () => {
+        const [val, setVal] = useState('med');
+        return (
+          <div className="space-y-6 max-w-xl">
+            <MobiDropdown 
+              label="Propulsion Node Cluster" 
+              value={val}
+              onChange={(e) => setVal(e.target.value)}
+              description="Controls active thruster matrices across the flagship."
+              options={[
+                { value: 'low', label: 'Sub-Light Core - Minimal Drain' },
+                { value: 'med', label: 'Warp Matrix Alpha - Balanced' },
+                { value: 'high', label: 'Hyperspace Induction - Overcharge [DISABLED]', disabled: true }
+              ]}
+            />
 
-          <MobiDropdown 
-            label="Damaged System Matrix" 
-            error="Operational lock: Subsystem offline due to thermal venting"
-            placeholder="Select cooling vector..."
-            options={[
-              { value: 'liquid_n', label: 'Liquid Nitrogen Purge' },
-              { value: 'laser', label: 'Coherent Light Heat Vent' }
-            ]}
-            technical
-          />
-        </div>
-      );
+            <MobiDropdown 
+              label="Damaged System Matrix" 
+              error="Operational lock: Subsystem offline due to thermal venting"
+              placeholder="Select cooling vector..."
+              options={[
+                { value: 'liquid_n', label: 'Liquid Nitrogen Purge' },
+                { value: 'laser', label: 'Coherent Light Heat Vent' }
+              ]}
+              technical
+            />
+          </div>
+        );
+      };
+      return <DropdownDemo />;
     }
   },
   {
