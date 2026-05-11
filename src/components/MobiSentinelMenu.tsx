@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { MobiUserBadge } from './MobiUserBadge';
 import { MobiSwitcher } from './MobiSwitcher';
 import { MobiThemeSwitcher } from './MobiThemeSwitcher';
@@ -60,8 +60,6 @@ export interface MobiSentinelMenuProps {
   className?: string;
 }
 
-
-
 /**
  * Data-driven user dropdown menu with identity header, action items,
  * language selector, and theme switcher.
@@ -71,6 +69,8 @@ export interface MobiSentinelMenuProps {
  *
  * Language state supports both controlled (`lang` + `onLangChange`) and
  * uncontrolled (internal state) modes.
+ *
+ * Keyboard accessible: Escape closes the menu.
  *
  * @example
  * ```tsx
@@ -97,33 +97,51 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
   className = ''
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   // Split items into regular and danger items
   const regularItems = items.filter(i => !i.danger);
   const dangerItems = items.filter(i => i.danger);
 
+  const close = useCallback(() => setIsOpen(false), []);
+
+  // Keyboard: close on Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') close();
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, close]);
+
   return (
-    <div className={`relative inline-block text-left ${className}`}>
-      <MobiUserBadge 
+    <div ref={menuRef} className={`relative inline-block text-left ${className}`}>
+      <MobiUserBadge
         variant={variant}
         initials={user.initials}
         plan={user.plan}
         email={user.email}
         name={user.name}
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => setIsOpen(prev => !prev)}
+        aria-haspopup="true"
+        aria-expanded={isOpen}
       />
 
       {isOpen && (
         <>
-          <div 
-            className="fixed inset-0 z-40" 
-            onClick={() => setIsOpen(false)} 
+          <div
+            role="presentation"
+            className="fixed inset-0 z-40"
+            onClick={close}
           />
-          <div 
+          <div
+            role="menu"
+            aria-label="User menu"
             className="absolute right-0 z-50 mt-3 w-80 origin-top-right overflow-hidden rounded-2xl border border-mobi-border bg-mobi-surface shadow-2xl ring-1 ring-black/5 backdrop-blur-xl"
           >
             {/* Header / User Info */}
-            <MobiUserBadge 
+            <MobiUserBadge
               variant="expanded"
               initials={user.initials}
               plan={user.plan}
@@ -139,11 +157,12 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
                 {regularItems.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => { item.onClick?.(); setIsOpen(false); }}
+                    role="menuitem"
+                    onClick={() => { item.onClick?.(); close(); }}
                     className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-mobi-text transition-all hover:bg-mobi-surface-hover active:scale-[0.98] font-sans tracking-tight"
                   >
                     {item.icon && (
-                      <div className="flex h-8 w-8 items-center justify-center text-mobi-text-muted group-hover:text-mobi-text transition-colors">
+                      <div className="flex h-8 w-8 items-center justify-center text-mobi-text-muted group-hover:text-mobi-text transition-colors" aria-hidden="true">
                         {item.icon}
                       </div>
                     )}
@@ -153,26 +172,24 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
               </div>
             )}
 
-            {/* Settings & Config (Tuned for micro) */}
+            {/* Settings & Config */}
             {(showThemeSwitcher || showLangSwitcher || showFontSizeSwitcher) && (
               <div className="p-3 border-t border-mobi-border/50 space-y-3 bg-mobi-bg/10">
-                {/* Font Size (Always visible if requested, even in micro) */}
                 {showFontSizeSwitcher && (
                   <div className="flex items-center justify-between px-2">
                     <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Texto</span>
-                    <MobiSwitcher 
+                    <MobiSwitcher
                       options={[
                         { id: 'sm', label: 'A-', icon: <span className="text-[10px] font-bold">A</span> },
                         { id: 'md', label: 'A', icon: <span className="text-[12px] font-bold">A</span> },
                         { id: 'lg', label: 'A+', icon: <span className="text-[14px] font-bold">A</span> }
                       ]}
                       activeId={fontSize}
-                      onChange={(id) => onFontSizeChange?.(id as any)}
+                      onChange={(id) => onFontSizeChange?.(id as 'sm' | 'md' | 'lg')}
                     />
                   </div>
                 )}
 
-                {/* Other settings hidden in micro */}
                 {variant !== 'micro' && (
                   <div className="space-y-3">
                     {showThemeSwitcher && (
@@ -184,9 +201,9 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
                     {showLangSwitcher && (
                       <div className="flex items-center justify-between px-2">
                         <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Idioma</span>
-                        <MobiLangSwitcher 
-                          lang={externalLang as any}
-                          onChange={onLangChange as any}
+                        <MobiLangSwitcher
+                          lang={externalLang as 'en' | 'es' | undefined}
+                          onChange={onLangChange}
                         />
                       </div>
                     )}
@@ -195,17 +212,18 @@ export const MobiSentinelMenu: React.FC<MobiSentinelMenuProps> = ({
               </div>
             )}
 
-            {/* Danger Actions (Logout, etc.) */}
+            {/* Danger Actions */}
             {dangerItems.length > 0 && (
               <div className="p-2 border-t border-mobi-border/50 bg-mobi-bg/30">
                 {dangerItems.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => { item.onClick?.(); setIsOpen(false); }}
+                    role="menuitem"
+                    onClick={() => { item.onClick?.(); close(); }}
                     className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-bold text-rose-500 transition-all hover:bg-rose-500/5 active:scale-[0.98] font-sans tracking-tight"
                   >
                     {item.icon && (
-                      <div className="flex h-8 w-8 items-center justify-center">
+                      <div className="flex h-8 w-8 items-center justify-center" aria-hidden="true">
                         {item.icon}
                       </div>
                     )}

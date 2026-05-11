@@ -4,19 +4,18 @@ export interface UseMobiEnergyOptions {
   initialLevel?: number;
   autoRecharge?: boolean;
   rechargeRate?: number; // % per second
-  drainRate?: number; // % per call
+  drainRate?: number;    // % per call
 }
 
 /**
  * Hook for managing autonomous energy lifecycles.
+ * `isLow` is derived inline (no extra state or effect).
  */
 export const useMobiEnergy = (options: UseMobiEnergyOptions = {}) => {
   const [level, setLevel] = useState(options.initialLevel ?? 100);
-  const [isLow, setIsLow] = useState(false);
 
-  useEffect(() => {
-    setIsLow(level < 20);
-  }, [level]);
+  // Derived value — no separate state or useEffect needed
+  const isLow = level < 20;
 
   // Auto-recharge logic
   useEffect(() => {
@@ -25,7 +24,7 @@ export const useMobiEnergy = (options: UseMobiEnergyOptions = {}) => {
     const interval = setInterval(() => {
       setLevel(prev => {
         if (prev >= 100) return 100;
-        return Math.min(100, prev + (options.rechargeRate || 1));
+        return Math.min(100, prev + (options.rechargeRate ?? 1));
       });
     }, 1000);
 
