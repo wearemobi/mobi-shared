@@ -70,16 +70,16 @@ export const MobiTabs: React.FC<MobiTabsProps> = ({
   'aria-label': ariaLabel = 'Tabs',
 }) => {
   const containerClass = {
-    default: 'flex gap-1 p-1 bg-mobi-bg/50 border border-mobi-border rounded-xl',
-    pills: 'flex gap-2',
-    underline: 'flex gap-0 border-b border-mobi-border',
+    default: 'flex gap-1 p-1 bg-mobi-bg/50 border border-mobi-border rounded-xl overflow-x-auto max-w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+    pills: 'flex gap-2 overflow-x-auto max-w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+    underline: 'flex gap-0 border-b border-mobi-border overflow-x-auto max-w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
   }[variant];
 
   const getTabClass = (tab: MobiTab): string => {
     const isActive = tab.id === activeId;
     const isDisabled = tab.disabled;
 
-    const base = 'relative flex items-center gap-2 transition-all font-sans font-bold text-xs uppercase tracking-widest outline-none focus-visible:ring-2 focus-visible:ring-mobi-primary/50';
+    const base = 'relative flex items-center gap-2 transition-all font-sans font-bold text-xs uppercase tracking-widest outline-none focus-visible:ring-2 focus-visible:ring-mobi-primary/50 shrink-0';
 
     if (isDisabled) return `${base} opacity-40 cursor-not-allowed`;
 
