@@ -780,6 +780,59 @@ const catalog: CatalogEntry[] = [
     render: () => {
       const DropdownDemo = () => {
         const [val, setVal] = useState('med');
+        
+        // Chained Dropdown State
+        const [country, setCountry] = useState('');
+        const [department, setDepartment] = useState('');
+        const [city, setCity] = useState('');
+
+        const countries = [
+          { value: 'col', label: 'Colombia 🇨🇴' },
+          { value: 'usa', label: 'United States 🇺🇸' }
+        ];
+
+        const departments: Record<string, { value: string; label: string }[]> = {
+          col: [
+            { value: 'antioquia', label: 'Antioquia' },
+            { value: 'bogota_dc', label: 'Bogotá D.C.' }
+          ],
+          usa: [
+            { value: 'california', label: 'California' },
+            { value: 'new_york', label: 'New York' }
+          ]
+        };
+
+        const cities: Record<string, { value: string; label: string }[]> = {
+          antioquia: [
+            { value: 'medellin', label: 'Medellín' },
+            { value: 'envigado', label: 'Envigado' },
+            { value: 'rionegro', label: 'Rionegro' }
+          ],
+          bogota_dc: [
+            { value: 'bogota_urb', label: 'Bogotá Distrito Capital' }
+          ],
+          california: [
+            { value: 'la', label: 'Los Angeles' },
+            { value: 'sf', label: 'San Francisco' },
+            { value: 'sd', label: 'San Diego' }
+          ],
+          new_york: [
+            { value: 'nyc', label: 'New York City' },
+            { value: 'buffalo', label: 'Buffalo' }
+          ]
+        };
+
+        const handleCountryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+          setCountry(e.target.value);
+          setDepartment('');
+          setCity('');
+        };
+
+        const handleDepartmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+          setDepartment(e.target.value);
+          setCity('');
+        };
+
         return (
           <div className="space-y-6 max-w-xl">
             <MobiDropdown 
@@ -804,6 +857,51 @@ const catalog: CatalogEntry[] = [
               ]}
               technical
             />
+
+            <div className="p-5 border border-mobi-border/60 bg-mobi-surface/30 rounded-2xl space-y-4 animate-in fade-in duration-300">
+              <MobiFormLabel 
+                variant="section" 
+                label="Chained Dropdown Protocol (Dynamic Filtering)" 
+                description="Select country, then department, then city to unlock navigation locks."
+              />
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <MobiDropdown
+                  label="1. Country"
+                  placeholder="Select country..."
+                  value={country}
+                  onChange={handleCountryChange}
+                  options={countries}
+                />
+
+                <MobiDropdown
+                  label="2. Department / State"
+                  placeholder="Select area..."
+                  value={department}
+                  onChange={handleDepartmentChange}
+                  options={country ? departments[country] || [] : []}
+                  disabled={!country}
+                />
+
+                <MobiDropdown
+                  label="3. City / Starport"
+                  placeholder="Select city..."
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  options={department ? cities[department] || [] : []}
+                  disabled={!department}
+                />
+              </div>
+
+              {city && (
+                <div className="p-3 bg-green-500/10 border border-green-500/30 rounded-xl text-green-500 text-xs font-semibold flex items-center gap-2">
+                  <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                  </svg>
+                  <span>Navigation Route Locked: {countries.find(c => c.value === country)?.label} &gt; {departments[country]?.find(d => d.value === department)?.label} &gt; {cities[department]?.find(ci => ci.value === city)?.label}</span>
+                </div>
+              )}
+            </div>
           </div>
         );
       };
