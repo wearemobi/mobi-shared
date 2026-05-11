@@ -4,7 +4,8 @@ import {
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
   MobiCard, MobiDropbox, MobiProgress, MobiChatInput, MobiEnergyMeter,
-  useMobiChat, useMobiEnergy, MobiChatWidget, useMobiAgentic, MobiMarkdown
+  useMobiChat, useMobiEnergy, MobiChatWidget, useMobiAgentic, MobiMarkdown,
+  MobiFormLabel, MobiInput, MobiDropdown, useMobiForm, mobiValidators
 } from '../src';
 import pkg from '../package.json';
 
@@ -633,6 +634,394 @@ const catalog: CatalogEntry[] = [
         );
       }
       return <AgenticDemo />;
+    }
+  },
+  {
+    id: 'MobiFormLabel',
+    name: 'MobiFormLabel',
+    category: 'component',
+    description: 'A premium typographic and structure system for form field labels, helper descriptions, and section titles.',
+    code: `<MobiFormLabel 
+  label="Operator Initials" 
+  description="Your registered dual-letter initials" 
+  required 
+/>
+
+<MobiFormLabel 
+  variant="title" 
+  label="Primary Database Configuration" 
+  description="Manage structural assets for this Fleet node" 
+/>
+
+<MobiFormLabel 
+  variant="section" 
+  label="Access Security Protocols" 
+/>`,
+    render: () => (
+      <div className="space-y-6 max-w-xl">
+        <MobiFormLabel 
+          variant="title" 
+          label="Sovereign Control Node" 
+          description="Establish core parameters for your quantum navigation stack." 
+        />
+        
+        <MobiFormLabel 
+          variant="section" 
+          label="Authentication Suite" 
+          description="Provide valid keys to unlock administrative pathways."
+        />
+
+        <div className="grid grid-cols-2 gap-4">
+          <MobiFormLabel 
+            label="Sovereign Identity Code" 
+            description="Official pilot ID token assigned by Grand Fleet Command." 
+            required 
+          />
+          <MobiFormLabel 
+            label="Auxiliary Comm Channel" 
+            description="Optional secondary laser frequency." 
+            optional 
+          />
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'MobiInput',
+    name: 'MobiInput',
+    category: 'component',
+    description: 'Unified high-fidelity inputs including standard text, email, revealable passwords, keyboard-filtered numbers, auto-resizing textareas, and money (currency) formats with built-in prefixes and suffixes.',
+    code: `<MobiInput 
+  type="text" 
+  label="Pilot Handle" 
+  placeholder="e.g. Maverick" 
+/>
+
+<MobiInput 
+  type="password" 
+  label="Decryption Key" 
+  description="Reveals password with interactive eye toggler" 
+  required 
+/>
+
+<MobiInput 
+  type="money" 
+  label="Ship Fuel Allowance" 
+  placeholder="0.00" 
+/>`,
+    render: () => {
+      const InputDemo = () => {
+        const [pw, setPw] = useState('MySecretPassphrase');
+        const [money, setMoney] = useState('1500000.00');
+        const [notes, setNotes] = useState('Optimal sub-light velocities recorded.');
+        
+        return (
+          <div className="space-y-6 max-w-xl">
+            <MobiInput 
+              type="text" 
+              label="Standard Input" 
+              placeholder="Enter standard text..." 
+              description="Basic sans-serif typography container."
+            />
+            
+            <MobiInput 
+              type="password" 
+              label="Secure Password Input" 
+              value={pw}
+              onChange={(e) => setPw(e.target.value)}
+              description="Reveals/conceals contents utilizing a premium inline toggle."
+            />
+
+            <MobiInput 
+              type="money" 
+              label="Financial/Currency Field" 
+              value={money}
+              onChange={(e) => setMoney(e.target.value)}
+              description="Injects a fixed prefix ($) and suffix (USD), locking numerical integrity."
+              technical
+            />
+
+            <MobiInput 
+              type="textarea" 
+              label="Multi-line Textarea" 
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+              placeholder="Add your multi-line flight logs..."
+              description="Dynamically resizes as typing extends past boundaries."
+            />
+
+            <MobiInput 
+              type="text" 
+              label="Error State Presentation" 
+              error="Validation failure: Cryptographic checksum mismatch on sector 9" 
+              defaultValue="CORRUPTED_HEX_7F3"
+              technical
+            />
+          </div>
+        );
+      };
+      return <InputDemo />;
+    }
+  },
+  {
+    id: 'MobiDropdown',
+    name: 'MobiDropdown',
+    category: 'component',
+    description: 'A custom styled dropdown component that integrates seamlessly with MOBI theme states, supporting section labels, helper text, and error indicators.',
+    code: `<MobiDropdown 
+  label="Quantum Reactor Speed" 
+  placeholder="Choose velocity state..."
+  options={[
+    { value: 'low', label: 'Idle / Minimal Power (10%)' },
+    { value: 'med', label: 'Cruising Efficiency (50%)' },
+    { value: 'high', label: 'Overcharged Peak (100%)', disabled: true }
+  ]} 
+/>`,
+    render: () => {
+      const [val, setVal] = useState('med');
+      return (
+        <div className="space-y-6 max-w-xl">
+          <MobiDropdown 
+            label="Propulsion Node Cluster" 
+            value={val}
+            onChange={(e) => setVal(e.target.value)}
+            description="Controls active thruster matrices across the flagship."
+            options={[
+              { value: 'low', label: 'Sub-Light Core - Minimal Drain' },
+              { value: 'med', label: 'Warp Matrix Alpha - Balanced' },
+              { value: 'high', label: 'Hyperspace Induction - Overcharge [DISABLED]', disabled: true }
+            ]}
+          />
+
+          <MobiDropdown 
+            label="Damaged System Matrix" 
+            error="Operational lock: Subsystem offline due to thermal venting"
+            placeholder="Select cooling vector..."
+            options={[
+              { value: 'liquid_n', label: 'Liquid Nitrogen Purge' },
+              { value: 'laser', label: 'Coherent Light Heat Vent' }
+            ]}
+            technical
+          />
+        </div>
+      );
+    }
+  },
+  {
+    id: 'useMobiForm',
+    name: 'useMobiForm & mobiValidators',
+    category: 'hook',
+    description: 'Comprehensive state machine for forms and validation rules. Orchestrates changes, dirty states, error indicators, and robust form submissions.',
+    code: `const { values, errors, handleChange, handleSubmit } = useMobiForm({
+  initialValues: { email: '', amount: '' },
+  validationRules: {
+    email: [mobiValidators.required(), mobiValidators.email()],
+    amount: [mobiValidators.required(), mobiValidators.money()]
+  },
+  onSubmit: (data) => console.log('Validated submission:', data)
+});`,
+    render: () => {
+      const FormDemo = () => {
+        const [alertMessage, setAlertMessage] = useState<string | null>(null);
+        const [alertType, setAlertType] = useState<'success' | 'error'>('success');
+
+        const {
+          values,
+          errors,
+          isSubmitting,
+          handleChange,
+          handleBlur,
+          handleSubmit,
+          resetForm
+        } = useMobiForm({
+          initialValues: {
+            fleetName: '',
+            operatorEmail: '',
+            securePassphrase: '',
+            operatingBudget: '',
+            maxCrews: '5',
+            reactorNode: ''
+          },
+          validationRules: {
+            fleetName: [
+              mobiValidators.required('Fleet Designation Name is required'),
+              mobiValidators.minLength(4, 'Fleet name must be at least 4 characters long')
+            ],
+            operatorEmail: [
+              mobiValidators.required('Operator email is required'),
+              mobiValidators.email('Please supply a valid corporate email format')
+            ],
+            securePassphrase: [
+              mobiValidators.required('Security decryption passphrase is required'),
+              mobiValidators.minLength(6, 'Decryption passphrases must contain at least 6 characters')
+            ],
+            operatingBudget: [
+              mobiValidators.required('Financial operating budget allocation is required'),
+              mobiValidators.money('Allocations must be formatted as numeric currency values'),
+              mobiValidators.min(5000, 'Minimum flagship initialization budget is $5,000.00')
+            ],
+            maxCrews: [
+              mobiValidators.required('Crew count is required'),
+              mobiValidators.number('Crew capacities must be numeric integers'),
+              mobiValidators.max(25, 'Flagship compartments support at most 25 crew members')
+            ],
+            reactorNode: [
+              mobiValidators.required('Select a valid reactor node cluster')
+            ]
+          },
+          onSubmit: async (data) => {
+            // Simulate API request delay
+            await new Promise((resolve) => setTimeout(resolve, 1500));
+            setAlertType('success');
+            setAlertMessage(`INITIATING ENGINE LAUNCH SEQUENCE: Fleet "${data.fleetName}" successfully registered with budget $${data.operatingBudget} USD on cluster node ${data.reactorNode.toUpperCase()}!`);
+          }
+        };
+
+        const handleReset = () => {
+          resetForm();
+          setAlertMessage(null);
+        };
+
+        return (
+          <div className="w-full max-w-lg mx-auto">
+            {alertMessage && (
+              <div className="mb-6">
+                <MobiAlert 
+                  title={alertType === 'success' ? 'Launch Success' : 'Launch Interrupted'} 
+                  message={alertMessage} 
+                  type={alertType} 
+                  duration={0}
+                  onClose={() => setAlertMessage(null)} 
+                />
+              </div>
+            )}
+
+            <MobiCard 
+              title="Fleet Flagship Registration Portal"
+              footer="Authorized access only • M.O.B.I.™ Grand Fleet v1.3.6"
+            >
+              <form onSubmit={handleSubmit} noValidate className="space-y-5">
+                <MobiFormLabel 
+                  variant="section" 
+                  label="General Specifications" 
+                  description="Establish general identifier nodes for this star cruiser."
+                />
+
+                <MobiInput 
+                  type="text"
+                  label="Fleet Designation Name"
+                  placeholder="e.g. Odyssey Fleet VII"
+                  id="fleetName"
+                  value={values.fleetName}
+                  onChange={handleChange('fleetName')}
+                  onBlur={handleBlur('fleetName')}
+                  error={errors.fleetName}
+                  required
+                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <MobiInput 
+                    type="email"
+                    label="Commanding Officer Email"
+                    placeholder="e.g. admiral@wearemobi.com"
+                    id="operatorEmail"
+                    value={values.operatorEmail}
+                    onChange={handleChange('operatorEmail')}
+                    onBlur={handleBlur('operatorEmail')}
+                    error={errors.operatorEmail}
+                    required
+                  />
+
+                  <MobiInput 
+                    type="password"
+                    label="Nuclear Lock Passphrase"
+                    placeholder="Input security lock..."
+                    id="securePassphrase"
+                    value={values.securePassphrase}
+                    onChange={handleChange('securePassphrase')}
+                    onBlur={handleBlur('securePassphrase')}
+                    error={errors.securePassphrase}
+                    required
+                  />
+                </div>
+
+                <MobiFormLabel 
+                  variant="section" 
+                  label="Resource Allotments & Core States" 
+                  description="Determine fiscal budgets and reactor targets."
+                />
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <MobiInput 
+                    type="money"
+                    label="Operation Budget Allocation"
+                    placeholder="e.g. 5000.00"
+                    id="operatingBudget"
+                    value={values.operatingBudget}
+                    onChange={handleChange('operatingBudget')}
+                    onBlur={handleBlur('operatingBudget')}
+                    error={errors.operatingBudget}
+                    technical
+                    required
+                  />
+
+                  <MobiInput 
+                    type="number"
+                    label="Max Crew Capacity"
+                    placeholder="e.g. 10"
+                    id="maxCrews"
+                    value={values.maxCrews}
+                    onChange={handleChange('maxCrews')}
+                    onBlur={handleBlur('maxCrews')}
+                    error={errors.maxCrews}
+                    technical
+                    required
+                  />
+                </div>
+
+                <MobiDropdown 
+                  label="Quantum Reactor Core Alignment"
+                  placeholder="Select core node..."
+                  id="reactorNode"
+                  value={values.reactorNode}
+                  onChange={handleChange('reactorNode')}
+                  onBlur={handleBlur('reactorNode')}
+                  error={errors.reactorNode}
+                  required
+                  options={[
+                    { value: 'node_alpha', label: 'Reactor Core Alpha - Deuterium Vent' },
+                    { value: 'node_beta', label: 'Reactor Core Beta - Plasma Infused' },
+                    { value: 'node_gamma', label: 'Reactor Core Gamma - Antimatter Cluster' }
+                  ]}
+                />
+
+                <div className="flex gap-4 pt-4 border-t border-mobi-border/50">
+                  <MobiButton 
+                    type="submit" 
+                    variant="solid" 
+                    className="flex-1 rounded-xl py-3"
+                    disabled={isSubmitting}
+                    icon={isSubmitting && <div className="h-4.5 w-4.5 border-2 border-mobi-bg/30 border-t-mobi-bg rounded-full animate-spin" />}
+                  >
+                    {isSubmitting ? 'Validating Reactor...' : 'Launch Flagship Matrix'}
+                  </MobiButton>
+                  
+                  <MobiButton 
+                    type="button" 
+                    variant="outline" 
+                    onClick={handleReset}
+                    className="rounded-xl py-3 px-5"
+                    disabled={isSubmitting}
+                  >
+                    Reset
+                  </MobiButton>
+                </div>
+              </form>
+            </MobiCard>
+          </div>
+        );
+      };
+      return <FormDemo />;
     }
   }
 ];
