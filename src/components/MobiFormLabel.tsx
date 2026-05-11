@@ -50,8 +50,10 @@ export const MobiFormLabel: React.FC<MobiFormLabelProps> = ({
   ...props
 }) => {
   if (variant === 'title') {
+    const { htmlFor: _hf, form: _f, defaultChecked: _dc, defaultValue: _dv, ...divProps } = props;
+    const safeProps = divProps as React.HTMLAttributes<HTMLDivElement>;
     return (
-      <div className={`mb-6 ${className}`}>
+      <div className={`mb-6 ${className}`} {...safeProps}>
         <h2 className="text-xl font-black tracking-tight font-sans text-mobi-text uppercase">
           {label}
         </h2>
@@ -65,8 +67,10 @@ export const MobiFormLabel: React.FC<MobiFormLabelProps> = ({
   }
 
   if (variant === 'section') {
+    const { htmlFor: _hf, form: _f, defaultChecked: _dc, defaultValue: _dv, ...divProps } = props;
+    const safeProps = divProps as React.HTMLAttributes<HTMLDivElement>;
     return (
-      <div className={`mb-4 mt-6 border-b border-mobi-border/50 pb-2 ${className}`}>
+      <div className={`mb-4 mt-6 border-b border-mobi-border/50 pb-2 ${className}`} {...safeProps}>
         <h3 className="text-sm font-black tracking-widest font-sans text-mobi-text uppercase">
           {label}
         </h3>
