@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MobiLogo, MobiLogoHero, MobiFooter, MobiSentinelMenu, MobiNavbar, MobiHero, MobiButton, useMobiAuth, MobiAlert, useMobiClipboard, MobiChatWidget, useMobiAgentic, useMobiGemini } from '../src';
+import { MobiLogo, MobiLogoHero, MobiFooter, MobiSentinelMenu, MobiNavbar, MobiHero, MobiButton, useMobiAuth, MobiAlert, useMobiClipboard, MobiChatEdge, useMobiAgentic, useMobiGemini } from '../src';
 import { DocsPage } from './DocsPage';
 import pkg from '../package.json';
 import '../src/styles.css';
@@ -12,7 +12,7 @@ const App: React.FC = () => {
   const { copy } = useMobiClipboard();
   const [view, setView] = useState<AppView>('home');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  
+
   const { chat: chatMobi } = useMobiAgentic({ baseUrl: '/proxy/agentic' });
   const { chat: chatGemini } = useMobiGemini();
 
@@ -39,10 +39,10 @@ const App: React.FC = () => {
       {/* Alert Overlay */}
       {alert && (
         <div className="fixed top-24 left-1/2 z-[100] w-full max-w-sm -translate-x-1/2 px-4">
-          <MobiAlert 
+          <MobiAlert
             title="Sentinel Notice"
-            message={alert.message} 
-            type={alert.type} 
+            message={alert.message}
+            type={alert.type}
             onClose={() => setAlert(null)}
             onCopy={() => {
               copy(alert.message);
@@ -52,13 +52,13 @@ const App: React.FC = () => {
         </div>
       )}
 
-      <MobiNavbar 
+      <MobiNavbar
         title="M.O.B.I.™ Shared"
         onLogoClick={() => setView('home')}
         rightContent={
           <>
             {view === 'docs' && (
-              <button 
+              <button
                 onClick={() => setIsSidebarOpen(true)}
                 className="lg:hidden p-2 -ml-2 text-mobi-text-muted hover:text-mobi-text"
                 aria-label="Open documentation menu"
@@ -68,13 +68,12 @@ const App: React.FC = () => {
                 </svg>
               </button>
             )}
-            <button 
+            <button
               onClick={() => setView(view === 'home' ? 'docs' : 'home')}
-              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] font-sans transition-all active:scale-95 ${
-                view === 'docs'
+              className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] font-sans transition-all active:scale-95 ${view === 'docs'
                   ? 'bg-mobi-primary text-mobi-bg'
                   : 'border border-mobi-border bg-mobi-surface text-mobi-text hover:bg-mobi-surface-hover'
-              }`}
+                }`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
@@ -82,7 +81,7 @@ const App: React.FC = () => {
               Docs
             </button>
 
-            <MobiSentinelMenu 
+            <MobiSentinelMenu
               user={{
                 initials: 'CA',
                 name: 'Carlos Quijano',
@@ -135,9 +134,9 @@ const App: React.FC = () => {
 
       {/* View Routing */}
       {view === 'docs' ? (
-        <DocsPage 
-          isSidebarOpen={isSidebarOpen} 
-          setIsSidebarOpen={setIsSidebarOpen} 
+        <DocsPage
+          isSidebarOpen={isSidebarOpen}
+          setIsSidebarOpen={setIsSidebarOpen}
         />
       ) : (
         <main className="flex-1 px-6">
@@ -147,27 +146,27 @@ const App: React.FC = () => {
             subtitle="Common UI"
             description={
               <>
-                Implementing the <strong>Core Blueprint v1.0.0</strong>. 
+                Implementing the <strong>Core Blueprint v1.0.0</strong>.
                 Using the official Chassis assets for seamless integration.
               </>
             }
           >
             <div className="flex flex-wrap justify-center gap-6">
               <div className="rounded-2xl border border-mobi-border bg-mobi-surface p-8 shadow-sm">
-                 <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-mobi-text-muted">Official App Icon</p>
-                 <div className="flex items-center justify-center">
-                    <MobiLogo size={64} />
-                 </div>
+                <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-mobi-text-muted">Official App Icon</p>
+                <div className="flex items-center justify-center">
+                  <MobiLogo size={64} />
+                </div>
               </div>
               <div className="rounded-2xl border border-mobi-border bg-mobi-surface p-8 shadow-sm">
-                 <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-mobi-text-muted">Official Brand Icon</p>
-                 <div className="flex items-center justify-center">
-                    <MobiLogoHero size={64} className="mb-0" />
-                 </div>
+                <p className="mb-4 text-[10px] font-bold uppercase tracking-widest text-mobi-text-muted">Official Brand Icon</p>
+                <div className="flex items-center justify-center">
+                  <MobiLogoHero size={64} className="mb-0" />
+                </div>
               </div>
             </div>
 
-            <MobiButton 
+            <MobiButton
               variant="outline"
               technical
               onClick={() => setView('docs')}
@@ -181,23 +180,12 @@ const App: React.FC = () => {
 
       <MobiFooter appName="M.O.B.I.™ Shared" version={`v${pkg.version}`} />
 
-      {/* GLOBAL TACTICAL INTERFACE */}
-      <MobiChatWidget 
-        title="MobiAI Chat"
-        userInitials="CQ"
-        userPlan="ULTRA"
-        userEmail="carlos@wearemobi.com"
-        userName="Carlos Quijano"
-        suggestions={[
-          "Analizar consumo energético del reactor",
-          "Estado de despliegue en Grand Fleet",
-          "Optimizar costos de Proton v1.2"
-        ]}
-        userMenuItems={[
-          { id: 'settings', label: 'Chat Settings', icon: <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg> },
-          { id: 'logout', label: 'Logout', danger: true, icon: <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg> }
-        ]}
-        onSendMessage={handleSendMessage}
+      {/* GLOBAL TACTICAL INTERFACE - EDGE REACTOR */}
+      <MobiChatEdge
+        title="MobiEdge Agent"
+        token="MOBI_PLAYGROUND_TOKEN"
+        tenantId="MOBI"
+        baseUrl="https://edge.sandbox.grandfleet.mobi"
       />
     </div>
   );

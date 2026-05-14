@@ -9,7 +9,8 @@ import {
   MobiModal, MobiToastProvider, useMobiToast, MobiCheckbox, MobiTable, MobiTabs,
   MobiBadge, MobiSkeleton, MobiSkeletonGroup, MobiTooltip, MobiPagination,
   MobiAnalytics, useMobiAnalytics,
-  MobiLoader, MobiWizard, useMobiWizard, MobiListView
+  MobiLoader, MobiWizard, useMobiWizard, MobiListView,
+  MobiChatEdge, useMobiEdge
 } from '../src';
 import pkg from '../package.json';
 
@@ -1839,6 +1840,39 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
       };
       return <ListViewDemo />;
     }
+  },
+  {
+    id: 'MobiChatEdge',
+    name: 'MobiChatEdge',
+    category: 'component',
+    description: 'Specialized chat interface for decentralized Edge Sentinel operations with Haki monitoring.',
+    code: `<MobiChatEdge \n  token="..." \n  tenantId="MOBI" \n  showEnergyBar={true} \n/>`,
+    render: () => (
+      <div className="p-12 border border-dashed border-mobi-border rounded-2xl text-center bg-mobi-bg/50">
+        <p className="text-[10px] font-mono text-mobi-text-muted uppercase mb-4">
+          Check the bottom-right corner for the MobiAI Edge Agent.
+        </p>
+        <div className="flex justify-center">
+          <MobiChatEdge token="DEMO" title="MobiAI Edge Demo" />
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'useMobiEdge',
+    name: 'useMobiEdge',
+    category: 'hook',
+    description: 'Hook for interacting with the MOBI Edge Reactor API (Radar Schema).',
+    code: `const { messages, models, status, sendMessage } = useMobiEdge({\n  token: '...',\n  tenantId: 'MOBI'\n});`,
+    render: () => (
+      <div className="p-6 bg-mobi-bg border border-mobi-border rounded-xl">
+        <p className="text-sm font-mono text-mobi-text-muted leading-relaxed">
+          // Hook state orchestration demo<br/>
+          const {'{'} status {'}'} = useMobiEdge({'{'} token: '...' {'}'});<br/>
+          console.log(status?.haki_limit);
+        </p>
+      </div>
+    )
   }
 ];
 
