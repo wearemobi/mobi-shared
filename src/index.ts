@@ -57,3 +57,8 @@ export * from './components/MobiWizard';
 export * from './hooks/useMobiWizard';
 export * from './components/MobiListView';
 
+// v1.3.9 — edge reactor
+export * from './components/MobiIntelligenceSelector';
+export * from './components/MobiChatEdge';
+export * from './hooks/useMobiEdge';
+

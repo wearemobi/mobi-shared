@@ -1,4 +1,4 @@
-# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.5
+# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.9
 
 > Universal UI & Logic Shield for the M.O.B.I.™ Grand Fleet
 
@@ -9,7 +9,7 @@ npm install @wearemobi/shared
 ```
 
 ```tsx
-import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } from '@wearemobi/shared';
+import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme, MobiChatEdge } from '@wearemobi/shared';
 ```
 
 ## Components
@@ -29,7 +29,9 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } fro
 | `MobiSentinelMenu` | Data-driven user dropdown with identity + config |
 | `MobiThemeSwitcher` | Standalone premium theme selector with light, auto, dark modes |
 | `MobiLangSwitcher` | Standalone premium language selector with EN and ES text buttons |
-| `MobiDropbox` | **(Updated)** High-performance drag-and-drop with Automated Vault Ingestion support |
+| `MobiDropbox` | High-performance drag-and-drop with Automated Vault Ingestion support |
+| `MobiIntelligenceSelector` | **(New)** Reusable tactical selector for AI models and tiers |
+| `MobiChatEdge` | **(New)** Decentralized agentic chat powered by M.O.B.I.™ Edge Reactor |
 
 ## Hooks
 
@@ -38,10 +40,11 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } fro
 | `useMobiTheme` | Theme persistence + system preference detection |
 | `useMobiAuth` | Authentication stub for JS Bridge v1.19 |
 | `useMobiClipboard` | Copy-to-clipboard with feedback state |
-| `useMobiVault` | **(Updated)** Sovereign client for the M.O.B.I.™ Vault microservice |
-| `useMobiReactor` | **(Updated)** Sovereign client for the M.O.B.I.™ Energy Reactor |
-| `useMobiAgentic` | **(New)** Sovereign client for the M.O.B.I.™ Agentic AI |
-| `useMobiGemini` | **(New)** Direct cloud client for Google Gemini Backup AI |
+| `useMobiVault` | Sovereign client for the M.O.B.I.™ Vault microservice |
+| `useMobiReactor` | Sovereign client for the M.O.B.I.™ Energy Reactor |
+| `useMobiEdge` | **(New)** Production client for the M.O.B.I.™ Edge Reactor (Radar v2.0.8) |
+| `useMobiAgentic` | Sovereign client for the M.O.B.I.™ Agentic AI |
+| `useMobiGemini` | Direct cloud client for Google Gemini Backup AI |
 
 ## Fleet Integration (v1.3.3)
 
