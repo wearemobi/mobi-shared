@@ -1,4 +1,4 @@
-# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.9
+# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.10
 
 > Universal UI & Logic Shield for the M.O.B.I.™ Grand Fleet
 

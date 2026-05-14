@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MobiChatInput } from './MobiChatInput';
 import { MobiChatFeed } from './MobiChatFeed';
-import { useMobiEdge } from '../hooks/useMobiEdge';
+import { useMobiEdge, MobiEdgeMessage } from '../hooks/useMobiEdge';
 import { MobiButton } from './MobiButton';
 import { MobiErrorBoundary } from './MobiErrorBoundary';
 
@@ -16,23 +16,43 @@ export interface MobiChatEdgeProps {
   title?: string;
   /** Placeholder for the input */
   placeholder?: string;
-  /** 
-   * Whether to show the Haki energy progress bar.
-   * @default true
-   */
-   showEnergyBar?: boolean;
-  /** Label for the energy bar. @default "HAKI ENERGY RESERVE" */
+  /** Label for the energy bar. @default "Energy Meter" */
   energyLabel?: string;
   /** Status message shown in the input. @default "SENTINEL ACTIVE" */
   statusMessage?: string;
   /** Initial model ID to select */
   initialModelId?: string;
   /** 
+   * Initial messages to populate the feed. 
+   * If not provided, a default welcome message is used.
+   */
+  initialMessages?: MobiEdgeMessage[];
+  /** 
+   * Optional shortcut to override the default welcome message text.
+   */
+  customWelcome?: string;
+  /**
+   * List of suggested questions shown as interactive pills.
+   */
+  suggestions?: string[];
+  /** 
+   * If true, the widget starts in expanded mode.
+   * @default false
+   */
+  isInitiallyOpen?: boolean;
+  /**
+   * If true, hides the robot icon on the trigger button.
+   * @default false
+   */
+  hideRobotIcon?: boolean;
+  /** 
    * Externally control if the widget is open. 
    */
   isOpen?: boolean;
   /** Callback triggered when the widget wants to change its open state. */
   onToggle?: (isOpen: boolean) => void;
+  /** Callback triggered when a message is sent. */
+  onSendMessage?: (message: string) => void;
 }
 
 /**
@@ -49,11 +69,27 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
   energyLabel = 'Energy Meter',
   statusMessage = 'SENTINEL ACTIVE',
   initialModelId,
+  initialMessages,
+  customWelcome,
+  suggestions = [],
+  isInitiallyOpen = false,
+  hideRobotIcon = false,
   isOpen: controlledIsOpen,
-  onToggle
+  onToggle,
+  onSendMessage
 }) => {
-  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  const [internalIsOpen, setInternalIsOpen] = useState(isInitiallyOpen);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+
+  // Default welcome if no initial messages provided
+  const defaultMessages: MobiEdgeMessage[] = [
+    {
+      id: 'welcome',
+      role: 'assistant',
+      content: customWelcome || 'Welcome to MobiAI Chat - Support Assistant, powered by MobiEdge - what do you want do build today?',
+      timestamp: Date.now()
+    }
+  ];
 
   const {
     messages,
@@ -68,14 +104,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
     tenantId, 
     baseUrl,
     initialModelId,
-    initialMessages: [
-      {
-        id: 'welcome',
-        role: 'assistant',
-        content: 'Welcome to MobiAI Chat - Support Assistant, powered by MobiEdge - what do you want do build today?',
-        timestamp: Date.now()
-      }
-    ]
+    initialMessages: initialMessages || defaultMessages
   });
 
   const handleToggle = () => {
@@ -84,6 +113,11 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
       setInternalIsOpen(nextState);
     }
     onToggle?.(nextState);
+  };
+
+  const handleSend = (msg: string) => {
+    sendMessage(msg);
+    onSendMessage?.(msg);
   };
 
   const modelOptions = models
@@ -109,7 +143,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
       {/* Chat Window */}
       {isOpen && (
         <div className="
-          w-full h-full sm:w-[380px] sm:h-[550px] bg-mobi-surface border-0 sm:border border-mobi-border rounded-none sm:rounded-xl
+          w-full h-full sm:w-[380px] sm:h-[600px] bg-mobi-surface border-0 sm:border border-mobi-border rounded-none sm:rounded-xl
           shadow-none sm:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col
           animate-in fade-in slide-in-from-bottom-4 duration-300 overflow-hidden
         ">
@@ -125,7 +159,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
                 size="sm" 
                 className="h-8 w-8 p-0 min-w-0"
                 onClick={handleToggle}
-                icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
+                suffixIcon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
               />
             </div>
 
@@ -137,10 +171,29 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
               className="flex-1 bg-mobi-bg/10"
             />
 
+            {/* Suggestions Area */}
+            {suggestions.length > 0 && (
+              <div className="px-3 py-2 bg-mobi-bg/50 flex gap-2 overflow-x-auto no-scrollbar border-t border-mobi-border/50">
+                {suggestions.map((suggestion, i) => (
+                  <button
+                    key={i}
+                    onClick={() => handleSend(suggestion)}
+                    className="
+                      whitespace-nowrap px-3 py-1.5 rounded-full bg-mobi-surface border border-mobi-border 
+                      text-[11px] text-mobi-text-muted hover:text-mobi-primary hover:border-mobi-primary 
+                      transition-colors flex-shrink-0
+                    "
+                  >
+                    {suggestion}
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Input Area */}
             <div className="p-3 bg-mobi-bg border-t border-mobi-border">
               <MobiChatInput 
-                onSend={sendMessage}
+                onSend={handleSend}
                 isProcessing={isProcessing || isOutOfEnergy}
                 activeModelId={activeModelId}
                 onModelChange={setActiveModelId}
@@ -176,21 +229,28 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
             <div className="absolute inset-0 h-6 w-6 bg-mobi-bg/20 rounded-full animate-ping group-hover:hidden" />
             
             {/* Robot Sentinel Icon */}
-            <svg 
-              className="h-6 w-6 text-mobi-bg group-hover:scale-110 transition-transform" 
-              viewBox="0 0 24 24" 
-              fill="none" 
-              stroke="currentColor" 
-              strokeWidth="2" 
-              strokeLinecap="round" 
-              strokeLinejoin="round"
-            >
-              <rect x="3" y="11" width="18" height="10" rx="2" />
-              <circle cx="12" cy="5" r="2" />
-              <path d="M12 7v4" />
-              <line x1="8" y1="16" x2="8" y2="16" />
-              <line x1="16" y1="16" x2="16" y2="16" />
-            </svg>
+            {!hideRobotIcon && (
+              <svg 
+                className="h-6 w-6 text-mobi-bg group-hover:scale-110 transition-transform" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round"
+              >
+                <rect x="3" y="11" width="18" height="10" rx="2" />
+                <circle cx="12" cy="5" r="2" />
+                <path d="M12 7v4" />
+                <line x1="8" y1="16" x2="8" y2="16" />
+                <line x1="16" y1="16" x2="16" y2="16" />
+              </svg>
+            )}
+            {hideRobotIcon && (
+              <svg className="h-6 w-6 text-mobi-bg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+            )}
           </div>
         </button>
       )}
