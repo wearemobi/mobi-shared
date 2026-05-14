@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { MobiButton } from './MobiButton';
-import { MobiSwitcher } from './MobiSwitcher';
 import { MobiEnergyMeter } from './MobiEnergyMeter';
 import { MobiIntelligenceSelector } from './MobiIntelligenceSelector';
 
