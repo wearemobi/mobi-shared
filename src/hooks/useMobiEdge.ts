@@ -84,10 +84,11 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
       const resources = data.intelligence_catalog || [];
       setModels(resources);
       
-      // Auto-select model logic
-      if (resources.length > 0 && !activeModelId) {
-        const basicModel = resources.find(r => r.engine_name === 'BASIC' && r.resource_kind === 'AI_MODEL');
-        setActiveModelId(basicModel?.slug || resources[0].slug);
+      // Auto-select model logic: Filter AI_MODELs first
+      const aiModels = resources.filter(r => r.resource_kind === 'AI_MODEL');
+      if (aiModels.length > 0 && !activeModelId) {
+        const basicModel = aiModels.find(r => r.engine_name === 'BASIC');
+        setActiveModelId(basicModel?.slug || aiModels[0].slug);
       }
     } catch (err) {
       console.error('[MobiEdge] Catalog error:', err);
