@@ -41,8 +41,7 @@ export const MobiIntelligenceSelector: React.FC<MobiIntelligenceSelectorProps> =
         className="px-2 text-[10px] font-bold tracking-widest text-mobi-text-muted hover:text-mobi-primary uppercase flex items-center gap-2 whitespace-nowrap min-w-0 max-w-[220px]"
         onClick={() => setIsOpen(!isOpen)}
         disabled={disabled}
-        icon={<svg className="h-3 w-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>}
-        iconPosition="right"
+        suffixIcon={<svg className="h-3 w-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>}
       >
         <span className="truncate">{activeOption?.label || 'SELECT MODEL'}</span>
       </MobiButton>

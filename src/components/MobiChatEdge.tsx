@@ -46,7 +46,6 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
   baseUrl,
   title = 'MobiEdge Agent',
   placeholder = 'Ask MobiAI...',
-  showEnergyBar = true,
   energyLabel = 'Energy Meter',
   statusMessage = 'SENTINEL ACTIVE',
   initialModelId,
