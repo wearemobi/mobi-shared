@@ -1882,7 +1882,7 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
               variant="outline" 
               size="sm" 
               technical 
-              onClick={() => window.open('/example/embed.html', '_blank')}
+              onClick={() => window.open('/embed.html', '_blank')}
             >
               Launch Live Embed Demo ↗
             </MobiButton>
