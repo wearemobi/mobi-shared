@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ACME Corp - Legacy Website (Embed Test)</title>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f4f5;
+      color: #18181b;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+    }
+    .container {
+      max-width: 600px;
+      padding: 2rem;
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    }
+    h1 { margin-bottom: 0.5rem; }
+    p { color: #71717a; line-height: 1.5; }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      background: #e4e4e7;
+      border-radius: 0.375rem;
+      font-size: 0.75rem;
+      font-weight: bold;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="badge">NON-REACT ENVIRONMENT</div>
+    <h1>ACME Corp Internal Portal</h1>
+    <p>
+      This is a legacy HTML page (simulating WordPress, Webflow or PHP). 
+      The MobiAI assistant below is being loaded via a single JS entry point 
+      without modifying this page's architecture.
+    </p>
+  </div>
+
+  <!-- 🚀 M.O.B.I.™ EMBED START -->
+  <script type="module" src="/src/embed-loader.tsx"></script>
+  <script type="module">
+    // Wait for the module to be ready (in production this would be handled by the script load)
+    // For this dev demo, we use a small timeout to ensure the window object is populated
+    setTimeout(() => {
+      if (window.MobiEdge) {
+        window.MobiEdge.init({
+          title: "ACME Embed Assistant",
+          token: "ACME_TACTICAL_TOKEN",
+          tenantId: "ACME",
+          agentId: "assistant",
+          welcomeTitle: "ACME Support",
+          customWelcome: "Hello! I am the ACME assistant, integrated via an embed script. How can I help you today?",
+          useMemory: true
+        });
+      }
+    }, 500);
+  </script>
+  <!-- 🚀 M.O.B.I.™ EMBED END -->
+
+</body>
+</html>

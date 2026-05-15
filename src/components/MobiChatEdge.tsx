@@ -72,6 +72,11 @@ export interface MobiChatEdgeProps {
   onSendMessage?: (message: string) => void;
   /** Custom CSS classes for the fixed container (e.g. for positioning) */
   containerClassName?: string;
+  /** 
+   * Explicitly enable/disable agentic memory. 
+   * If not provided, it is automatically determined by tenant tier.
+   */
+  useMemory?: boolean;
 }
 
 /**
@@ -101,7 +106,8 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
   containerClassName,
   welcomeTitle,
   welcomeDescription,
-  hideWelcomeLogo
+  hideWelcomeLogo,
+  useMemory
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(isInitiallyOpen);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
@@ -127,6 +133,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
     agentId,
     persistSession,
     initialModelId,
+    useMemory,
     initialMessages: initialMessages || defaultMessages
   });
 
