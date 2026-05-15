@@ -35,6 +35,7 @@ export interface MobiChatFeedProps {
   emptyState?: {
     title?: string;
     description?: string;
+    hideLogo?: boolean;
   };
   /**
    * Font size scale for messages.
@@ -89,9 +90,11 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
     >
       {messages.length === 0 ? (
         <div className="h-full flex flex-col items-center justify-center text-center p-8">
-          <div className="mb-6 animate-pulse">
-            <MobiLogoHero className="h-12" />
-          </div>
+          {!emptyState?.hideLogo && (
+            <div className="mb-6 animate-pulse">
+              <MobiLogoHero className="h-12" />
+            </div>
+          )}
           <div className="space-y-2">
             <h4 className="text-[15px] font-black tracking-tight text-mobi-text">{emptyState.title}</h4>
             <p className="text-[11px] font-sans text-mobi-text-muted leading-relaxed max-w-[220px] mx-auto opacity-80 mb-8">
