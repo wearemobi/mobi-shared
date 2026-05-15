@@ -73,7 +73,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
   title = 'MobiEdge Agent',
   placeholder = 'Ask MobiAI...',
   energyLabel = 'Energy Meter',
-  statusMessage = 'SENTINEL ACTIVE',
+  statusMessage = 'CONNECTED',
   initialModelId,
   initialMessages,
   customWelcome,
@@ -108,9 +108,9 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
     suggestions: apiSuggestions,
     isMemoryActive,
     clearHistory
-  } = useMobiEdge({ 
-    token, 
-    tenantId, 
+  } = useMobiEdge({
+    token,
+    tenantId,
     baseUrl,
     agentId,
     persistSession,
@@ -133,17 +133,10 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
 
   const modelOptions = models
     .filter(m => m.resource_kind === 'AI_MODEL')
-    .map(m => {
-      let label = m.engine_name;
-      if (label.toUpperCase().includes('FAST')) label = '⚡️ FAST';
-      if (label.toUpperCase().includes('SMART')) label = '🧠 SMART';
-      if (label.toUpperCase().includes('ULTRA')) label = '🔥 ULTRA';
-      
-      return { 
-        id: m.slug, 
-        label
-      };
-    });
+    .map(m => ({
+      id: m.slug,
+      label: `${m.engine_name} (${m.slug})`
+    }));
 
   // Merge suggestions: API suggestions take precedence, fall back to props
   const displaySuggestions = apiSuggestions.length > 0 ? apiSuggestions : propSuggestions;
@@ -157,8 +150,8 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
 
   return (
     <div className={
-      isOpen 
-        ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col sm:items-end sm:gap-4" 
+      isOpen
+        ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col sm:items-end sm:gap-4"
         : "fixed bottom-6 right-6 z-[9999]"
     }>
       {/* Chat Window */}
@@ -181,17 +174,17 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
                 </div>
               </div>
               <div className="flex items-center gap-1">
-                <MobiButton 
-                  variant="ghost" 
-                  size="sm" 
+                <MobiButton
+                  variant="ghost"
+                  size="sm"
                   className="h-8 w-8 p-0 min-w-0 opacity-40 hover:opacity-100 transition-opacity"
                   onClick={clearHistory}
                   title="Clear Session"
                   suffixIcon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>}
                 />
-                <MobiButton 
-                  variant="ghost" 
-                  size="sm" 
+                <MobiButton
+                  variant="ghost"
+                  size="sm"
                   className="h-8 w-8 p-0 min-w-0"
                   onClick={handleToggle}
                   suffixIcon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
@@ -201,9 +194,9 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
 
 
             {/* Messages Feed */}
-            <MobiChatFeed 
-              messages={messages as any} 
-              isProcessing={isProcessing} 
+            <MobiChatFeed
+              messages={messages as any}
+              isProcessing={isProcessing}
               className="flex-1 bg-mobi-bg/10"
             />
 
@@ -228,7 +221,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
 
             {/* Input Area */}
             <div className="p-3 bg-mobi-bg border-t border-mobi-border">
-              <MobiChatInput 
+              <MobiChatInput
                 onSend={handleSend}
                 isProcessing={isProcessing || isOutOfEnergy}
                 activeModelId={activeModelId}
@@ -241,6 +234,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
                   limit: hakiLimit,
                   percent: energyPercent
                 }}
+                isCompact={true}
                 placeholder={isOutOfEnergy ? "Insufficient Haki Energy..." : placeholder}
                 statusMessage={isOutOfEnergy ? "RECHARGE REQUIRED" : statusMessage}
                 className="border-none shadow-none bg-transparent"
@@ -252,7 +246,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
 
       {/* Trigger Button */}
       {!isOpen && (
-        <button 
+        <button
           onClick={handleToggle}
           className="
             w-14 h-14 rounded-sm bg-mobi-text border border-mobi-text
@@ -263,16 +257,16 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
           <div className="relative flex items-center justify-center">
             {/* Ambient Pulse */}
             <div className="absolute inset-0 h-6 w-6 bg-mobi-bg/20 rounded-full animate-ping group-hover:hidden" />
-            
+
             {/* Robot Sentinel Icon */}
             {!hideRobotIcon && (
-              <svg 
-                className="h-6 w-6 text-mobi-bg group-hover:scale-110 transition-transform" 
-                viewBox="0 0 24 24" 
-                fill="none" 
-                stroke="currentColor" 
-                strokeWidth="2" 
-                strokeLinecap="round" 
+              <svg
+                className="h-6 w-6 text-mobi-bg group-hover:scale-110 transition-transform"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
                 strokeLinejoin="round"
               >
                 <rect x="3" y="11" width="18" height="10" rx="2" />
