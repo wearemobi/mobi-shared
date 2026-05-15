@@ -174,9 +174,9 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
         headers,
         body: JSON.stringify({ 
           prompt, 
-          model, 
-          agentId: initialAgentId,
-          conversationId,
+          model: model || undefined, 
+          agentId: initialAgentId || undefined,
+          conversationId: conversationId || undefined,
           useMemory
         })
       });
