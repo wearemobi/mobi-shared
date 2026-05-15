@@ -107,7 +107,8 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
     sendMessage,
     suggestions: apiSuggestions,
     isMemoryActive,
-    clearHistory
+    clearHistory,
+    isConnected
   } = useMobiEdge({
     token,
     tenantId,
@@ -165,7 +166,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
             {/* Header */}
             <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className={`h-2 w-2 rounded-full ${isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
+                <div className={`h-2 w-2 rounded-full ${!isConnected ? 'bg-rose-500' : (isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500')}`} />
                 <div className="flex flex-col">
                   <h3 className="text-[14px] font-bold tracking-tight text-mobi-text leading-none">{title}</h3>
                   {isMemoryActive && (
@@ -236,7 +237,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
                 }}
                 isCompact={true}
                 placeholder={isOutOfEnergy ? "Insufficient Haki Energy..." : placeholder}
-                statusMessage={isOutOfEnergy ? "RECHARGE REQUIRED" : statusMessage}
+                statusMessage={!isConnected ? "OFFLINE" : (isOutOfEnergy ? "RECHARGE REQUIRED" : statusMessage)}
                 className="border-none shadow-none bg-transparent"
               />
             </div>
