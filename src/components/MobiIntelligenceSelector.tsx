@@ -44,7 +44,7 @@ export const MobiIntelligenceSelector: React.FC<MobiIntelligenceSelectorProps> =
         variant="ghost" 
         size="sm" 
         className={`
-          ${isCompact ? 'w-8 h-8 p-0 flex items-center justify-center' : 'px-2 text-[10px] font-bold tracking-widest text-mobi-text-muted hover:text-mobi-primary uppercase flex items-center gap-2 whitespace-nowrap min-w-0 max-w-[220px]'}
+          ${isCompact ? 'px-1 h-8 flex items-center gap-1.5' : 'px-2 text-[10px] font-bold tracking-widest text-mobi-text-muted hover:text-mobi-primary uppercase flex items-center gap-2 whitespace-nowrap min-w-0 max-w-[220px]'}
         `}
         onClick={() => setIsOpen(!isOpen)}
         disabled={disabled}
@@ -55,7 +55,13 @@ export const MobiIntelligenceSelector: React.FC<MobiIntelligenceSelectorProps> =
           </svg>
         ) : undefined}
       >
-        {!isCompact && <span className="truncate">{activeOption?.label || 'SELECT MODEL'}</span>}
+        {isCompact ? (
+          <span className="text-[8px] font-black font-mono text-mobi-text-muted/60 tracking-tighter uppercase truncate max-w-[60px]">
+            {activeOption?.label.split(' ')[0] || 'FAST'}
+          </span>
+        ) : (
+          <span className="truncate">{activeOption?.label || 'SELECT MODEL'}</span>
+        )}
       </MobiButton>
 
       {isOpen && (
