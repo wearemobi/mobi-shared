@@ -37,14 +37,6 @@ export interface MobiChatInputProps {
    */
   onModelChange?: (id: string) => void;
   /**
-   * Currently selected engine/provider ID ('mobi' or 'gemini').
-   */
-  activeEngine?: 'mobi' | 'gemini';
-  /**
-   * Callback triggered when a new engine is selected.
-   */
-  onEngineChange?: (id: 'mobi' | 'gemini') => void;
-  /**
    * Additional CSS classes for the container.
    */
   className?: string;
