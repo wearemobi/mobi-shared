@@ -84,6 +84,10 @@ export interface MobiChatInputProps {
    * List of available models for the switcher.
    */
   models?: { id: string; label: string }[];
+  /**
+   * If true, uses a more compact layout for the input tools.
+   */
+  isCompact?: boolean;
 }
 
 const DEFAULT_MODELS = [
@@ -116,7 +120,8 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
   processingText = 'Processing Request...',
   onAttach,
   models = DEFAULT_MODELS,
-  energyStats
+  energyStats,
+  isCompact = false
 }) => {
   const [value, setValue] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -190,7 +195,8 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
             activeId={activeModelId}
             onChange={onModelChange || (() => {})}
             disabled={isProcessing}
-            className="min-w-0 flex-1"
+            variant={isCompact ? 'compact' : 'default'}
+            className={isCompact ? 'flex-shrink-0' : 'min-w-0 flex-1'}
           />
         </div>
 

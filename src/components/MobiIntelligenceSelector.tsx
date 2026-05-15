@@ -17,6 +17,8 @@ export interface MobiIntelligenceSelectorProps {
   disabled?: boolean;
   /** Additional CSS classes */
   className?: string;
+  /** UI Variant: default (text + arrow) or compact (icon only) */
+  variant?: 'default' | 'compact';
 }
 
 /**
@@ -28,22 +30,32 @@ export const MobiIntelligenceSelector: React.FC<MobiIntelligenceSelectorProps> =
   options,
   onChange,
   disabled = false,
-  className = ""
+  className = "",
+  variant = 'default'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const activeOption = options.find(o => o.id === activeId);
+
+  const isCompact = variant === 'compact';
 
   return (
     <div className={`relative ${className}`}>
       <MobiButton 
         variant="ghost" 
         size="sm" 
-        className="px-2 text-[10px] font-bold tracking-widest text-mobi-text-muted hover:text-mobi-primary uppercase flex items-center gap-2 whitespace-nowrap min-w-0 max-w-[220px]"
+        className={`
+          ${isCompact ? 'w-8 h-8 p-0 flex items-center justify-center' : 'px-2 text-[10px] font-bold tracking-widest text-mobi-text-muted hover:text-mobi-primary uppercase flex items-center gap-2 whitespace-nowrap min-w-0 max-w-[220px]'}
+        `}
         onClick={() => setIsOpen(!isOpen)}
         disabled={disabled}
-        suffixIcon={<svg className="h-3 w-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>}
+        suffixIcon={isCompact ? undefined : <svg className="h-3 w-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>}
+        icon={isCompact ? (
+          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
+          </svg>
+        ) : undefined}
       >
-        <span className="truncate">{activeOption?.label || 'SELECT MODEL'}</span>
+        {!isCompact && <span className="truncate">{activeOption?.label || 'SELECT MODEL'}</span>}
       </MobiButton>
 
       {isOpen && (
@@ -51,7 +63,10 @@ export const MobiIntelligenceSelector: React.FC<MobiIntelligenceSelectorProps> =
           {/* Backdrop to close on click outside */}
           <div className="fixed inset-0 z-40" onClick={() => setIsOpen(false)} />
           
-          <div className="absolute bottom-full left-0 mb-2 w-72 bg-mobi-surface border border-mobi-border rounded-sm shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2">
+          <div className={`
+            absolute bottom-full mb-2 w-72 bg-mobi-surface border border-mobi-border rounded-sm shadow-2xl overflow-hidden z-50 animate-in fade-in slide-in-from-bottom-2
+            ${isCompact ? 'left-0' : 'left-0'}
+          `}>
             <div className="px-3 py-2 bg-mobi-bg/50 border-b border-mobi-border/50 flex items-center justify-between">
               <p className="text-[8px] font-black text-mobi-text-muted uppercase tracking-[0.2em]">Available Intelligence</p>
               <div className="h-1 w-1 rounded-full bg-emerald-500 animate-pulse" />
