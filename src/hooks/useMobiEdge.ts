@@ -42,11 +42,15 @@ export interface UseMobiEdgeOptions {
   initialMessages?: MobiEdgeMessage[];
   /** Initially selected model slug */
   initialModelId?: string;
+  /** Target Agent ID (defaults to 'mobi-core') */
+  agentId?: string;
+  /** Whether to persist session in local storage */
+  persistSession?: boolean;
 }
 
 /**
  * Hook for interacting with the MOBI Edge Reactor API.
- * Strictly follows the OpenAPI schema v2.0.8 (Radar).
+ * Updated to support Specification v2.1.0 (API v1).
  */
 export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const {
@@ -54,17 +58,25 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     tenantId = 'MOBI',
     baseUrl = 'https://edge.sandbox.grandfleet.mobi',
     initialMessages = [],
-    initialModelId
+    initialModelId,
+    agentId: initialAgentId = 'mobi-core',
+    persistSession = true
   } = options;
+
+  const sessionKey = `mobi_edge_session_${tenantId}_${initialAgentId}`;
 
   const [messages, setMessages] = useState<MobiEdgeMessage[]>(initialMessages);
   const [models, setModels] = useState<MobiEdgeModel[]>([]);
   const [status, setStatus] = useState<MobiEdgeStatus | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [activeModelId, setActiveModelId] = useState<string | undefined>(initialModelId);
+  const [conversationId, setConversationId] = useState<string | null>(() => {
+    return persistSession ? localStorage.getItem(sessionKey) : null;
+  });
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  // Memoize headers to avoid unnecessary effect triggers
+  // Memoize headers
   const headers = {
     'Content-Type': 'application/json',
     'X-Tenant-Id': tenantId,
@@ -74,17 +86,13 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const fetchCatalog = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await fetch(`${baseUrl}/api/reactor/catalog`, { headers });
-      if (!res.ok) {
-        console.error('[MobiEdge] Catalog Fetch Failed:', res.status);
-        throw new Error('Failed to synchronize intelligence catalog.');
-      }
+      const res = await fetch(`${baseUrl}/api/v1/reactor/catalog`, { headers });
+      if (!res.ok) throw new Error('Catalog Fetch Failed');
       const data: MobiEdgeCatalogResponse = await res.json();
       
       const resources = data.intelligence_catalog || [];
       setModels(resources);
       
-      // Auto-select model logic: Filter AI_MODELs first
       const aiModels = resources.filter(r => r.resource_kind === 'AI_MODEL');
       if (aiModels.length > 0 && !activeModelId) {
         const basicModel = aiModels.find(r => r.engine_name === 'BASIC');
@@ -98,11 +106,8 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const fetchStatus = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await fetch(`${baseUrl}/api/reactor/status`, { headers });
-      if (!res.ok) {
-        console.error('[MobiEdge] Status Fetch Failed:', res.status);
-        throw new Error('Failed to synchronize energy telemetry.');
-      }
+      const res = await fetch(`${baseUrl}/api/v1/reactor/status`, { headers });
+      if (!res.ok) throw new Error('Status Fetch Failed');
       const data: MobiEdgeStatus = await res.json();
       setStatus(data);
     } catch (err) {
@@ -110,11 +115,36 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     }
   }, [baseUrl, token, tenantId]);
 
+  const fetchHistory = useCallback(async (id: string) => {
+    if (!token || !id) return;
+    try {
+      const res = await fetch(`${baseUrl}/api/v1/agentic/history/${id}`, { headers });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.messages && data.messages.length > 0) {
+          const mappedMessages = data.messages.map((m: any) => ({
+            id: m.id || String(Math.random()),
+            role: m.role,
+            content: m.content,
+            timestamp: m.timestamp || Date.now(),
+            model: m.model_used
+          }));
+          setMessages(mappedMessages);
+        }
+      }
+    } catch (err) {
+      console.error('[MobiEdge] History error:', err);
+    }
+  }, [baseUrl, token, tenantId]);
+
   // Initial load
   useEffect(() => {
     fetchCatalog();
     fetchStatus();
-  }, [token, tenantId, baseUrl]); // Re-fetch if core config changes
+    if (conversationId) {
+      fetchHistory(conversationId);
+    }
+  }, [token, tenantId, baseUrl]);
 
   const addMessage = useCallback((message: Omit<MobiEdgeMessage, 'id' | 'timestamp'>) => {
     const newMessage: MobiEdgeMessage = {
@@ -130,34 +160,51 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
 
   const sendMessage = useCallback(async (prompt: string, modelOverride?: string) => {
     const model = modelOverride || activeModelId;
-    if (!prompt.trim() || !model || isProcessing) return;
+    if (!prompt.trim() || isProcessing) return;
 
     setError(null);
     addMessage({ role: 'user', content: prompt, model });
     setIsProcessing(true);
 
     try {
-      const res = await fetch(`${baseUrl}/api/agentic/infer`, {
+      const useMemory = status?.tier !== 'BASIC';
+      
+      const res = await fetch(`${baseUrl}/api/v1/agentic/infer`, {
         method: 'POST',
         headers,
-        body: JSON.stringify({ prompt, model })
+        body: JSON.stringify({ 
+          prompt, 
+          model, 
+          agentId: initialAgentId,
+          conversationId,
+          useMemory
+        })
       });
 
-      if (res.status === 403) {
-        throw new Error('Insufficient Haki');
-      }
-
-      if (!res.ok) {
-        const errorData = await res.json().catch(() => ({}));
-        console.error('[MobiEdge] Inference Failure:', errorData);
-        throw new Error('Tactical response failed. Please check your model selection or try again later.');
-      }
+      if (res.status === 403) throw new Error('Insufficient Haki');
+      if (!res.ok) throw new Error('Inference Failure');
 
       const data = await res.json();
-      // Schema says response is in 'response' field
-      addMessage({ role: 'assistant', content: data.response, model });
       
-      // Refresh status after message to reflect new energy balance
+      // Update session if it's new
+      if (data.conversation_id && data.conversation_id !== conversationId) {
+        setConversationId(data.conversation_id);
+        if (persistSession) {
+          localStorage.setItem(sessionKey, data.conversation_id);
+        }
+      }
+
+      // Update suggestions from Agent
+      if (data.suggestions) {
+        setSuggestions(data.suggestions);
+      }
+
+      addMessage({ 
+        role: 'assistant', 
+        content: data.response, 
+        model: data.model_used || model 
+      });
+      
       fetchStatus();
     } catch (err) {
       const msg = (err as Error).message;
@@ -175,11 +222,15 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     } finally {
       setIsProcessing(false);
     }
-  }, [baseUrl, token, tenantId, activeModelId, isProcessing, addMessage, fetchStatus]);
+  }, [baseUrl, token, tenantId, activeModelId, isProcessing, addMessage, fetchStatus, conversationId, status, initialAgentId, sessionKey, persistSession]);
 
   const clearHistory = useCallback(() => {
     setMessages([]);
-  }, []);
+    setConversationId(null);
+    if (persistSession) {
+      localStorage.removeItem(sessionKey);
+    }
+  }, [sessionKey, persistSession]);
 
   return {
     messages,
@@ -191,6 +242,9 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     sendMessage,
     clearHistory,
     error,
-    refreshStatus: fetchStatus
+    refreshStatus: fetchStatus,
+    suggestions,
+    isMemoryActive: !!conversationId && status?.tier !== 'BASIC'
   };
 };
+
