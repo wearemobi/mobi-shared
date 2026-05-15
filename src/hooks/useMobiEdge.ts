@@ -75,6 +75,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   });
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [isConnected, setIsConnected] = useState(false);
 
   // Memoize headers
   const headers = {
@@ -92,6 +93,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
       
       const resources = data.intelligence_catalog || [];
       setModels(resources);
+      setIsConnected(true);
       
       const aiModels = resources.filter(r => r.resource_kind === 'AI_MODEL');
       if (aiModels.length > 0 && !activeModelId) {
@@ -110,8 +112,10 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
       if (!res.ok) throw new Error('Status Fetch Failed');
       const data: MobiEdgeStatus = await res.json();
       setStatus(data);
+      setIsConnected(true);
     } catch (err) {
       console.error('[MobiEdge] Status error:', err);
+      setIsConnected(false);
     }
   }, [baseUrl, token, tenantId]);
 
@@ -244,7 +248,8 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     error,
     refreshStatus: fetchStatus,
     suggestions,
-    isMemoryActive: !!conversationId && status?.tier !== 'BASIC'
+    isMemoryActive: !!conversationId && status?.tier !== 'BASIC',
+    isConnected
   };
 };
 
