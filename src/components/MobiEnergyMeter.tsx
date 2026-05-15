@@ -74,7 +74,7 @@ export const MobiEnergyMeter: React.FC<MobiEnergyMeterProps> = ({
           ${onClick ? 'group-hover:text-mobi-text group-hover:opacity-100' : 'opacity-60'}
           ${currentSize.text}
         `}>
-          {level}%
+          {Math.round(level)}%
         </span>
       )}
       <div className={`
