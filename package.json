@@ -23,7 +23,7 @@
     "prepare": "npm run build",
     "build:docs": "vite build --config vite.config.docs.ts",
     "preview": "vite preview",
-    "example": "vite example --config vite.config.ts"
+    "example": "vite example --config vite.config.ts --port 5173 --strictPort"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
