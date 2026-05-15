@@ -153,8 +153,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
 
   return (
     <div className={`
-      w-full bg-mobi-surface border border-mobi-border rounded-md
-      shadow-2xl transition-all duration-300 focus-within:border-mobi-primary focus-within:ring-1 focus-within:ring-mobi-primary/20
+      w-full transition-all duration-300 focus-within:ring-1 focus-within:ring-mobi-primary/20
       ${className}
     `}>
       {/* Input Area */}
