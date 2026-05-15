@@ -12,6 +12,10 @@ export interface MobiChatEdgeProps {
   tenantId?: string;
   /** Base URL for the Edge Reactor API */
   baseUrl?: string;
+  /** Target Agent ID (defaults to 'mobi-core') */
+  agentId?: string;
+  /** Whether to persist session in local storage. @default true */
+  persistSession?: boolean;
   /** Title of the chat window */
   title?: string;
   /** Placeholder for the input */
@@ -57,13 +61,15 @@ export interface MobiChatEdgeProps {
 
 /**
  * M.O.B.I.™ Edge Chat Widget.
- * A specialized interface for interacting with the Edge Reactor.
+ * Updated to support Specification v2.1.0 (API v1).
  * Strictly compliant with Radar schema (haki_limit, haki_used).
  */
 export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
   token,
   tenantId = 'MOBI',
   baseUrl,
+  agentId,
+  persistSession = true,
   title = 'MobiEdge Agent',
   placeholder = 'Ask MobiAI...',
   energyLabel = 'Energy Meter',
@@ -71,7 +77,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
   initialModelId,
   initialMessages,
   customWelcome,
-  suggestions = [],
+  suggestions: propSuggestions = [],
   isInitiallyOpen = false,
   hideRobotIcon = false,
   isOpen: controlledIsOpen,
@@ -98,11 +104,16 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
     isProcessing,
     activeModelId,
     setActiveModelId,
-    sendMessage
+    sendMessage,
+    suggestions: apiSuggestions,
+    isMemoryActive,
+    clearHistory
   } = useMobiEdge({ 
     token, 
     tenantId, 
     baseUrl,
+    agentId,
+    persistSession,
     initialModelId,
     initialMessages: initialMessages || defaultMessages
   });
@@ -126,6 +137,9 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
       id: m.slug, 
       label: `${m.engine_name} (${m.slug})`
     }));
+
+  // Merge suggestions: API suggestions take precedence, fall back to props
+  const displaySuggestions = apiSuggestions.length > 0 ? apiSuggestions : propSuggestions;
 
   // Energy calculation based on Radar schema
   const hakiLimit = status?.haki_limit || 100;
@@ -152,15 +166,30 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
             <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <div className={`h-2 w-2 rounded-full ${isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
-                <h3 className="text-[14px] font-bold tracking-tight text-mobi-text">{title}</h3>
+                <div className="flex flex-col">
+                  <h3 className="text-[14px] font-bold tracking-tight text-mobi-text leading-none">{title}</h3>
+                  {isMemoryActive && (
+                    <span className="text-[9px] text-emerald-500 font-bold tracking-widest mt-1 opacity-80 uppercase">Memory Active</span>
+                  )}
+                </div>
               </div>
-              <MobiButton 
-                variant="ghost" 
-                size="sm" 
-                className="h-8 w-8 p-0 min-w-0"
-                onClick={handleToggle}
-                suffixIcon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
-              />
+              <div className="flex items-center gap-1">
+                <MobiButton 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-8 w-8 p-0 min-w-0 opacity-40 hover:opacity-100 transition-opacity"
+                  onClick={clearHistory}
+                  title="Clear Session"
+                  suffixIcon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>}
+                />
+                <MobiButton 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-8 w-8 p-0 min-w-0"
+                  onClick={handleToggle}
+                  suffixIcon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
+                />
+              </div>
             </div>
 
 
@@ -172,9 +201,9 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
             />
 
             {/* Suggestions Area */}
-            {suggestions.length > 0 && (
+            {displaySuggestions.length > 0 && (
               <div className="px-3 py-2 bg-mobi-bg/50 flex gap-2 overflow-x-auto no-scrollbar border-t border-mobi-border/50">
-                {suggestions.map((suggestion, i) => (
+                {displaySuggestions.map((suggestion, i) => (
                   <button
                     key={i}
                     onClick={() => handleSend(suggestion)}
@@ -257,3 +286,4 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
     </div>
   );
 };
+
