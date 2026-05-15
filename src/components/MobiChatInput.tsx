@@ -196,6 +196,12 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
             variant={isCompact ? 'compact' : 'default'}
             className={isCompact ? 'flex-shrink-0' : 'min-w-0 flex-1'}
           />
+
+          {isCompact && (
+            <span className="text-[9px] font-black font-mono text-mobi-text-muted tracking-tighter uppercase truncate max-w-[120px] ml-1 opacity-60">
+              {models.find(m => m.id === activeModelId)?.label || 'FAST'}
+            </span>
+          )}
         </div>
 
         <MobiButton 
