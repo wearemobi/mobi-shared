@@ -133,10 +133,17 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
 
   const modelOptions = models
     .filter(m => m.resource_kind === 'AI_MODEL')
-    .map(m => ({ 
-      id: m.slug, 
-      label: `${m.engine_name} (${m.slug})`
-    }));
+    .map(m => {
+      let label = m.engine_name;
+      if (label.toUpperCase().includes('FAST')) label = '⚡️ FAST';
+      if (label.toUpperCase().includes('SMART')) label = '🧠 SMART';
+      if (label.toUpperCase().includes('ULTRA')) label = '🔥 ULTRA';
+      
+      return { 
+        id: m.slug, 
+        label
+      };
+    });
 
   // Merge suggestions: API suggestions take precedence, fall back to props
   const displaySuggestions = apiSuggestions.length > 0 ? apiSuggestions : propSuggestions;
