@@ -9,36 +9,39 @@ npm install @wearemobi/shared
 ```
 
 ```tsx
-import { MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme } from '@wearemobi/shared';
+import { MobiChatEdge, MobiButton, useMobiEdge } from '@wearemobi/shared';
 ```
 
-The library ships with its own CSS (Tailwind v4 + MOBI design tokens). Styles are injected automatically on import.
-
-## Components
+## Components (Alphabetical)
 
 | Component | Description | Docs |
 |---|---|---|
-| [`MobiNavbar`](./MobiNavbar.md) | Sticky top navigation bar with responsive logo/text |
-| [`MobiHero`](./MobiHero.md) | High-impact header section for landing pages |
-| [`MobiButton`](./MobiButton.md) | Standard button with variants and icon support |
-| [`MobiLogo`](./MobiLogo.md) | Official brand mark at configurable size |
-| [`MobiLogoHero`](./MobiLogoHero.md) | Theme-aware hero logo for landing pages |
-| [`MobiFooter`](./MobiFooter.md) | Parametric branding footer with app metadata support |
-| [`MobiAlert`](./MobiAlert.md) | Toast notification with auto-dismiss and progress bar |
-| [`MobiPlanBadge`](./MobiPlanBadge.md) | Color-coded subscription tier pill |
-| [`MobiUserBadge`](./MobiUserBadge.md) | Theme-aware user identity badge (condensed/expanded) |
-| [`MobiSwitcher`](./MobiSwitcher.md) | Compact segmented selector (theme, language, etc.) |
-| [`MobiSentinelMenu`](./MobiSentinelMenu.md) | Data-driven user dropdown with identity + config |
-| [`MobiThemeSwitcher`](./MobiThemeSwitcher.md) | Standalone premium theme selector with light, auto, dark modes |
-| [`MobiLangSwitcher`](./MobiLangSwitcher.md) | Standalone premium language selector with EN and ES text buttons |
+| [`MobiAlert`](./MobiAlert.md) | Toast notification with auto-dismiss and progress bar | [Link](./MobiAlert.md) |
+| [`MobiButton`](./MobiButton.md) | Standard button with variants and icon support | [Link](./MobiButton.md) |
+| [`MobiCard`](./MobiCard.md) | Premium content container with elevation | [Link](./MobiCard.md) |
+| [`MobiChatEdge`](./MobiChatEdge.md) | **Full Agent Interface** for Edge Reactor v1 | [Link](./MobiChatEdge.md) |
+| [`MobiChatInput`](./MobiChatInput.md) | Advanced command input for agentic logic | [Link](./MobiChatInput.md) |
+| [`MobiEnergyMeter`](./MobiEnergyMeter.md) | Haki/Battery level visualizer | [Link](./MobiEnergyMeter.md) |
+| [`MobiFooter`](./MobiFooter.md) | Parametric branding footer with app metadata | [Link](./MobiFooter.md) |
+| [`MobiHero`](./MobiHero.md) | High-impact header section for landing pages | [Link](./MobiHero.md) |
+| [`MobiLangSwitcher`](./MobiLangSwitcher.md) | Premium language selector (EN/ES) | [Link](./MobiLangSwitcher.md) |
+| [`MobiLogo`](./MobiLogo.md) | Official brand mark | [Link](./MobiLogo.md) |
+| [`MobiLogoHero`](./MobiLogoHero.md) | Theme-aware hero logo | [Link](./MobiLogoHero.md) |
+| [`MobiNavbar`](./MobiNavbar.md) | Sticky top navigation bar | [Link](./MobiNavbar.md) |
+| [`MobiPlanBadge`](./MobiPlanBadge.md) | Subscription tier pill indicator | [Link](./MobiPlanBadge.md) |
+| [`MobiSentinelMenu`](./MobiSentinelMenu.md) | Data-driven identity dropdown | [Link](./MobiSentinelMenu.md) |
+| [`MobiSwitcher`](./MobiSwitcher.md) | Compact segmented selector | [Link](./MobiSwitcher.md) |
+| [`MobiThemeSwitcher`](./MobiThemeSwitcher.md) | Premium theme selector | [Link](./MobiThemeSwitcher.md) |
+| [`MobiUserBadge`](./MobiUserBadge.md) | Theme-aware user identity badge | [Link](./MobiUserBadge.md) |
 
 ## Hooks
 
 | Hook | Description | Docs |
 |---|---|---|
-| [`useMobiTheme`](./useMobiTheme.md) | Theme state with localStorage persistence |
-| [`useMobiAuth`](./useMobiAuth.md) | Authentication stub for JS Bridge v1.19 |
-| [`useMobiClipboard`](./useMobiClipboard.md) | Copy-to-clipboard with transient feedback state |
+| [`useMobiAuth`](./useMobiAuth.md) | Authentication stub for JS Bridge v1.19 | [Link](./useMobiAuth.md) |
+| [`useMobiClipboard`](./useMobiClipboard.md) | Copy-to-clipboard with feedback | [Link](./useMobiClipboard.md) |
+| [`useMobiEdge`](./useMobiEdge.md) | **Core logic** for MobiEdge v1 integration | [Link](./useMobiEdge.md) |
+| [`useMobiTheme`](./useMobiTheme.md) | Theme state with persistence | [Link](./useMobiTheme.md) |
 
 ## Design Tokens
 
@@ -48,16 +51,10 @@ All components use semantic CSS variables from the MOBI token system:
 |---|---|---|---|
 | `mobi-bg` | `#F8FAFC` | `#000000` | Page background |
 | `mobi-surface` | `#ffffff` | `#111111` | Card / panel background |
-| `mobi-surface-hover` | `#F1F5F9` | `#1f1f1f` | Interactive hover state |
 | `mobi-border` | `#E2E8F0` | `#222222` | Borders and dividers |
 | `mobi-text` | `#0F172A` | `#F8FAFC` | Primary text |
-| `mobi-text-muted` | `#64748B` | `#94A3B8` | Secondary / label text |
 | `mobi-primary` | `#0F172A` | `#F8FAFC` | Brand accent |
-
-**Typography:** Inter (sans), JetBrains Mono (mono)
 
 ---
 Copyright © 2026 **M.O.B.I.™** (Machine Oriented Brilliant Ideas™)  
-Transforming ideas into high-impact digital solutions. 🚀  
-[wearemobi.com](https://wearemobi.com) · contact@wearemobi.com
-<!-- M.O.B.I. Core: SDD-Compliant-V1.7 | Sentinel-Status: ACTIVE -->
+[wearemobi.com](https://wearemobi.com)

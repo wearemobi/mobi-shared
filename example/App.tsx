@@ -180,12 +180,22 @@ const App: React.FC = () => {
 
       <MobiFooter appName="M.O.B.I.™ Shared" version={`v${pkg.version}`} />
 
-      {/* GLOBAL TACTICAL INTERFACE - EDGE REACTOR */}
+      {/* GLOBAL TACTICAL INTERFACE - MOBI REACTOR */}
       <MobiChatEdge
         title="MobiEdge Agent"
         token="MOBI_PLAYGROUND_TOKEN"
         tenantId="MOBI"
         baseUrl="https://edge.sandbox.grandfleet.mobi"
+      />
+
+      {/* BRANDED INTERFACE - ACME REACTOR */}
+      <MobiChatEdge
+        title="ACME Sentinel"
+        token="ACME_TACTICAL_TOKEN"
+        tenantId="ACME"
+        agentId="acme-helper"
+        placeholder="How can ACME help you today?"
+        containerClassName="fixed bottom-6 right-24 z-[9999]"
       />
     </div>
   );

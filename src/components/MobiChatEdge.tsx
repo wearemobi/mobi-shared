@@ -57,6 +57,8 @@ export interface MobiChatEdgeProps {
   onToggle?: (isOpen: boolean) => void;
   /** Callback triggered when a message is sent. */
   onSendMessage?: (message: string) => void;
+  /** Custom CSS classes for the fixed container (e.g. for positioning) */
+  containerClassName?: string;
 }
 
 /**
@@ -151,9 +153,9 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
 
   return (
     <div className={
-      isOpen
+      containerClassName || (isOpen
         ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col sm:items-end sm:gap-4"
-        : "fixed bottom-6 right-6 z-[9999]"
+        : "fixed bottom-6 right-6 z-[9999]")
     }>
       {/* Chat Window */}
       {isOpen && (
