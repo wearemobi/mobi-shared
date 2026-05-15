@@ -40,6 +40,19 @@ export interface MobiChatEdgeProps {
    */
   suggestions?: string[];
   /** 
+   * Custom title for the welcome screen (when no messages)
+   */
+  welcomeTitle?: string;
+  /**
+   * Custom description for the welcome screen
+   */
+  welcomeDescription?: string;
+  /**
+   * If true, hides the MOBI logo on the welcome screen
+   * @default false
+   */
+  hideWelcomeLogo?: boolean;
+  /** 
    * If true, the widget starts in expanded mode.
    * @default false
    */
@@ -85,20 +98,15 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
   isOpen: controlledIsOpen,
   onToggle,
   onSendMessage,
-  containerClassName
+  containerClassName,
+  welcomeTitle,
+  welcomeDescription,
+  hideWelcomeLogo
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(isInitiallyOpen);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
 
-  // Default welcome if no initial messages provided
-  const defaultMessages: MobiEdgeMessage[] = [
-    {
-      id: 'welcome',
-      role: 'assistant',
-      content: customWelcome || 'Welcome to MobiAI Chat - Support Assistant, powered by MobiEdge - what do you want do build today?',
-      timestamp: Date.now()
-    }
-  ];
+  const defaultMessages: MobiEdgeMessage[] = [];
 
   const {
     messages,
@@ -202,6 +210,11 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
               messages={messages as any}
               isProcessing={isProcessing}
               className="flex-1 bg-mobi-bg/10"
+              emptyState={{
+                title: welcomeTitle || 'MobiAI Chat',
+                description: welcomeDescription || customWelcome || 'Agentic Link established. System is ready for tactical deployment.',
+                hideLogo: hideWelcomeLogo
+              }}
             />
 
             {/* Suggestions Area */}

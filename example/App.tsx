@@ -185,6 +185,7 @@ const App: React.FC = () => {
         title="MobiEdge Agent"
         token="MOBI_PLAYGROUND_TOKEN"
         tenantId="MOBI"
+        agentId="support"
         baseUrl="https://edge.sandbox.grandfleet.mobi"
       />
 
@@ -193,9 +194,12 @@ const App: React.FC = () => {
         title="ACME Sentinel"
         token="ACME_TACTICAL_TOKEN"
         tenantId="ACME"
-        agentId="acme-helper"
+        agentId="assistant"
         placeholder="How can ACME help you today?"
         containerClassName="fixed bottom-6 right-24 z-[9999]"
+        welcomeTitle="ACMEAI Chat"
+        hideWelcomeLogo={true}
+        customWelcome="Welcome to ACME Corp. Strategic Assistant active. How can I help you today?"
       />
     </div>
   );
