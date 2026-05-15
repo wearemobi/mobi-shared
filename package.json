@@ -21,7 +21,7 @@
     "dev": "vite",
     "build": "vite build && tsc --emitDeclarationOnly",
     "prepare": "npm run build",
-    "build:docs": "vite build --config vite.config.docs.ts",
+    "build:docs": "vite build --config vite.config.docs.ts && cp dist-embed/mobi-embed.js docs-dist/ && cp dist-embed/mobi-embed.css docs-dist/",
     "build:embed": "vite build --config vite.config.embed.ts",
     "preview": "vite preview",
     "example": "vite example --config vite.config.ts --port 5173 --strictPort"
