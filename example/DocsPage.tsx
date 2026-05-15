@@ -4,7 +4,7 @@ import {
   MobiUserBadge, MobiSwitcher, MobiSentinelMenu, MobiNavbar, MobiHero,
   MobiButton, MobiSidebar, MobiSidebarItem, useMobiTheme, useMobiClipboard,
   MobiCard, MobiDropbox, MobiProgress, MobiChatInput, MobiEnergyMeter,
-  useMobiChat, useMobiEnergy, MobiChatWidget, useMobiAgentic, MobiMarkdown,
+  useMobiChat, useMobiEnergy, MobiChatWidget, MobiMarkdown,
   MobiFormLabel, MobiInput, MobiDropdown, useMobiForm, mobiValidators,
   MobiModal, MobiToastProvider, useMobiToast, MobiCheckbox, MobiTable, MobiTabs,
   MobiBadge, MobiSkeleton, MobiSkeletonGroup, MobiTooltip, MobiPagination,
@@ -457,13 +457,6 @@ const catalog: CatalogEntry[] = [
 />`,
     render: () => {
       const ChatDemo = () => {
-        const { chat } = useMobiAgentic({ baseUrl: '/proxy/agentic' });
-        
-        const handleSendMessage = async (msg: string) => {
-          const res = await chat(msg);
-          return res.response;
-        };
-
         const { 
           messages, 
           isProcessing, 
@@ -474,7 +467,10 @@ const catalog: CatalogEntry[] = [
           rechargeEnergy 
         } = useMobiChat({ 
           initialEnergy: 85,
-          onSendMessage: handleSendMessage
+          onSendMessage: async (msg) => {
+            await new Promise(r => setTimeout(r, 1000));
+            return `M.O.B.I.™ received: "${msg}". Command logged in tactical buffer.`;
+          }
         });
 
         return (
@@ -613,33 +609,6 @@ const catalog: CatalogEntry[] = [
         </MobiMarkdown>
       </div>
     )
-  },
-  {
-    id: 'useMobiAgentic',
-    name: 'useMobiAgentic',
-    category: 'hook',
-    description: 'Sovereign client for the M.O.B.I.™ Agentic AI microservice.',
-    code: `const { chat, isProcessing, lastResponse } = useMobiAgentic();\n\nchat("Analyze this code.").then(res => console.log(res.response));`,
-    render: () => {
-      const AgenticDemo = () => {
-        const { chat, isProcessing, lastResponse, lastError } = useMobiAgentic({ baseUrl: '/proxy/agentic' });
-        return (
-          <div className="space-y-4 max-w-md">
-            <p className="text-sm">Status: {isProcessing ? 'Processing...' : 'Idle'}</p>
-            <MobiButton variant="outline" size="sm" onClick={() => chat("Hello from the example sandbox!")} technical>
-              Send "Hello" Ping
-            </MobiButton>
-            {lastError && <MobiAlert title="Error" message={lastError.message} type="error" duration={0} />}
-            {lastResponse && (
-              <div className="p-4 bg-mobi-bg rounded border border-mobi-border text-[10px] font-mono whitespace-pre-wrap text-mobi-text">
-                {lastResponse.response}
-              </div>
-            )}
-          </div>
-        );
-      }
-      return <AgenticDemo />;
-    }
   },
   {
     id: 'MobiFormLabel',
@@ -1873,6 +1842,54 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
         </p>
       </div>
     )
+  },
+  {
+    id: 'SovereignEmbed',
+    name: 'Sovereign Embed (Non-React)',
+    category: 'component',
+    description: 'Universal integration pattern for legacy websites (WordPress, PHP, Webflow). Allows full Agentic Link deployment via a single script tag without modifying site architecture.',
+    code: `<!-- 1. Include the Loader -->
+<script src="https://shared.wearemobi.com/mobi-embed.js"></script>
+
+<!-- 2. Initialize the Sentinel -->
+<script>
+  window.MobiEdge.init({
+    token: "YOUR_TACTICAL_TOKEN",
+    tenantId: "ACME",
+    useMemory: true,
+    title: "ACME Assistant"
+  });
+</script>`,
+    render: () => (
+      <div className="space-y-6">
+        <MobiAlert 
+          title="Universal Portability" 
+          message="This pattern allows any 'troop' website to be equipped with M.O.B.I.™ Intelligence regardless of their tech stack." 
+          type="success" 
+          duration={0} 
+        />
+        <div className="p-6 bg-mobi-surface border border-mobi-border rounded-xl space-y-4">
+          <p className="text-sm font-bold">Integration Parameters:</p>
+          <ul className="text-xs space-y-2 list-disc pl-4 text-mobi-text-muted font-mono">
+            <li><span className="text-mobi-primary">token</span>: Required. Your Reactor Auth Bearer.</li>
+            <li><span className="text-mobi-primary">tenantId</span>: Required. The sovereign ID (e.g. 'MOBI', 'ACME').</li>
+            <li><span className="text-mobi-primary">useMemory</span>: boolean. Enable/Disable session persistence.</li>
+            <li><span className="text-mobi-primary">welcomeTitle</span>: Custom headline for the assistant.</li>
+            <li><span className="text-mobi-primary">baseUrl</span>: Optional. Point to specific Reactor nodes.</li>
+          </ul>
+          <div className="pt-4 border-t border-mobi-border/50">
+            <MobiButton 
+              variant="outline" 
+              size="sm" 
+              technical 
+              onClick={() => window.open('/example/embed.html', '_blank')}
+            >
+              Launch Live Embed Demo ↗
+            </MobiButton>
+          </div>
+        </div>
+      </div>
+    )
   }
 ];
 
@@ -1887,11 +1904,14 @@ export const DocsPage: React.FC<DocsPageProps> = ({
   isSidebarOpen, 
   setIsSidebarOpen 
 }) => {
-  const [activeId, setActiveId] = useState(catalog[0].id);
-  const active = catalog.find(c => c.id === activeId) || catalog[0];
+  // Sort catalog alphabetically by name
+  const sortedCatalog = [...catalog].sort((a, b) => a.name.localeCompare(b.name));
+  
+  const [activeId, setActiveId] = useState(sortedCatalog[0].id);
+  const active = sortedCatalog.find(c => c.id === activeId) || sortedCatalog[0];
 
-  const components = catalog.filter(c => c.category === 'component');
-  const hooks = catalog.filter(c => c.category === 'hook');
+  const components = sortedCatalog.filter(c => c.category === 'component');
+  const hooks = sortedCatalog.filter(c => c.category === 'hook');
 
   const handleNav = (id: string) => {
     setActiveId(id);

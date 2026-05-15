@@ -46,6 +46,11 @@ export interface UseMobiEdgeOptions {
   agentId?: string;
   /** Whether to persist session in local storage */
   persistSession?: boolean;
+  /** 
+   * Whether to use agentic memory for this session. 
+   * If not provided, it defaults to true for non-BASIC tiers.
+   */
+  useMemory?: boolean;
 }
 
 /**
@@ -60,7 +65,8 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     initialMessages = [],
     initialModelId,
     agentId: initialAgentId = 'mobi-core',
-    persistSession = true
+    persistSession = true,
+    useMemory: useMemoryOverride
   } = options;
 
   const sessionKey = `mobi_edge_session_${tenantId}_${initialAgentId}`;
@@ -171,7 +177,9 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     setIsProcessing(true);
 
     try {
-      const useMemory = status?.tier !== 'BASIC';
+      const useMemory = useMemoryOverride !== undefined 
+        ? useMemoryOverride 
+        : (status?.tier !== 'BASIC');
       
       const res = await fetch(`${baseUrl}/api/v1/agentic/infer`, {
         method: 'POST',
@@ -248,7 +256,9 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     error,
     refreshStatus: fetchStatus,
     suggestions,
-    isMemoryActive: !!conversationId && status?.tier !== 'BASIC',
+    isMemoryActive: useMemoryOverride !== undefined 
+      ? useMemoryOverride 
+      : (status?.tier ? status.tier !== 'BASIC' : false),
     isConnected
   };
 };
