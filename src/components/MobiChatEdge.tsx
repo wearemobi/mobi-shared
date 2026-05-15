@@ -220,7 +220,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
             )}
 
             {/* Input Area */}
-            <div className="p-3 bg-mobi-bg border-t border-mobi-border">
+            <div className="p-4 bg-mobi-bg border-t border-mobi-border">
               <MobiChatInput
                 onSend={handleSend}
                 isProcessing={isProcessing || isOutOfEnergy}
