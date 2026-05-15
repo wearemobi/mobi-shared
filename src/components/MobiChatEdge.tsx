@@ -84,7 +84,8 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
   hideRobotIcon = false,
   isOpen: controlledIsOpen,
   onToggle,
-  onSendMessage
+  onSendMessage,
+  containerClassName
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(isInitiallyOpen);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
