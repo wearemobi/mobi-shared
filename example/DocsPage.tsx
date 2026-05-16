@@ -10,7 +10,8 @@ import {
   MobiBadge, MobiSkeleton, MobiSkeletonGroup, MobiTooltip, MobiPagination,
   MobiAnalytics, useMobiAnalytics,
   MobiLoader, MobiWizard, useMobiWizard, MobiListView,
-  MobiChatEdge, useMobiEdge
+  MobiChatEdge, useMobiEdge,
+  MobiNav, MobiHamburgerMenu
 } from '../src';
 import pkg from '../package.json';
 
@@ -319,6 +320,43 @@ const catalog: CatalogEntry[] = [
     }
   },
   {
+    id: 'MobiNav',
+    name: 'MobiNav',
+    category: 'component',
+    description: 'Hybrid navigation orchestration that switches between a desktop sidebar and a mobile hamburger drawer.',
+    code: `<MobiNav 
+  items={[
+    { id: 'dash', label: 'Dashboard', icon: <DashIcon /> },
+    { id: 'settings', label: 'Settings', icon: <SettingsIcon />, badge: 'New' }
+  ]} 
+  activeId="dash" 
+  onNavigate={(id) => console.log(id)} 
+/>`,
+    render: () => {
+      const NavDemo = () => {
+        const [active, setActive] = useState('dash');
+        return (
+          <div className="border border-mobi-border rounded-xl bg-mobi-bg overflow-hidden relative" style={{ height: '300px' }}>
+            <MobiNav 
+              activeId={active}
+              onNavigate={setActive}
+              items={[
+                { id: 'dash', label: 'Dashboard', icon: <span className="text-lg">📊</span> },
+                { id: 'modules', label: 'Modules', icon: <span className="text-lg">📦</span>, badge: 3 },
+                { id: 'settings', label: 'Settings', icon: <span className="text-lg">⚙️</span> }
+              ]}
+              title={<span className="font-bold">Fleet Nav</span>}
+            />
+            <div className="p-4 lg:pl-72 text-[10px] text-mobi-text-muted italic">
+              * Note: On desktop, the sidebar is fixed to the left. On mobile, it collapses into a top bar.
+            </div>
+          </div>
+        );
+      };
+      return <NavDemo />;
+    }
+  },
+  {
     id: 'MobiSentinelMenu',
     name: 'MobiSentinelMenu',
     category: 'component',
@@ -343,6 +381,31 @@ const catalog: CatalogEntry[] = [
           items={[
             { id: 'profile', label: 'Profile', icon: <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg> },
             { id: 'logout', label: 'Logout', danger: true, icon: <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1" /></svg> }
+          ]}
+        />
+      </div>
+    )
+  },
+  {
+    id: 'MobiHamburgerMenu',
+    name: 'MobiHamburgerMenu',
+    category: 'component',
+    description: 'Tactical action dropdown triggered by a hamburger icon. Ideal for contextual actions and modular manifests.',
+    code: `<MobiHamburgerMenu 
+  items={[
+    { id: 'copy', label: 'Copy UUID', icon: <CopyIcon /> },
+    { id: 'sync', label: 'Force Sync', icon: <SyncIcon /> },
+    { id: 'destruct', label: 'Self Destruct', icon: <TrashIcon />, danger: true }
+  ]} 
+/>`,
+    render: () => (
+      <div className="flex justify-start p-4 bg-mobi-bg/20 border border-dashed border-mobi-border rounded-xl">
+        <MobiHamburgerMenu 
+          title="Module Actions"
+          items={[
+            { id: 'copy', label: 'Copy UUID', icon: <span className="text-xs">📋</span>, onClick: () => alert('UUID Copied to Buffer') },
+            { id: 'sync', label: 'Force Sync', icon: <span className="text-xs">🔄</span> },
+            { id: 'destruct', label: 'Self Destruct', icon: <span className="text-xs">💥</span>, danger: true, onClick: () => alert('Protocol Alpha initiated') }
           ]}
         />
       </div>
