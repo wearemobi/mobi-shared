@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MobiButton } from './MobiButton';
 import { MobiEnergyMeter } from './MobiEnergyMeter';
 import { MobiIntelligenceSelector } from './MobiIntelligenceSelector';
+import { MobiIcon } from './MobiIcon';
 
 export interface MobiChatInputProps {
   /**
@@ -176,7 +177,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
             className="flex-shrink-0"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
             disabled={isProcessing}
-            icon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>}
+            icon={<MobiIcon name="plus" size={16} />}
           />
           
           <MobiIntelligenceSelector 
@@ -203,7 +204,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
           icon={isProcessing ? (
             <div className="h-3 w-3 border-2 border-mobi-bg/30 border-t-mobi-bg rounded-full animate-spin" />
           ) : (
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+            <MobiIcon name="chevron-right" size={16} />
           )}
         />
       </div>
@@ -253,14 +254,14 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
             className="w-full px-4 py-3 text-left text-[11px] font-sans font-semibold text-mobi-text hover:bg-mobi-primary hover:text-mobi-bg transition-colors flex items-center gap-3"
             onClick={() => { setIsMenuOpen(false); onAttachClick?.(); onAttach?.('computer'); }}
           >
-            <svg className="h-4 w-4 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" /></svg>
+            <MobiIcon name="clip" size={14} className="opacity-60" />
             <span>{addFromComputerText}</span>
           </button>
           <button 
             className="w-full px-4 py-3 text-left text-[11px] font-sans font-semibold text-mobi-text hover:bg-mobi-primary hover:text-mobi-bg transition-colors border-t border-mobi-border flex items-center gap-3"
             onClick={() => { setIsMenuOpen(false); onAttach?.('vault'); }}
           >
-            <svg className="h-4 w-4 opacity-60" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" /></svg>
+            <MobiIcon name="shield" size={14} className="opacity-60" />
             <span>{addFromVaultText}</span>
           </button>
         </div>

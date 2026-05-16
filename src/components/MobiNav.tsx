@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { MobiSidebar, MobiSidebarItem } from './MobiSidebar';
 import { MobiLogo } from './MobiLogo';
 import { MobiBadge } from './MobiBadge';
+import { MobiIcon } from './MobiIcon';
 import './MobiNav.css';
 
 export interface NavModule {
@@ -80,9 +81,7 @@ export const MobiNav: React.FC<MobiNavProps> = ({
           className="p-2 -mr-2 text-mobi-text-muted hover:text-mobi-text focus:outline-none"
           aria-label="Open menu"
         >
-          <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          <MobiIcon name="burger" size={28} />
         </button>
       </div>
 

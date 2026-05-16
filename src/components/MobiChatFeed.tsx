@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { MobiLogoHero } from './MobiLogoHero';
 import { MobiMarkdown } from './MobiMarkdown';
+import { MobiIcon } from './MobiIcon';
 
 export interface MobiChatMessage {
   id: string;
@@ -116,9 +117,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                     "
                   >
                     <span>{s}</span>
-                    <svg className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-                    </svg>
+                    <MobiIcon name="chevron-right" size={12} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                   </button>
                 ))}
               </div>
@@ -158,7 +157,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                     onCopy?.(m.content);
                   }}
                 >
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" /></svg>
+                  <MobiIcon name="copy" size={14} />
                 </button>
                 <button 
                   title="Share"
@@ -166,7 +165,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                   className="p-1 hover:bg-mobi-primary/10 rounded-sm text-mobi-text-muted hover:text-mobi-primary transition-colors"
                   onClick={() => onShare?.(m.content)}
                 >
-                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
+                  <MobiIcon name="external" size={14} />
                 </button>
                 {(m.role === 'assistant' || m.isError) && (
                   <button 
@@ -175,7 +174,7 @@ export const MobiChatFeed: React.FC<MobiChatFeedProps> = ({
                     className="p-1 hover:bg-mobi-primary/10 rounded-sm text-mobi-text-muted hover:text-mobi-primary transition-colors"
                     onClick={() => onRetry?.(m)}
                   >
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+                    <MobiIcon name="sync" size={14} />
                   </button>
                 )}
               </div>

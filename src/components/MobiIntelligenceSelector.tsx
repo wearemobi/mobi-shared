@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MobiButton } from './MobiButton';
+import { MobiIcon } from './MobiIcon';
 
 export interface IntelligenceOption {
   id: string;
@@ -48,11 +49,9 @@ export const MobiIntelligenceSelector: React.FC<MobiIntelligenceSelectorProps> =
         `}
         onClick={() => setIsOpen(!isOpen)}
         disabled={disabled}
-        suffixIcon={isCompact ? undefined : <svg className="h-3 w-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>}
+        suffixIcon={isCompact ? undefined : <MobiIcon name="chevron-down" size={12} />}
         icon={isCompact ? (
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z" />
-          </svg>
+          <MobiIcon name="cpu" size={16} />
         ) : undefined}
       >
         {!isCompact && <span className="truncate">{activeOption?.label || 'SELECT MODEL'}</span>}
@@ -90,7 +89,7 @@ export const MobiIntelligenceSelector: React.FC<MobiIntelligenceSelectorProps> =
                   >
                     <span className="truncate pr-2">{option.label}</span>
                     {activeId === option.id && (
-                      <svg className="h-3 w-3 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                      <MobiIcon name="check" size={12} />
                     )}
                   </button>
                 ))
