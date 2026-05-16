@@ -1,4 +1,4 @@
-# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.3.10
+# <img src="https://wearemobi.com/icon-light.svg" width="24" height="24" valign="middle"> M.O.B.I.™ · `@wearemobi/shared` v1.4.1
 
 > Universal UI & Logic Shield for the M.O.B.I.™ Grand Fleet
 
@@ -32,6 +32,7 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme, Mobi
 | `MobiDropbox` | High-performance drag-and-drop with Automated Vault Ingestion support |
 | `MobiIntelligenceSelector` | **(New)** Reusable tactical selector for AI models and tiers |
 | `MobiChatEdge` | **(New)** Decentralized agentic chat powered by M.O.B.I.™ Edge Reactor |
+| `MobiNav` | **(New)** Hybrid navigation orchestration (Sidebar + Hamburger Drawer) |
 
 ## Hooks
 
