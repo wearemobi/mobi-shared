@@ -80,47 +80,35 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
       </button>
 
       {isOpen && (
-        <div
-          role="menu"
-          className="absolute right-0 z-50 mt-2 w-64 origin-top-right overflow-hidden rounded-2xl border border-mobi-border bg-mobi-surface shadow-2xl ring-1 ring-black/5 backdrop-blur-xl animate-in fade-in zoom-in duration-200"
-        >
-          {title && (
-            <div className="px-4 py-3 border-b border-mobi-border/50 bg-mobi-bg/10">
-              <span className="text-[10px] font-black uppercase tracking-[0.2em] text-mobi-text-muted font-sans">
-                {title}
-              </span>
-            </div>
-          )}
+        <>
+          {/* Mobile Backdrop */}
+          <div 
+            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden animate-in fade-in duration-300"
+            onClick={close}
+          />
+          
+          <div
+            role="menu"
+            className="mobi-hamburger-dropdown absolute right-0 z-50 mt-2 w-64 origin-top-right overflow-hidden rounded-2xl border border-mobi-border bg-mobi-surface shadow-2xl ring-1 ring-black/5 backdrop-blur-xl animate-in fade-in zoom-in duration-200"
+          >
+            {title && (
+              <div className="px-4 py-3 border-b border-mobi-border/50 bg-mobi-bg/10">
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-mobi-text-muted font-sans">
+                  {title}
+                </span>
+              </div>
+            )}
 
-          <div className="p-2 space-y-1">
-            {regularItems.map((item) => (
-              <button
-                key={item.id}
-                role="menuitem"
-                onClick={() => { item.onClick?.(); close(); }}
-                className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-mobi-text transition-all hover:bg-mobi-surface-hover active:scale-[0.98] font-sans tracking-tight"
-              >
-                {item.icon && (
-                  <div className="flex h-5 w-5 items-center justify-center text-mobi-text-muted group-hover:text-mobi-text transition-colors" aria-hidden="true">
-                    {item.icon}
-                  </div>
-                )}
-                <span className="truncate">{item.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {dangerItems.length > 0 && (
-            <div className="p-2 border-t border-mobi-border/50 bg-mobi-bg/30">
-              {dangerItems.map((item) => (
+            <div className="p-2 space-y-1">
+              {regularItems.map((item) => (
                 <button
                   key={item.id}
                   role="menuitem"
                   onClick={() => { item.onClick?.(); close(); }}
-                  className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-bold text-rose-500 transition-all hover:bg-rose-500/5 active:scale-[0.98] font-sans tracking-tight"
+                  className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-mobi-text transition-all hover:bg-mobi-surface-hover active:scale-[0.98] font-sans tracking-tight"
                 >
                   {item.icon && (
-                    <div className="flex h-5 w-5 items-center justify-center" aria-hidden="true">
+                    <div className="flex h-5 w-5 items-center justify-center text-mobi-text-muted group-hover:text-mobi-text transition-colors" aria-hidden="true">
                       {item.icon}
                     </div>
                   )}
@@ -128,8 +116,28 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
                 </button>
               ))}
             </div>
-          )}
-        </div>
+
+            {dangerItems.length > 0 && (
+              <div className="p-2 border-t border-mobi-border/50 bg-mobi-bg/30">
+                {dangerItems.map((item) => (
+                  <button
+                    key={item.id}
+                    role="menuitem"
+                    onClick={() => { item.onClick?.(); close(); }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-bold text-rose-500 transition-all hover:bg-rose-500/5 active:scale-[0.98] font-sans tracking-tight"
+                  >
+                    {item.icon && (
+                      <div className="flex h-5 w-5 items-center justify-center" aria-hidden="true">
+                        {item.icon}
+                      </div>
+                    )}
+                    <span className="truncate">{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
       )}
     </div>
   );
