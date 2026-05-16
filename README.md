@@ -33,6 +33,7 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme, Mobi
 | `MobiIntelligenceSelector` | **(New)** Reusable tactical selector for AI models and tiers |
 | `MobiChatEdge` | **(New)** Decentralized agentic chat powered by M.O.B.I.™ Edge Reactor |
 | `MobiNav` | **(New)** Hybrid navigation orchestration (Sidebar + Hamburger Drawer) |
+| `MobiHamburgerMenu` | **(New)** Tactical action dropdown triggered by a hamburger icon |
 
 ## Hooks
 

@@ -63,4 +63,5 @@ export * from './hooks/useMobiEdge';
 
 // v1.4.1 — hybrid navigation
 export * from './components/MobiNav';
+export * from './components/MobiHamburgerMenu';
 
