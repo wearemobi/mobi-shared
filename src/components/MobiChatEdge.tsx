@@ -4,6 +4,7 @@ import { MobiChatFeed } from './MobiChatFeed';
 import { useMobiEdge, MobiEdgeMessage } from '../hooks/useMobiEdge';
 import { MobiButton } from './MobiButton';
 import { MobiErrorBoundary } from './MobiErrorBoundary';
+import { MobiIcon } from './MobiIcon';
 
 export interface MobiChatEdgeProps {
   /** Bearer token for authorization */
@@ -199,14 +200,14 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
                   className="h-8 w-8 p-0 min-w-0 opacity-40 hover:opacity-100 transition-opacity"
                   onClick={clearHistory}
                   title="Clear Session"
-                  suffixIcon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>}
+                  suffixIcon={<MobiIcon name="trash" size={16} />}
                 />
                 <MobiButton
                   variant="ghost"
                   size="sm"
                   className="h-8 w-8 p-0 min-w-0"
                   onClick={handleToggle}
-                  suffixIcon={<svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>}
+                  suffixIcon={<MobiIcon name="close" size={16} />}
                 />
               </div>
             </div>
@@ -284,26 +285,10 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
 
             {/* Robot Sentinel Icon */}
             {!hideRobotIcon && (
-              <svg
-                className="h-6 w-6 text-mobi-bg group-hover:scale-110 transition-transform"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <rect x="3" y="11" width="18" height="10" rx="2" />
-                <circle cx="12" cy="5" r="2" />
-                <path d="M12 7v4" />
-                <line x1="8" y1="16" x2="8" y2="16" />
-                <line x1="16" y1="16" x2="16" y2="16" />
-              </svg>
+              <MobiIcon name="bot" size={24} className="text-mobi-bg group-hover:scale-110 transition-transform" />
             )}
             {hideRobotIcon && (
-              <svg className="h-6 w-6 text-mobi-bg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
-              </svg>
+              <MobiIcon name="chat" size={24} className="text-mobi-bg" />
             )}
           </div>
         </button>
@@ -311,4 +296,6 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
     </div>
   );
 };
+
+export default MobiChatEdge;
 

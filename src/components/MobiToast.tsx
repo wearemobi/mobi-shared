@@ -6,6 +6,7 @@ import React, {
   useRef,
 } from 'react';
 import { createPortal } from 'react-dom';
+import { MobiIcon } from './MobiIcon';
 import type { AlertType } from './MobiAlert';
 
 // ─── Toast Data Model ─────────────────────────────────────────────────────────
@@ -141,26 +142,10 @@ interface MobiToastContainerProps {
 }
 
 const TYPE_ICON: Record<AlertType, React.ReactNode> = {
-  success: (
-    <svg className="h-5 w-5 text-emerald-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ),
-  error: (
-    <svg className="h-5 w-5 text-rose-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ),
-  warning: (
-    <svg className="h-5 w-5 text-amber-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-    </svg>
-  ),
-  info: (
-    <svg className="h-5 w-5 text-blue-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-    </svg>
-  ),
+  success: <MobiIcon name="success" size={20} strokeWidth={2.5} className="text-emerald-500 shrink-0" />,
+  error: <MobiIcon name="error" size={20} strokeWidth={2.5} className="text-rose-500 shrink-0" />,
+  warning: <MobiIcon name="alert" size={20} strokeWidth={2.5} className="text-amber-500 shrink-0" />,
+  info: <MobiIcon name="info" size={20} strokeWidth={2.5} className="text-blue-400 shrink-0" />,
 };
 
 const TYPE_BAR: Record<AlertType, string> = {
@@ -204,9 +189,7 @@ const MobiToastContainer: React.FC<MobiToastContainerProps> = ({ toasts, onDismi
             className="absolute top-3 right-3 text-mobi-text-muted/50 hover:text-mobi-text transition-colors rounded"
             aria-label="Dismiss notification"
           >
-            <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <MobiIcon name="close" size={14} strokeWidth={2.5} />
           </button>
 
           {/* Color accent bar */}

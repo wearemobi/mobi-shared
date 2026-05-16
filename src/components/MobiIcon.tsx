@@ -6,8 +6,11 @@ export type MobiIconName =
   | 'input' | 'send' | 'back' | 'burger' | 'close'
   | 'settings' | 'user' | 'home' | 'shield'
   | 'copy' | 'sync' | 'trash' | 'external'
-  | 'plus' | 'minus' | 'chevron-right' | 'chevron-down'
-  | 'cpu' | 'clip' | 'bot' | 'history' | 'zap' | 'check';
+  | 'plus' | 'minus' | 'chevron-right' | 'chevron-down' | 'chevron-left'
+  | 'chevrons-right' | 'chevrons-left'
+  | 'cpu' | 'clip' | 'bot' | 'history' | 'zap' | 'check'
+  | 'sun' | 'moon' | 'monitor' | 'upload' | 'upload-cloud'
+  | 'eye' | 'eye-off' | 'chat' | 'docs' | 'search' | 'loader';
 
 interface MobiIconProps {
   /** Identifier of the icon in the M.O.B.I.™ registry */
@@ -47,12 +50,26 @@ const ICON_REGISTRY: Record<MobiIconName, React.ReactNode> = {
   minus: <line x1="5" y1="12" x2="19" y2="12" />,
   'chevron-right': <polyline points="9 18 15 12 9 6" />,
   'chevron-down': <polyline points="6 9 12 15 18 9" />,
+  'chevron-left': <polyline points="15 18 9 12 15 6" />,
+  'chevrons-right': <><polyline points="13 5 20 12 13 19" /><polyline points="6 5 13 12 6 19" /></>,
+  'chevrons-left': <><polyline points="11 19 4 12 11 5" /><polyline points="18 19 11 12 18 5" /></>,
   cpu: <><rect x="4" y="4" width="16" height="16" rx="2" ry="2" /><rect x="9" y="9" width="6" height="6" /><line x1="9" y1="1" x2="9" y2="4" /><line x1="15" y1="1" x2="15" y2="4" /><line x1="9" y1="20" x2="9" y2="23" /><line x1="15" y1="20" x2="15" y2="23" /><line x1="20" y1="9" x2="23" y2="9" /><line x1="20" y1="15" x2="23" y2="15" /><line x1="1" y1="9" x2="4" y2="9" /><line x1="1" y1="15" x2="4" y2="15" /></>,
   clip: <path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.82-2.82l8.49-8.48" />,
   bot: <><rect x="3" y="11" width="18" height="10" rx="2" /><circle cx="12" cy="5" r="2" /><path d="M12 7v4" /><line x1="8" y1="16" x2="8" y2="16" /><line x1="16" y1="16" x2="16" y2="16" /></>,
   history: <><path d="M3 3v5h5" /><path d="M3.05 13A9 9 0 106 5.3L3 8" /></>,
   zap: <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />,
-  check: <polyline points="20 6 9 17 4 12" />
+  check: <polyline points="20 6 9 17 4 12" />,
+  sun: <><circle cx="12" cy="12" r="5" /><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" /></>,
+  moon: <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />,
+  monitor: <><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></>,
+  upload: <><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" /><polyline points="17 8 12 3 7 8" /><line x1="12" y1="3" x2="12" y2="15" /></>,
+  'upload-cloud': <><path d="M16 16l-4-4-4 4" /><path d="M12 12v9" /><path d="M20.39 18.39A5 5 0 0018 9h-1.26A8 8 0 103 16.3" /></>,
+  eye: <><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" /><circle cx="12" cy="12" r="3" /></>,
+  'eye-off': <><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24" /><line x1="1" y1="1" x2="23" y2="23" /></>,
+  chat: <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />,
+  docs: <><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></>,
+  search: <><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></>,
+  loader: <><circle cx="12" cy="12" r="10" strokeOpacity="0.25" /><path d="M4 12a8 8 0 018-8" strokeOpacity="0.75" /></>
 };
 
 export const MobiIcon: React.FC<MobiIconProps> = ({ 

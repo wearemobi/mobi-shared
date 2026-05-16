@@ -1,6 +1,7 @@
 import React from 'react';
 import { MobiFormLabel } from './MobiFormLabel';
 import { FormError } from './FormError';
+import { MobiIcon } from './MobiIcon';
 
 export interface MobiDropdownOption {
   /**
@@ -129,9 +130,7 @@ export const MobiDropdown: React.FC<MobiDropdownProps> = ({
         </select>
 
         <div className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none text-mobi-text-muted">
-          <svg className="h-4.5 w-4.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-          </svg>
+          <MobiIcon name="chevron-down" size={18} />
         </div>
       </div>
 

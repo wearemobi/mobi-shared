@@ -1,4 +1,5 @@
 import React from 'react';
+import { MobiIcon } from './MobiIcon';
 
 export interface MobiPaginationProps {
   /** Current page (1-indexed). */
@@ -98,9 +99,7 @@ export const MobiPagination: React.FC<MobiPaginationProps> = ({
           disabled={currentPage === 1}
           onClick={() => onChange(1)}
         >
-          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
-          </svg>
+          <MobiIcon name="chevrons-left" size={14} strokeWidth={2.5} />
         </NavButton>
       )}
 
@@ -110,9 +109,7 @@ export const MobiPagination: React.FC<MobiPaginationProps> = ({
         disabled={currentPage === 1}
         onClick={() => onChange(currentPage - 1)}
       >
-        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 19l-7-7 7-7" />
-        </svg>
+        <MobiIcon name="chevron-left" size={14} strokeWidth={2.5} />
       </NavButton>
 
       {/* Page numbers */}
@@ -144,9 +141,7 @@ export const MobiPagination: React.FC<MobiPaginationProps> = ({
         disabled={currentPage === totalPages}
         onClick={() => onChange(currentPage + 1)}
       >
-        <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 5l7 7-7 7" />
-        </svg>
+        <MobiIcon name="chevron-right" size={14} strokeWidth={2.5} />
       </NavButton>
 
       {/* Last */}
@@ -156,9 +151,7 @@ export const MobiPagination: React.FC<MobiPaginationProps> = ({
           disabled={currentPage === totalPages}
           onClick={() => onChange(totalPages)}
         >
-          <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 5l7 7-7 7M5 5l7 7-7 7" />
-          </svg>
+          <MobiIcon name="chevrons-right" size={14} strokeWidth={2.5} />
         </NavButton>
       )}
     </nav>
