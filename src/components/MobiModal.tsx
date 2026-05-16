@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useCallback } from 'react';
 import { createPortal } from 'react-dom';
+import { MobiIcon } from './MobiIcon';
 
 export type MobiModalSize = 'sm' | 'md' | 'lg' | 'xl' | 'full';
 
@@ -179,9 +180,7 @@ export const MobiModal: React.FC<MobiModalProps> = ({
               className="shrink-0 p-2 rounded-lg text-mobi-text-muted hover:text-mobi-text hover:bg-mobi-surface-hover transition-colors"
               aria-label="Close dialog"
             >
-              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              <MobiIcon name="close" size={16} strokeWidth={2.5} aria-hidden="true" />
             </button>
           </div>
         )}

@@ -65,4 +65,5 @@ export * from './hooks/useMobiEdge';
 export * from './components/MobiNav';
 export * from './components/MobiHamburgerMenu';
 export * from './components/MobiDrawer';
+export * from './components/MobiIcon';
 
