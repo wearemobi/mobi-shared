@@ -61,3 +61,6 @@ export * from './components/MobiIntelligenceSelector';
 export * from './components/MobiChatEdge';
 export * from './hooks/useMobiEdge';
 
+// v1.4.1 — hybrid navigation
+export * from './components/MobiNav';
+
