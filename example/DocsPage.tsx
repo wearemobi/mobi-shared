@@ -11,7 +11,7 @@ import {
   MobiAnalytics, useMobiAnalytics,
   MobiLoader, MobiWizard, useMobiWizard, MobiListView,
   MobiChatEdge, useMobiEdge,
-  MobiNav, MobiHamburgerMenu
+  MobiNav, MobiHamburgerMenu, MobiDrawer
 } from '../src';
 import pkg from '../package.json';
 
@@ -399,17 +399,94 @@ const catalog: CatalogEntry[] = [
   ]} 
 />`,
     render: () => (
-      <div className="flex justify-start p-4 bg-mobi-bg/20 border border-dashed border-mobi-border rounded-xl">
-        <MobiHamburgerMenu 
-          title="Module Actions"
-          items={[
-            { id: 'copy', label: 'Copy UUID', icon: <span className="text-xs">📋</span>, onClick: () => alert('UUID Copied to Buffer') },
-            { id: 'sync', label: 'Force Sync', icon: <span className="text-xs">🔄</span> },
-            { id: 'destruct', label: 'Self Destruct', icon: <span className="text-xs">💥</span>, danger: true, onClick: () => alert('Protocol Alpha initiated') }
-          ]}
-        />
-      </div>
+        <div className="flex flex-col gap-8">
+          <div className="flex flex-col gap-2">
+            <span className="text-[10px] font-black text-mobi-text-muted uppercase tracking-widest">Dropdown Mode (Default)</span>
+            <MobiHamburgerMenu 
+              title="Module Actions"
+              items={[
+                { id: 'copy', label: 'Copy UUID', icon: <span className="text-xs">📋</span>, onClick: () => alert('UUID Copied to Buffer') },
+                { id: 'sync', label: 'Force Sync', icon: <span className="text-xs">🔄</span> },
+                { id: 'destruct', label: 'Self Destruct', icon: <span className="text-xs">💥</span>, danger: true, onClick: () => alert('Protocol Alpha initiated') }
+              ]}
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <span className="text-[10px] font-black text-mobi-text-muted uppercase tracking-widest">Drawer Mode (Right)</span>
+            <MobiHamburgerMenu 
+              mode="drawer"
+              title="Fleet Manifest"
+              variant="primary"
+              items={[
+                { id: 'scan', label: 'Scan Perimeter', icon: <span className="text-xs">📡</span> },
+                { id: 'logs', label: 'Access Logs', icon: <span className="text-xs">📄</span> },
+                { id: 'reboot', label: 'Hard Reboot', icon: <span className="text-xs">🔋</span>, danger: true }
+              ]}
+            />
+          </div>
+        </div>
     )
+  },
+  {
+    id: 'MobiDrawer',
+    name: 'MobiDrawer',
+    category: 'component',
+    description: 'A versatile sliding panel for navigation, filters, or auxiliary content. Supports multiple positions (left, right, top, bottom).',
+    code: `<MobiDrawer 
+  isOpen={isOpen} 
+  onClose={() => setIsOpen(false)}
+  position="right"
+  title="System Settings"
+>
+  <p>Drawer Content</p>
+</MobiDrawer>`,
+    render: () => {
+      const DrawerDemo = () => {
+        const [open, setOpen] = useState(false);
+        const [pos, setPos] = useState<any>('right');
+        
+        const openDrawer = (p: any) => {
+          setPos(p);
+          setOpen(true);
+        };
+
+        return (
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-2">
+              <MobiButton variant="outline" size="sm" onClick={() => openDrawer('left')} technical>Left</MobiButton>
+              <MobiButton variant="outline" size="sm" onClick={() => openDrawer('right')} technical>Right</MobiButton>
+              <MobiButton variant="outline" size="sm" onClick={() => openDrawer('top')} technical>Top</MobiButton>
+              <MobiButton variant="outline" size="sm" onClick={() => openDrawer('bottom')} technical>Bottom</MobiButton>
+            </div>
+            
+            <MobiDrawer 
+              isOpen={open} 
+              onClose={() => setOpen(false)} 
+              position={pos}
+              title={`Sovereign Panel (${pos.toUpperCase()})`}
+              footer={
+                <div className="flex justify-end">
+                  <MobiButton variant="solid" size="sm" onClick={() => setOpen(false)}>Acknowledge</MobiButton>
+                </div>
+              }
+            >
+              <div className="space-y-4">
+                <p className="text-mobi-text leading-relaxed">
+                  The M.O.B.I.™ Drawer provides an overlay context for advanced configuration or navigation manifesting.
+                </p>
+                <div className="p-4 bg-mobi-bg/50 border border-mobi-border rounded-xl font-mono text-[10px]">
+                  ID: FLEET_DRAWER_001<br/>
+                  STATUS: OPERATIONAL<br/>
+                  POSITION: {pos.toUpperCase()}
+                </div>
+              </div>
+            </MobiDrawer>
+          </div>
+        );
+      };
+      return <DrawerDemo />;
+    }
   },
   {
     id: 'MobiCard',
