@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { MobiDrawer } from './MobiDrawer';
 import './MobiHamburgerMenu.css';
 
 export interface MobiMenuItem {
@@ -18,6 +19,11 @@ export interface MobiHamburgerMenuProps {
   className?: string;
   /** Variant for the trigger button. @default 'default' */
   variant?: 'default' | 'ghost' | 'primary';
+  /** 
+   * How the menu is presented when opened.
+   * @default 'dropdown'
+   */
+  mode?: 'dropdown' | 'drawer';
 }
 
 /**
@@ -29,7 +35,8 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
   items,
   title,
   className = '',
-  variant = 'default'
+  variant = 'default',
+  mode = 'dropdown'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -79,7 +86,7 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
         </svg>
       </button>
 
-      {isOpen && (
+      {isOpen && mode === 'dropdown' && (
         <>
           {/* Mobile Backdrop */}
           <div 
@@ -138,6 +145,51 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
             )}
           </div>
         </>
+      )}
+
+      {mode === 'drawer' && (
+        <MobiDrawer
+          isOpen={isOpen}
+          onClose={close}
+          title={title}
+          position="right"
+        >
+          <div className="space-y-1">
+            {regularItems.map((item) => (
+              <button
+                key={item.id}
+                onClick={() => { item.onClick?.(); close(); }}
+                className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold text-mobi-text transition-all hover:bg-mobi-surface-hover active:scale-[0.98] font-sans tracking-tight"
+              >
+                {item.icon && (
+                  <div className="flex h-5 w-5 items-center justify-center text-mobi-text-muted group-hover:text-mobi-text transition-colors">
+                    {item.icon}
+                  </div>
+                )}
+                <span>{item.label}</span>
+              </button>
+            ))}
+
+            {dangerItems.length > 0 && (
+              <div className="mt-4 pt-4 border-t border-mobi-border/50">
+                {dangerItems.map((item) => (
+                  <button
+                    key={item.id}
+                    onClick={() => { item.onClick?.(); close(); }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold text-rose-500 transition-all hover:bg-rose-500/5 active:scale-[0.98] font-sans tracking-tight"
+                  >
+                    {item.icon && (
+                      <div className="flex h-5 w-5 items-center justify-center">
+                        {item.icon}
+                      </div>
+                    )}
+                    <span>{item.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </MobiDrawer>
       )}
     </div>
   );
