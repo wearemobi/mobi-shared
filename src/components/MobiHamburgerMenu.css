@@ -36,3 +36,30 @@
   background: var(--mobi-border);
   border-radius: 10px;
 }
+
+/* Mobile Responsive Overrides */
+@media (max-width: 768px) {
+  .mobi-hamburger-dropdown {
+    position: fixed !important;
+    bottom: 20px !important;
+    left: 20px !important;
+    right: 20px !important;
+    top: auto !important;
+    width: auto !important;
+    margin: 0 !important;
+    transform: none !important;
+    transform-origin: bottom !important;
+    animation: mobi-menu-mobile-enter 0.3s cubic-bezier(0, 0, 0.2, 1) forwards;
+  }
+}
+
+@keyframes mobi-menu-mobile-enter {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
