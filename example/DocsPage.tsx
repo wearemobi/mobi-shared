@@ -11,7 +11,7 @@ import {
   MobiAnalytics, useMobiAnalytics,
   MobiLoader, MobiWizard, useMobiWizard, MobiListView,
   MobiChatEdge, useMobiEdge,
-  MobiNav, MobiHamburgerMenu, MobiDrawer
+  MobiNav, MobiHamburgerMenu, MobiDrawer, MobiIcon
 } from '../src';
 import pkg from '../package.json';
 
@@ -2028,6 +2028,29 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
             </MobiButton>
           </div>
         </div>
+      </div>
+    )
+  },
+  {
+    id: 'MobiIcon',
+    name: 'MobiIcon',
+    category: 'component',
+    description: 'The M.O.B.I.™ Tactical Iconography System. A sovereign, high-performance icon registry.',
+    code: `<MobiIcon name="bot" size={32} color="var(--mobi-primary)" />
+<MobiIcon name="zap" strokeWidth={3} />`,
+    render: () => (
+      <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-6">
+        {[
+          'login', 'logout', 'register', 'alert', 'error', 'success', 'info', 
+          'input', 'send', 'back', 'burger', 'close', 'settings', 'user', 'home', 
+          'shield', 'copy', 'sync', 'trash', 'external', 'plus', 'minus', 
+          'chevron-right', 'chevron-down', 'cpu', 'clip', 'bot', 'history', 'zap', 'check'
+        ].map(name => (
+          <div key={name} className="flex flex-col items-center gap-3 p-4 bg-mobi-bg/20 border border-mobi-border/30 rounded-xl hover:bg-mobi-surface-hover transition-all group">
+            <MobiIcon name={name as any} size={24} className="group-hover:scale-110 transition-transform" />
+            <span className="text-[9px] font-mono text-mobi-text-muted uppercase tracking-tighter truncate w-full text-center">{name}</span>
+          </div>
+        ))}
       </div>
     )
   }
