@@ -66,4 +66,6 @@ export * from './components/MobiNav';
 export * from './components/MobiHamburgerMenu';
 export * from './components/MobiDrawer';
 export * from './components/MobiIcon';
+export * from './components/MobiAppLogo';
+export * from './components/MobiSectionHeader';
 

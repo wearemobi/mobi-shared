@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 
 import { MobiProgress } from './MobiProgress';
 import { useMobiVault, FileMetadata } from '../hooks/useMobiVault';
+import { MobiIcon } from './MobiIcon';
 
 export interface MobiDropboxProps {
   /**
@@ -190,13 +191,12 @@ export const MobiDropbox: React.FC<MobiDropboxProps> = ({
             p-6 rounded-2xl border transition-colors duration-300
             ${isDragging ? 'bg-mobi-primary border-mobi-primary' : 'bg-mobi-bg border-mobi-border'}
           `}>
-            <svg
-              className={`h-10 w-10 ${isDragging ? 'text-mobi-bg' : 'text-mobi-text-muted'}`}
-              fill="none" viewBox="0 0 24 24" stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-            </svg>
+            <MobiIcon
+              name="upload-cloud"
+              size={40}
+              strokeWidth={1.5}
+              className={isDragging ? 'text-mobi-bg' : 'text-mobi-text-muted'}
+            />
           </div>
 
           <div className="text-center font-sans">
@@ -226,9 +226,7 @@ export const MobiDropbox: React.FC<MobiDropboxProps> = ({
         <div className="w-full max-w-sm space-y-6">
           <div className="flex flex-col items-center gap-2">
             <div className="h-10 w-10 rounded-xl bg-mobi-primary/10 flex items-center justify-center animate-pulse">
-              <svg className="h-6 w-6 text-mobi-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
-              </svg>
+              <MobiIcon name="upload" size={24} className="text-mobi-primary" />
             </div>
             <p className="text-sm font-black uppercase tracking-widest text-mobi-text">Ingesting Assets</p>
           </div>

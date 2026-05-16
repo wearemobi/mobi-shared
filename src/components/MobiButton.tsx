@@ -1,4 +1,5 @@
 import React from 'react';
+import { MobiIcon } from './MobiIcon';
 
 export type MobiButtonVariant = 'solid' | 'outline' | 'ghost' | 'danger';
 
@@ -78,8 +79,6 @@ export const MobiButton: React.FC<MobiButtonProps> = ({
     lg: technical ? "px-7 py-3 rounded-xl text-sm" : "px-8 py-3.5 rounded-xl text-base"
   };
 
-  const spinnerSize = size === 'sm' ? 'h-3 w-3' : size === 'lg' ? 'h-5 w-5' : 'h-4 w-4';
-
   return (
     <button
       className={`${baseStyles} ${fontStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
@@ -88,15 +87,12 @@ export const MobiButton: React.FC<MobiButtonProps> = ({
       {...props}
     >
       {loading ? (
-        <svg
-          className={`${spinnerSize} animate-spin shrink-0`}
-          fill="none"
-          viewBox="0 0 24 24"
-          aria-hidden="true"
-        >
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
-        </svg>
+        <MobiIcon
+          name="loader"
+          size={size === 'sm' ? 12 : size === 'lg' ? 20 : 16}
+          strokeWidth={4}
+          className="animate-spin shrink-0"
+        />
       ) : (
         icon && <span className="shrink-0" aria-hidden="true">{icon}</span>
       )}

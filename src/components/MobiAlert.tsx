@@ -1,4 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
+import { MobiIcon } from './MobiIcon';
 
 /** Visual severity of the alert notification. */
 export type AlertType = 'info' | 'success' | 'warning' | 'error';
@@ -76,26 +77,10 @@ export const MobiAlert: React.FC<MobiAlertProps> = ({
   };
 
   const icons = {
-    info: (
-      <svg className={`h-6 w-6 ${typeColors[type]}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    success: (
-      <svg className={`h-6 w-6 ${typeColors[type]}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
-    warning: (
-      <svg className={`h-6 w-6 ${typeColors[type]}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-      </svg>
-    ),
-    error: (
-      <svg className={`h-6 w-6 ${typeColors[type]}`} fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
+    info: <MobiIcon name="info" size={24} strokeWidth={2.5} className={typeColors[type]} />,
+    success: <MobiIcon name="success" size={24} strokeWidth={2.5} className={typeColors[type]} />,
+    warning: <MobiIcon name="alert" size={24} strokeWidth={2.5} className={typeColors[type]} />,
+    error: <MobiIcon name="error" size={24} strokeWidth={2.5} className={typeColors[type]} />,
   };
 
   return (
@@ -120,9 +105,7 @@ export const MobiAlert: React.FC<MobiAlertProps> = ({
             className="flex-shrink-0 opacity-30 hover:opacity-100 hover:bg-mobi-bg rounded-lg p-2 transition-all active:scale-90"
             aria-label="Dismiss notification"
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-            </svg>
+            <MobiIcon name="close" size={16} strokeWidth={2.5} />
           </button>
         )}
         {onCopy && (
@@ -131,9 +114,7 @@ export const MobiAlert: React.FC<MobiAlertProps> = ({
             className="flex-shrink-0 opacity-30 hover:opacity-100 hover:bg-mobi-bg rounded-lg p-2 transition-all active:scale-90"
             aria-label="Copy message to clipboard"
           >
-            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-            </svg>
+            <MobiIcon name="copy" size={16} strokeWidth={2.5} />
           </button>
         )}
       </div>

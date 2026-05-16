@@ -1,4 +1,5 @@
 import React from 'react';
+import { MobiIcon } from './MobiIcon';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -47,9 +48,7 @@ const CheckboxControl: React.FC<{
     `}
   >
     {checked && (
-      <svg className="h-2.5 w-2.5 text-mobi-bg" viewBox="0 0 12 12" fill="none" stroke="currentColor">
-        <path d="M2 6l3 3 5-5" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      <MobiIcon name="check" size={12} strokeWidth={4} className="text-mobi-bg" />
     )}
   </span>
 );
@@ -213,9 +212,7 @@ export const MobiCheckbox: React.FC<MobiCheckboxProps> = ({
       {/* Error */}
       {error && (
         <p id={errId} role="alert" className="text-xs font-bold text-rose-500 pl-7 font-sans flex items-center gap-1">
-          <svg className="h-3 w-3 shrink-0" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
-          </svg>
+          <MobiIcon name="alert" size={12} strokeWidth={3} />
           {error}
         </p>
       )}

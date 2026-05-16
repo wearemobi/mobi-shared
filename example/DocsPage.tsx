@@ -11,7 +11,8 @@ import {
   MobiAnalytics, useMobiAnalytics,
   MobiLoader, MobiWizard, useMobiWizard, MobiListView,
   MobiChatEdge, useMobiEdge,
-  MobiNav, MobiHamburgerMenu, MobiDrawer, MobiIcon
+  MobiNav, MobiHamburgerMenu, MobiDrawer, MobiIcon, MobiAppLogo,
+  MobiSectionHeader
 } from '../src';
 import pkg from '../package.json';
 
@@ -52,6 +53,47 @@ const catalog: CatalogEntry[] = [
       <div className="flex flex-col items-center justify-center p-8 bg-mobi-bg rounded-xl border border-mobi-border">
         <MobiLogoHero size={120} />
         <p className="text-[10px] text-mobi-text-muted uppercase tracking-widest mt-4">Theme-aware asset resolution</p>
+      </div>
+    )
+  },
+  {
+    id: 'MobiAppLogo',
+    name: 'MobiAppLogo',
+    category: 'component',
+    description: 'Dynamic app identity icon with stylized initial on black square.',
+    code: `<MobiAppLogo label="MobiVault" size={48} />`,
+    render: () => (
+      <div className="flex items-center gap-6 p-4 bg-mobi-bg rounded-xl border border-mobi-border">
+        <MobiAppLogo label="MobiVault" size={32} />
+        <MobiAppLogo label="EdgeReactor" size={48} />
+        <MobiAppLogo label="GrandFleet" size={64} />
+        <div className="flex flex-col gap-1">
+          <span className="text-[10px] font-black uppercase tracking-widest text-mobi-text">Identity Matrix</span>
+          <span className="text-[9px] text-mobi-text-muted">Dynamic Initial Extraction</span>
+        </div>
+      </div>
+    )
+  },
+  {
+    id: 'MobiSectionHeader',
+    name: 'MobiSectionHeader',
+    category: 'component',
+    description: 'Standardized layout for section introductions with headline badges, titles, and descriptions.',
+    code: `<MobiSectionHeader \n  headline="Category" \n  title="Section Title" \n  description="Detailed explanation..." \n  variant="component" \n/>`,
+    render: () => (
+      <div className="space-y-8 p-6 bg-mobi-bg rounded-xl border border-mobi-border">
+        <MobiSectionHeader 
+          headline="Fleet Component" 
+          title="Reactor Core" 
+          description="A specialized module for managing atomic energy state and tactical intelligence orchestration." 
+          variant="component"
+        />
+        <div className="pt-4 border-t border-mobi-border/50">
+          <MobiSectionHeader 
+            title="Simplified Header" 
+            description="Only title and description, no headline badge." 
+          />
+        </div>
       </div>
     )
   },
@@ -2044,7 +2086,9 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
           'login', 'logout', 'register', 'alert', 'error', 'success', 'info', 
           'input', 'send', 'back', 'burger', 'close', 'settings', 'user', 'home', 
           'shield', 'copy', 'sync', 'trash', 'external', 'plus', 'minus', 
-          'chevron-right', 'chevron-down', 'cpu', 'clip', 'bot', 'history', 'zap', 'check'
+          'chevron-right', 'chevron-down', 'chevron-left', 'chevrons-right', 'chevrons-left',
+          'cpu', 'clip', 'bot', 'history', 'zap', 'check', 'sun', 'moon', 'monitor',
+          'upload', 'upload-cloud', 'eye', 'eye-off', 'chat', 'docs', 'search'
         ].map(name => (
           <div key={name} className="flex flex-col items-center gap-3 p-4 bg-mobi-bg/20 border border-mobi-border/30 rounded-xl hover:bg-mobi-surface-hover transition-all group">
             <MobiIcon name={name as any} size={24} className="group-hover:scale-110 transition-transform" />
@@ -2138,19 +2182,12 @@ export const DocsPage: React.FC<DocsPageProps> = ({
       <main className="flex-1 overflow-y-auto p-6 lg:p-12">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
-          <div className="mb-10">
-            <div className="flex items-center gap-3 mb-3">
-              <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-2.5 py-1 rounded-md font-mono ${
-                active.category === 'component' 
-                  ? 'bg-emerald-500/10 text-emerald-500' 
-                  : 'bg-blue-500/10 text-blue-500'
-              }`}>
-                {active.category}
-              </span>
-            </div>
-            <h2 className="text-4xl font-black tracking-tight font-sans text-mobi-text">{active.name}</h2>
-            <p className="text-base text-mobi-text-muted font-sans mt-2 max-w-2xl leading-relaxed">{active.description}</p>
-          </div>
+          <MobiSectionHeader 
+            headline={active.category}
+            title={active.name}
+            description={active.description}
+            variant={active.category as any}
+          />
 
           <div className="grid grid-cols-1 gap-12">
             {/* Live Preview */}
