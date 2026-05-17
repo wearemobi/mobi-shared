@@ -69,3 +69,6 @@ export * from './components/MobiIcon';
 export * from './components/MobiAppLogo';
 export * from './components/MobiSectionHeader';
 
+// v1.4.2 — collapsible navigation, card variants & bento grid
+export * from './components/MobiBentoGrid';
+

@@ -12,7 +12,7 @@ import {
   MobiLoader, MobiWizard, useMobiWizard, MobiListView,
   MobiChatEdge, useMobiEdge,
   MobiNav, MobiHamburgerMenu, MobiDrawer, MobiIcon, MobiAppLogo,
-  MobiSectionHeader
+  MobiSectionHeader, MobiBentoGrid, MobiBentoItem
 } from '../src';
 import pkg from '../package.json';
 
@@ -365,32 +365,71 @@ const catalog: CatalogEntry[] = [
     id: 'MobiNav',
     name: 'MobiNav',
     category: 'component',
-    description: 'Hybrid navigation orchestration that switches between a desktop sidebar and a mobile hamburger drawer.',
+    description: 'Hybrid navigation orchestration with optional collapsible desktop mode, premium glyph registry, and custom action slots.',
     code: `<MobiNav 
   items={[
-    { id: 'dash', label: 'Dashboard', icon: <DashIcon /> },
-    { id: 'settings', label: 'Settings', icon: <SettingsIcon />, badge: 'New' }
+    { id: 'dash', label: 'Dashboard', icon: <MobiIcon name="pos" /> }
   ]} 
   activeId="dash" 
+  collapsible={true}
+  footerActions={
+    <div className="flex flex-col gap-2 w-full">
+      <MobiButton size="sm" variant="solid" className="w-full">Sync POS</MobiButton>
+    </div>
+  }
   onNavigate={(id) => console.log(id)} 
 />`,
     render: () => {
       const NavDemo = () => {
         const [active, setActive] = useState('dash');
+        const [collapsible, setCollapsible] = useState(true);
+
         return (
-          <div className="border border-mobi-border rounded-xl bg-mobi-bg overflow-hidden relative" style={{ height: '300px' }}>
-            <MobiNav 
-              activeId={active}
-              onNavigate={setActive}
-              items={[
-                { id: 'dash', label: 'Dashboard', icon: <span className="text-lg">📊</span> },
-                { id: 'modules', label: 'Modules', icon: <span className="text-lg">📦</span>, badge: 3 },
-                { id: 'settings', label: 'Settings', icon: <span className="text-lg">⚙️</span> }
-              ]}
-              title={<span className="font-bold">Fleet Nav</span>}
-            />
-            <div className="p-4 lg:pl-72 text-[10px] text-mobi-text-muted italic">
-              * Note: On desktop, the sidebar is fixed to the left. On mobile, it collapses into a top bar.
+          <div className="border border-mobi-border rounded-xl bg-mobi-bg overflow-hidden relative flex flex-col" style={{ height: '380px' }}>
+            <div className="p-3 border-b border-mobi-border bg-mobi-surface/50 flex gap-4 items-center justify-between z-20">
+              <span className="text-[10px] font-black uppercase tracking-wider text-mobi-text-muted">Desktop Mode Control:</span>
+              <MobiButton size="sm" variant="outline" onClick={() => setCollapsible(!collapsible)}>
+                {collapsible ? "Lock Permanent Layout" : "Unlock Collapsible Mode"}
+              </MobiButton>
+            </div>
+            <div className="flex-1 relative overflow-hidden">
+              <MobiNav 
+                activeId={active}
+                onNavigate={setActive}
+                collapsible={collapsible}
+                items={[
+                  { id: 'dash', label: 'Retail POS', icon: <MobiIcon name="pos" size={18} /> },
+                  { id: 'items', label: 'Items Inventory', icon: <MobiIcon name="items" size={18} /> },
+                  { id: 'billing', label: 'Transactions Ledger', icon: <MobiIcon name="billing" size={18} /> },
+                  { id: 'customers', label: 'Customers Cardex', icon: <MobiIcon name="customers" size={18} /> },
+                  { id: 'ia', label: 'Intelligence Engine', icon: <MobiIcon name="ia" size={18} /> }
+                ]}
+                title={
+                  <span className="font-bold flex items-center gap-2">
+                    <MobiIcon name="cart" size={20} className="text-mobi-primary" /> 
+                    <span>Retail Unit</span>
+                  </span>
+                }
+                footerActions={
+                  <div className="flex flex-col gap-2 w-full">
+                    <MobiButton size="sm" variant="solid" className="w-full">Sync Database</MobiButton>
+                    <MobiButton size="sm" variant="outline" className="w-full">Settings</MobiButton>
+                  </div>
+                }
+                footer={
+                  <div className="text-[9px] text-mobi-text-muted text-center uppercase tracking-widest font-mono">
+                    Terminal v1.4.2
+                  </div>
+                }
+              />
+              <div className={`p-6 transition-all duration-300 ${collapsible ? "lg:pl-6" : "lg:pl-76"}`}>
+                <h4 className="text-xs font-black uppercase tracking-widest text-mobi-text mb-2">Main Panel Viewport</h4>
+                <p className="text-[10px] text-mobi-text-muted leading-relaxed max-w-md">
+                  Active Panel: <code className="bg-mobi-surface px-1.5 py-0.5 border border-mobi-border rounded">{active.toUpperCase()}</code>.
+                  {collapsible && " The sidebar is currently collapsible on desktop! Toggle it using the hamburger menu triggers."}
+                  {!collapsible && " The sidebar is currently fixed and locked open on desktop viewports."}
+                </p>
+              </div>
             </div>
           </div>
         );
@@ -534,26 +573,91 @@ const catalog: CatalogEntry[] = [
     id: 'MobiCard',
     name: 'MobiCard',
     category: 'component',
-    description: 'Premium asset container with header and technical footer.',
-    code: `<MobiCard title="Data Analytics">
-  <p>Content goes here.</p>
+    description: 'Premium asset container with header, technical footer, and curated theme-aware color variants.',
+    code: `<MobiCard title="Tactical Operations" variant="tactical" footer="Core Command">
+  <p>Core tactical overview.</p>
 </MobiCard>`,
     render: () => (
-      <div className="max-w-md">
-        <MobiCard title="System Node v1.2.6">
-          <div className="space-y-3">
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium text-mobi-text-muted">Status</span>
-              <span className="text-xs font-bold text-emerald-500 uppercase tracking-widest">Active</span>
-            </div>
-            <div className="h-2 bg-mobi-bg rounded-full overflow-hidden">
-              <div className="h-full bg-mobi-primary w-[65%]" />
-            </div>
-            <p className="text-sm text-mobi-text leading-relaxed">
-              Real-time synchronization with the Command Bridge is active.
-            </p>
-          </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
+        <MobiCard title="Default Variant" variant="default" footer="Asset Frame">
+          <p className="text-sm text-mobi-text leading-relaxed">
+            Standard crisp M.O.B.I.™ responsive dashboard component container.
+          </p>
         </MobiCard>
+        <MobiCard title="Primary Accent" variant="primary" footer="Core Grid">
+          <p className="text-sm text-mobi-text leading-relaxed">
+            Highlight boundary accentuating the M.O.B.I.™ primary theme color.
+          </p>
+        </MobiCard>
+        <MobiCard title="Success Matrix" variant="success" footer="Operational Status">
+          <p className="text-sm text-mobi-text leading-relaxed">
+            Curated emerald highlights for active nodes and verified results.
+          </p>
+        </MobiCard>
+        <MobiCard title="Tactical Deep Dark" variant="tactical" footer="Sovereign Core">
+          <p className="text-sm text-slate-300 leading-relaxed">
+            Deep-dark mode container designed for professional tactical interfaces.
+          </p>
+        </MobiCard>
+      </div>
+    )
+  },
+  {
+    id: 'MobiBentoGrid',
+    name: 'MobiBentoGrid',
+    category: 'component',
+    description: 'Premium, multi-dimensional responsive Bento layout grid. Features hover lift interactions and radial glows.',
+    code: `<MobiBentoGrid columns={4}>
+  <MobiBentoItem colSpan={2} rowSpan={2}>
+    <h3>Main Control</h3>
+  </MobiBentoItem>
+  <MobiBentoItem colSpan={2}>
+    <h3>Side Widget</h3>
+  </MobiBentoItem>
+</MobiBentoGrid>`,
+    render: () => (
+      <div className="w-full max-w-4xl">
+        <MobiBentoGrid columns={4}>
+          <MobiBentoItem colSpan={2} rowSpan={2} className="min-h-[220px]">
+            <div className="flex flex-col justify-between h-full">
+              <div>
+                <MobiBadge variant="info" className="mb-2">Operational Core</MobiBadge>
+                <h3 className="text-lg font-bold text-mobi-text tracking-tight mb-2">Grand Fleet Commander</h3>
+                <p className="text-xs text-mobi-text-muted leading-relaxed">
+                  Decentralized real-time orchestration engine monitoring network status across all active sectors.
+                </p>
+              </div>
+              <div className="flex gap-2 items-center mt-4">
+                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                <span className="text-[10px] font-mono text-mobi-text-muted uppercase">Sector 4 Node Active</span>
+              </div>
+            </div>
+          </MobiBentoItem>
+
+          <MobiBentoItem colSpan={2} className="min-h-[100px]">
+            <div className="flex justify-between items-start">
+              <div>
+                <h4 className="text-xs font-bold text-mobi-text uppercase tracking-wider mb-1">Haki Balance</h4>
+                <div className="text-2xl font-black text-mobi-text font-mono">14,250.00 ₡</div>
+              </div>
+              <MobiIcon name="billing" size={24} className="text-mobi-primary" />
+            </div>
+          </MobiBentoItem>
+
+          <MobiBentoItem colSpan={1} className="min-h-[100px]">
+            <div className="flex flex-col justify-between h-full">
+              <span className="text-[10px] uppercase font-bold text-mobi-text-muted">Active Users</span>
+              <div className="text-xl font-bold text-mobi-text font-mono mt-1">128 / 500</div>
+            </div>
+          </MobiBentoItem>
+
+          <MobiBentoItem colSpan={1} className="min-h-[100px]">
+            <div className="flex flex-col justify-between h-full">
+              <span className="text-[10px] uppercase font-bold text-mobi-text-muted">Response SLA</span>
+              <div className="text-xl font-bold text-emerald-500 font-mono mt-1">99.98%</div>
+            </div>
+          </MobiBentoItem>
+        </MobiBentoGrid>
       </div>
     )
   },

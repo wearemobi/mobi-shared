@@ -26,6 +26,15 @@ export interface MobiSidebarProps {
    */
   footer?: React.ReactNode;
   /**
+   * Optional action elements inside the footer.
+   */
+  footerActions?: React.ReactNode;
+  /**
+   * Whether the sidebar can be collapsed on all viewports.
+   * @default false
+   */
+  collapsible?: boolean;
+  /**
    * Additional CSS classes.
    */
   className?: string;
@@ -42,9 +51,11 @@ export const MobiSidebar: React.FC<MobiSidebarProps> = ({
   title,
   children,
   footer,
+  footerActions,
+  collapsible = false,
   className = ""
 }) => {
-  // Prevent scrolling when mobile sidebar is open
+  // Prevent scrolling when mobile/collapsible sidebar is open
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
@@ -56,9 +67,11 @@ export const MobiSidebar: React.FC<MobiSidebarProps> = ({
 
   return (
     <>
-      {/* Mobile Backdrop */}
+      {/* Mobile/Collapsible Backdrop */}
       <div 
-        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 lg:hidden ${
+        className={`fixed inset-0 z-40 bg-black/50 backdrop-blur-sm transition-opacity duration-300 ${
+          collapsible ? "" : "lg:hidden"
+        } ${
           isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
         }`}
         onClick={onClose}
@@ -66,7 +79,9 @@ export const MobiSidebar: React.FC<MobiSidebarProps> = ({
 
       {/* Sidebar Container */}
       <aside 
-        className={`fixed top-0 bottom-0 left-0 z-50 flex w-72 flex-col border-r border-mobi-border bg-mobi-surface transition-transform duration-300 ease-in-out lg:translate-x-0 ${
+        className={`fixed top-0 bottom-0 left-0 z-50 flex w-72 flex-col border-r border-mobi-border bg-mobi-surface transition-transform duration-300 ease-in-out ${
+          collapsible ? "" : "lg:translate-x-0"
+        } ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } ${className}`}
       >
@@ -77,7 +92,9 @@ export const MobiSidebar: React.FC<MobiSidebarProps> = ({
           </div>
           <button 
             onClick={onClose}
-            className="h-10 w-10 flex items-center justify-center text-mobi-text-muted hover:text-mobi-text hover:bg-mobi-surface rounded-xl transition-all"
+            className={`h-10 w-10 flex items-center justify-center text-mobi-text-muted hover:text-mobi-text hover:bg-mobi-surface rounded-xl transition-all ${
+              collapsible ? "" : "lg:hidden"
+            }`}
             aria-label="Close sidebar"
           >
             <MobiIcon name="close" size={24} />
@@ -90,9 +107,18 @@ export const MobiSidebar: React.FC<MobiSidebarProps> = ({
         </nav>
 
         {/* Footer */}
-        {footer && (
-          <div className="border-t border-mobi-border/50 p-4">
-            {footer}
+        {(footer || footerActions) && (
+          <div className="border-t border-mobi-border/50 p-4 space-y-4">
+            {footerActions && (
+              <div className="flex flex-col gap-2">
+                {footerActions}
+              </div>
+            )}
+            {footer && (
+              <div>
+                {footer}
+              </div>
+            )}
           </div>
         )}
       </aside>

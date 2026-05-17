@@ -10,7 +10,8 @@ export type MobiIconName =
   | 'chevrons-right' | 'chevrons-left'
   | 'cpu' | 'clip' | 'bot' | 'history' | 'zap' | 'check'
   | 'sun' | 'moon' | 'monitor' | 'upload' | 'upload-cloud'
-  | 'eye' | 'eye-off' | 'chat' | 'docs' | 'search' | 'loader';
+  | 'eye' | 'eye-off' | 'chat' | 'docs' | 'search' | 'loader'
+  | 'cart' | 'items' | 'billing' | 'customers' | 'ia' | 'pos';
 
 interface MobiIconProps {
   /** Identifier of the icon in the M.O.B.I.™ registry */
@@ -69,7 +70,13 @@ const ICON_REGISTRY: Record<MobiIconName, React.ReactNode> = {
   chat: <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />,
   docs: <><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" /><polyline points="14 2 14 8 20 8" /><line x1="16" y1="13" x2="8" y2="13" /><line x1="16" y1="17" x2="8" y2="17" /><polyline points="10 9 9 9 8 9" /></>,
   search: <><circle cx="11" cy="11" r="8" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></>,
-  loader: <><circle cx="12" cy="12" r="10" strokeOpacity="0.25" /><path d="M4 12a8 8 0 018-8" strokeOpacity="0.75" /></>
+  loader: <><circle cx="12" cy="12" r="10" strokeOpacity="0.25" /><path d="M4 12a8 8 0 018-8" strokeOpacity="0.75" /></>,
+  cart: <><circle cx="9" cy="21" r="1" /><circle cx="20" cy="21" r="1" /><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6" /></>,
+  items: <><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z" /><polyline points="3.27 6.96 12 12.01 20.73 6.96" /><line x1="12" y1="22.08" x2="12" y2="12" /></>,
+  billing: <><rect x="4" y="2" width="16" height="20" rx="2" ry="2" /><line x1="9" y1="9" x2="15" y2="9" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="9" y1="17" x2="15" y2="17" /></>,
+  customers: <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></>,
+  ia: <><circle cx="12" cy="12" r="2" /><circle cx="5" cy="5" r="2" /><circle cx="5" cy="19" r="2" /><circle cx="19" cy="5" r="2" /><circle cx="19" cy="19" r="2" /><line x1="7" y1="7" x2="10.5" y2="10.5" /><line x1="7" y1="17" x2="10.5" y2="13.5" /><line x1="17" y1="7" x2="13.5" y2="10.5" /><line x1="17" y1="17" x2="13.5" y2="13.5" /></>,
+  pos: <><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></>
 };
 
 export const MobiIcon: React.FC<MobiIconProps> = ({ 
