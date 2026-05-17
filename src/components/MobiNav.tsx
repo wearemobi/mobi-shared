@@ -42,6 +42,19 @@ export interface MobiNavProps {
    */
   footer?: React.ReactNode;
   /**
+   * Optional action elements inside the footer.
+   */
+  footerActions?: React.ReactNode;
+  /**
+   * Whether the sidebar can be collapsed on all viewports.
+   * @default false
+   */
+  collapsible?: boolean;
+  /**
+   * Callback triggered when the sidebar open state changes.
+   */
+  onToggle?: (isOpen: boolean) => void;
+  /**
    * Additional CSS classes.
    */
   className?: string;
@@ -58,26 +71,38 @@ export const MobiNav: React.FC<MobiNavProps> = ({
   onNavigate,
   title,
   footer,
+  footerActions,
+  collapsible = false,
+  onToggle,
   className = ""
 }) => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
+  const handleToggle = (open: boolean) => {
+    setIsMobileOpen(open);
+    if (onToggle) {
+      onToggle(open);
+    }
+  };
+
   const handleNavigate = (id: string) => {
     onNavigate(id);
-    setIsMobileOpen(false);
+    handleToggle(false);
   };
 
   return (
     <>
-      {/* Mobile Tactical Trigger Bar */}
-      <div className="lg:hidden sticky top-0 z-30 flex items-center justify-between h-16 px-4 border-b border-mobi-border bg-mobi-surface/80 backdrop-blur-md">
+      {/* Mobile/Collapsible Tactical Trigger Bar */}
+      <div className={`sticky top-0 z-30 flex items-center justify-between h-16 px-4 border-b border-mobi-border bg-mobi-surface/80 backdrop-blur-md ${
+        collapsible ? "" : "lg:hidden"
+      }`}>
         <div className="flex items-center gap-3">
           {title || <MobiLogo size={28} />}
           <span className="font-bold text-lg tracking-tight">M.O.B.I.™</span>
         </div>
         
         <button
-          onClick={() => setIsMobileOpen(true)}
+          onClick={() => handleToggle(true)}
           className="p-2 -mr-2 text-mobi-text-muted hover:text-mobi-text focus:outline-none"
           aria-label="Open menu"
         >
@@ -88,9 +113,11 @@ export const MobiNav: React.FC<MobiNavProps> = ({
       {/* Unified Navigation Layer (Sidebar + Drawer) */}
       <MobiSidebar
         isOpen={isMobileOpen}
-        onClose={() => setIsMobileOpen(false)}
+        onClose={() => handleToggle(false)}
         title={title}
         footer={footer}
+        footerActions={footerActions}
+        collapsible={collapsible}
         className={`mobi-nav-container ${className}`}
       >
         <div className="flex flex-col gap-1">
