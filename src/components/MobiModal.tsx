@@ -36,7 +36,7 @@ const SIZE_MAP: Record<MobiModalSize, string> = {
   md: 'max-w-lg',
   lg: 'max-w-2xl',
   xl: 'max-w-4xl',
-  full: 'max-w-full mx-4'
+  full: 'max-w-full'
 };
 
 /**
@@ -132,7 +132,7 @@ export const MobiModal: React.FC<MobiModalProps> = ({
 
   return createPortal(
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 animate-in fade-in duration-200"
+      className={`fixed inset-0 z-[9999] flex items-center justify-center ${size === 'full' ? 'p-0' : 'p-4'} animate-in fade-in duration-200`}
       onClick={handleOverlayClick}
       role="presentation"
     >
@@ -149,8 +149,9 @@ export const MobiModal: React.FC<MobiModalProps> = ({
         tabIndex={-1}
         className={`
           relative z-10 w-full ${SIZE_MAP[size]} bg-mobi-surface border border-mobi-border
-          rounded-2xl shadow-2xl ring-1 ring-black/10 flex flex-col
-          animate-in fade-in zoom-in-95 duration-200 max-h-[90vh] outline-none
+          ${size === 'full' ? 'h-screen max-h-screen rounded-none border-none' : 'rounded-2xl max-h-[90vh]'}
+          shadow-2xl ring-1 ring-black/10 flex flex-col
+          animate-in fade-in zoom-in-95 duration-200 outline-none
           ${className}
         `}
       >
@@ -194,7 +195,7 @@ export const MobiModal: React.FC<MobiModalProps> = ({
 
         {/* Footer */}
         {footer && (
-          <div className="px-6 py-4 border-t border-mobi-border/50 bg-mobi-bg/30 rounded-b-2xl">
+          <div className={`px-6 py-4 border-t border-mobi-border/50 bg-mobi-bg/30 ${size === 'full' ? 'rounded-none' : 'rounded-b-2xl'}`}>
             {footer}
           </div>
         )}
