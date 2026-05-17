@@ -96,10 +96,14 @@ export const MobiNav: React.FC<MobiNavProps> = ({
       <div className={`sticky top-0 z-30 flex items-center justify-between h-16 px-4 border-b border-mobi-border bg-mobi-surface/80 backdrop-blur-md ${
         collapsible ? "" : "lg:hidden"
       }`}>
-        <div className="flex items-center gap-3">
+        <button
+          onClick={() => handleToggle(true)}
+          className="flex items-center gap-3 focus:outline-none hover:opacity-80 transition-opacity active:scale-[0.98] select-none"
+          aria-label="Open menu"
+        >
           {title || <MobiLogo size={28} />}
           <span className="font-bold text-lg tracking-tight">M.O.B.I.™</span>
-        </div>
+        </button>
         
         <button
           onClick={() => handleToggle(true)}
