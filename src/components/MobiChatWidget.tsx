@@ -86,6 +86,8 @@ export interface MobiChatWidgetProps {
   onToggle?: (isOpen: boolean) => void;
   /** Callback to handle the actual sending of the message and returning the response text. */
   onSendMessage?: (message: string, model: string) => Promise<string>;
+  /** Custom CSS classes for the fixed container (e.g. for positioning) */
+  containerClassName?: string;
 }
 
 /**
@@ -119,10 +121,12 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   suggestions = [],
   isOpen: controlledIsOpen,
   onToggle,
-  onSendMessage
+  onSendMessage,
+  containerClassName
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(false);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+  const [isFullScreen, setIsFullScreen] = useState(false);
   
   const [currentFontSize, setCurrentFontSize] = useState<'sm' | 'md' | 'lg'>('md');
   
@@ -133,8 +137,12 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     }
     onToggle?.(nextState);
     
-    if (nextState) onOpen?.();
-    else onClose?.();
+    if (nextState) {
+      onOpen?.();
+    } else {
+      setIsFullScreen(false);
+      onClose?.();
+    }
   };
 
   const { 
@@ -147,6 +155,16 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   } = useMobiChat({ initialEnergy, initialMessages, onSendMessage });
 
   const lastErrorIdRef = React.useRef<string | null>(null);
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'info' } | null>(null);
+  const toastTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = React.useCallback((message: string, type: 'success' | 'info' = 'success') => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setToast({ message, type });
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast(null);
+    }, 2000);
+  }, []);
 
   // Monitor for errors to trigger analytics hook
   React.useEffect(() => {
@@ -162,10 +180,6 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
   const handleSendMessage = (content: string) => {
     sendMessage(content);
     onMessageSent?.(content);
-    
-    // Check for error state in messages (after next render or via hook)
-    // For now, trigger generic send event. Error tracking would usually
-    // happen in the hook, but we expose it here.
   };
 
   const handleAttach = (source: 'computer' | 'vault') => {
@@ -173,23 +187,73 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
     onAction?.('attach', { source });
   };
 
+  const handleCopy = React.useCallback((content: string) => {
+    navigator.clipboard.writeText(content);
+    showToast('Copied to Clipboard', 'success');
+    onAction?.('copy', { contentLength: content.length });
+  }, [showToast, onAction]);
+
+  const handleShare = React.useCallback((content: string) => {
+    if (navigator.share) {
+      navigator.share({ text: content })
+        .then(() => showToast('Shared successfully', 'success'))
+        .catch((err) => {
+          if (err.name !== 'AbortError') {
+            console.error('Share error:', err);
+            navigator.clipboard.writeText(content);
+            showToast('Copied instead (Share failed)', 'info');
+          }
+        });
+    } else {
+      navigator.clipboard.writeText(content);
+      showToast('Copied Link & Text', 'success');
+    }
+    onAction?.('share', { contentLength: content.length });
+  }, [showToast, onAction]);
+
+  const handleRetry = React.useCallback((msg: MobiChatMessage) => {
+    const index = messages.findIndex(m => m.id === msg.id);
+    if (index === -1) return;
+
+    for (let i = index - 1; i >= 0; i--) {
+      if (messages[i].role === 'user') {
+        const prompt = messages[i].content;
+        sendMessage(prompt);
+        onAction?.('retry', { messageId: msg.id, prompt });
+        showToast('Retrying generation', 'info');
+        return;
+      }
+    }
+    showToast('No user prompt found to retry', 'info');
+  }, [messages, sendMessage, onAction, showToast]);
+
+
+  const calculatedContainerClassName = isOpen 
+    ? (isFullScreen 
+        ? "fixed inset-0 z-[9999] flex flex-col" 
+        : (containerClassName || "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col sm:items-end sm:gap-4"))
+    : (containerClassName || "fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-4");
+
+  const calculatedChatWindowClassName = isFullScreen
+    ? "w-full h-full bg-mobi-surface border-0 flex flex-col"
+    : "w-full h-full sm:w-[380px] sm:h-[550px] bg-mobi-surface border-0 sm:border border-mobi-border rounded-none sm:rounded-xl shadow-none sm:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300";
 
   return (
-    <div className={
-      isOpen 
-        ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col sm:items-end sm:gap-4" 
-        : "fixed bottom-6 right-6 z-[9999] flex flex-col items-end gap-4"
-    }>
+    <div className={calculatedContainerClassName}>
       {/* Chat Window */}
       {isOpen && (
-        <div className="
-          w-full h-full sm:w-[380px] sm:h-[550px] bg-mobi-surface border-0 sm:border border-mobi-border rounded-none sm:rounded-xl
-          shadow-none sm:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col
-          animate-in fade-in slide-in-from-bottom-4 duration-300
-        ">
+        <div className={calculatedChatWindowClassName}>
           <MobiErrorBoundary>
             {/* Header (Condensed) */}
-            <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-none sm:rounded-t-xl">
+            <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between rounded-t-none sm:rounded-t-xl relative overflow-hidden">
+              {toast && (
+                <div className="absolute inset-0 bg-mobi-bg/95 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-300 px-5 z-20">
+                  <div className="flex items-center gap-2">
+                    <MobiIcon name={toast.type === 'success' ? 'check' : 'info'} size={14} className="text-mobi-primary animate-pulse" />
+                    <span className="text-[10px] font-mono font-bold tracking-widest text-mobi-text uppercase">{toast.message}</span>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center gap-3">
                 {userInitials && (
                   <MobiSentinelMenu 
@@ -216,7 +280,18 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
                   <h3 className="text-[14px] font-bold tracking-tight text-mobi-text">{title}</h3>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
+                <MobiButton 
+                  variant="ghost" 
+                  size="sm" 
+                  className="h-8 w-8 p-0 min-w-0 rounded-sm opacity-60 hover:opacity-100 transition-opacity"
+                  onClick={() => {
+                    setIsFullScreen(prev => !prev);
+                    onAction?.('fullscreen_toggle', { isFullScreen: !isFullScreen });
+                  }}
+                  title={isFullScreen ? "Exit Fullscreen" : "Fullscreen Mode"}
+                  icon={<MobiIcon name={isFullScreen ? "monitor" : "external"} size={14} />}
+                />
                 <MobiButton 
                   variant="ghost" 
                   size="sm" 
@@ -234,16 +309,9 @@ export const MobiChatWidget: React.FC<MobiChatWidgetProps> = ({
               className="bg-mobi-bg/10"
               processingText={processingText}
               fontSize={currentFontSize}
-              onRetry={(msg) => {
-                sendMessage(msg.content);
-                onAction?.('retry', { messageId: msg.id });
-              }}
-              onCopy={(content) => {
-                onAction?.('copy', { contentLength: content.length });
-              }}
-              onShare={(content) => {
-                onAction?.('share', { contentLength: content.length });
-              }}
+              onRetry={handleRetry}
+              onCopy={handleCopy}
+              onShare={handleShare}
               emptyState={{
                 title: emptyStateTitle,
                 description: emptyStateDescription

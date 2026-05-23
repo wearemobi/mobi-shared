@@ -81,6 +81,11 @@ export interface MobiChatInputProps {
    * If true, uses a more compact layout for the input tools.
    */
   isCompact?: boolean;
+  /**
+   * Connection status. If false, status indicator turns red.
+   * @default true
+   */
+  isConnected?: boolean;
 }
 
 const DEFAULT_MODELS = [
@@ -114,7 +119,8 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
   onAttach,
   models = DEFAULT_MODELS,
   energyStats,
-  isCompact = false
+  isCompact = false,
+  isConnected = true
 }) => {
   const [value, setValue] = useState('');
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -213,7 +219,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
       <div className="px-4 py-1.5 bg-mobi-bg border-t border-mobi-border/50 flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className={`h-1.5 w-1.5 rounded-full ${isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500'}`} />
+            <div className={`h-1.5 w-1.5 rounded-full ${!isConnected ? 'bg-rose-500' : (isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500')}`} />
             <span className="text-[9px] font-bold text-mobi-text-muted tracking-[0.15em] font-mono">
               {isProcessing ? processingText : statusMessage}
             </span>

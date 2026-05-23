@@ -55,8 +55,8 @@ const App: React.FC = () => {
             <button
               onClick={() => setView(view === 'home' ? 'docs' : 'home')}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] font-sans transition-all active:scale-95 ${view === 'docs'
-                  ? 'bg-mobi-primary text-mobi-bg'
-                  : 'border border-mobi-border bg-mobi-surface text-mobi-text hover:bg-mobi-surface-hover'
+                ? 'bg-mobi-primary text-mobi-bg'
+                : 'border border-mobi-border bg-mobi-surface text-mobi-text hover:bg-mobi-surface-hover'
                 }`}
             >
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -170,7 +170,7 @@ const App: React.FC = () => {
         token="MOBI_PLAYGROUND_TOKEN"
         tenantId="MOBI"
         agentId="support"
-        baseUrl="https://edge.sandbox.grandfleet.mobi"
+        baseUrl="http://localhost:8787"
       />
 
       {/* BRANDED INTERFACE - ACME REACTOR */}

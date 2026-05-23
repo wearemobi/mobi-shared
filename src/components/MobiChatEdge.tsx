@@ -112,6 +112,7 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
 }) => {
   const [internalIsOpen, setInternalIsOpen] = useState(isInitiallyOpen);
   const isOpen = controlledIsOpen !== undefined ? controlledIsOpen : internalIsOpen;
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
   const defaultMessages: MobiEdgeMessage[] = [];
 
@@ -143,6 +144,9 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
     if (controlledIsOpen === undefined) {
       setInternalIsOpen(nextState);
     }
+    if (!nextState) {
+      setIsFullScreen(false);
+    }
     onToggle?.(nextState);
   };
 
@@ -150,6 +154,54 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
     sendMessage(msg);
     onSendMessage?.(msg);
   };
+
+  const [toast, setToast] = useState<{ message: string; type: 'success' | 'info' } | null>(null);
+  const toastTimeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const showToast = React.useCallback((message: string, type: 'success' | 'info' = 'success') => {
+    if (toastTimeoutRef.current) clearTimeout(toastTimeoutRef.current);
+    setToast({ message, type });
+    toastTimeoutRef.current = setTimeout(() => {
+      setToast(null);
+    }, 2000);
+  }, []);
+
+  const handleCopy = React.useCallback((content: string) => {
+    navigator.clipboard.writeText(content);
+    showToast('Copied to Clipboard', 'success');
+  }, [showToast]);
+
+  const handleShare = React.useCallback((content: string) => {
+    if (navigator.share) {
+      navigator.share({ text: content })
+        .then(() => showToast('Shared successfully', 'success'))
+        .catch((err) => {
+          if (err.name !== 'AbortError') {
+            console.error('Share error:', err);
+            navigator.clipboard.writeText(content);
+            showToast('Copied instead (Share failed)', 'info');
+          }
+        });
+    } else {
+      navigator.clipboard.writeText(content);
+      showToast('Copied Link & Text', 'success');
+    }
+  }, [showToast]);
+
+  const handleRetry = React.useCallback((msg: MobiEdgeMessage) => {
+    const index = messages.findIndex(m => m.id === msg.id);
+    if (index === -1) return;
+
+    for (let i = index - 1; i >= 0; i--) {
+      if (messages[i].role === 'user') {
+        const prompt = messages[i].content;
+        sendMessage(prompt, msg.model);
+        showToast('Retrying generation', 'info');
+        return;
+      }
+    }
+    showToast('No user prompt found to retry', 'info');
+  }, [messages, sendMessage, showToast]);
 
   const modelOptions = models
     .filter(m => m.resource_kind === 'AI_MODEL')
@@ -168,22 +220,32 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
   const energyPercent = (hakiBalance / hakiLimit) * 100;
   const isOutOfEnergy = hakiBalance <= 0;
 
+  const calculatedContainerClassName = isOpen
+    ? (isFullScreen
+        ? "fixed inset-0 z-[9999] flex flex-col"
+        : (containerClassName || "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col sm:items-end sm:gap-4"))
+    : (containerClassName || "fixed bottom-6 right-6 z-[9999]");
+
+  const calculatedChatWindowClassName = isFullScreen
+    ? "w-full h-full bg-mobi-surface border-0 flex flex-col overflow-hidden"
+    : "w-full h-full sm:w-[380px] sm:h-[600px] bg-mobi-surface border-0 sm:border border-mobi-border rounded-none sm:rounded-xl shadow-none sm:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col animate-in fade-in slide-in-from-bottom-4 duration-300 overflow-hidden";
+
   return (
-    <div className={
-      containerClassName || (isOpen
-        ? "fixed inset-0 sm:inset-auto sm:bottom-6 sm:right-6 z-[9999] flex flex-col sm:items-end sm:gap-4"
-        : "fixed bottom-6 right-6 z-[9999]")
-    }>
+    <div className={calculatedContainerClassName}>
       {/* Chat Window */}
       {isOpen && (
-        <div className="
-          w-full h-full sm:w-[380px] sm:h-[600px] bg-mobi-surface border-0 sm:border border-mobi-border rounded-none sm:rounded-xl
-          shadow-none sm:shadow-[0_20px_50px_rgba(0,0,0,0.5)] flex flex-col
-          animate-in fade-in slide-in-from-bottom-4 duration-300 overflow-hidden
-        ">
+        <div className={calculatedChatWindowClassName}>
           <MobiErrorBoundary>
             {/* Header */}
-            <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between">
+            <div className="px-5 py-3.5 bg-mobi-bg border-b border-mobi-border flex items-center justify-between relative overflow-hidden">
+              {toast && (
+                <div className="absolute inset-0 bg-mobi-bg/95 backdrop-blur-sm flex items-center justify-center animate-in fade-in duration-300 px-5 z-20">
+                  <div className="flex items-center gap-2">
+                    <MobiIcon name={toast.type === 'success' ? 'check' : 'info'} size={14} className="text-mobi-primary animate-pulse" />
+                    <span className="text-[10px] font-mono font-bold tracking-widest text-mobi-text uppercase">{toast.message}</span>
+                  </div>
+                </div>
+              )}
               <div className="flex items-center gap-3">
                 <div className={`h-2 w-2 rounded-full ${!isConnected ? 'bg-rose-500' : (isProcessing ? 'bg-amber-500 animate-pulse' : 'bg-emerald-500')}`} />
                 <div className="flex flex-col">
@@ -205,6 +267,14 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
                 <MobiButton
                   variant="ghost"
                   size="sm"
+                  className="h-8 w-8 p-0 min-w-0 opacity-40 hover:opacity-100 transition-opacity"
+                  onClick={() => setIsFullScreen(prev => !prev)}
+                  title={isFullScreen ? "Exit Fullscreen" : "Fullscreen Mode"}
+                  suffixIcon={<MobiIcon name={isFullScreen ? "monitor" : "external"} size={14} />}
+                />
+                <MobiButton
+                  variant="ghost"
+                  size="sm"
                   className="h-8 w-8 p-0 min-w-0"
                   onClick={handleToggle}
                   suffixIcon={<MobiIcon name="close" size={16} />}
@@ -218,6 +288,9 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
               messages={messages as any}
               isProcessing={isProcessing}
               className="flex-1 bg-mobi-bg/10"
+              onRetry={handleRetry}
+              onCopy={handleCopy}
+              onShare={handleShare}
               emptyState={{
                 title: welcomeTitle || 'MobiAI Chat',
                 description: welcomeDescription || customWelcome || 'Agentic Link established. System is ready for tactical deployment.',
@@ -248,21 +321,22 @@ export const MobiChatEdge: React.FC<MobiChatEdgeProps> = ({
             <div className="p-4 bg-mobi-bg border-t border-mobi-border">
               <MobiChatInput
                 onSend={handleSend}
-                isProcessing={isProcessing || isOutOfEnergy}
+                isProcessing={isProcessing || isOutOfEnergy || !isConnected}
                 activeModelId={activeModelId}
                 onModelChange={setActiveModelId}
                 models={modelOptions}
-                energy={energyPercent}
+                energy={!isConnected ? 0 : energyPercent}
                 energyStats={{
                   label: energyLabel,
-                  used: hakiUsed,
-                  limit: hakiLimit,
-                  percent: energyPercent
+                  used: !isConnected ? 0 : hakiUsed,
+                  limit: !isConnected ? 0 : hakiLimit,
+                  percent: !isConnected ? 0 : energyPercent
                 }}
                 isCompact={true}
-                placeholder={isOutOfEnergy ? "Insufficient Haki Energy..." : placeholder}
+                placeholder={!isConnected ? "System is offline..." : (isOutOfEnergy ? "Insufficient Haki Energy..." : placeholder)}
                 statusMessage={!isConnected ? "OFFLINE" : (isOutOfEnergy ? "RECHARGE REQUIRED" : statusMessage)}
                 className="border-none shadow-none bg-transparent"
+                isConnected={isConnected}
               />
             </div>
           </MobiErrorBoundary>
