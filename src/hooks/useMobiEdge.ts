@@ -31,6 +31,14 @@ export interface MobiEdgeCatalogResponse {
   intelligence_catalog: MobiEdgeModel[];
 }
 
+export interface MobiEdgeHealth {
+  status: 'online' | string;
+  service: string;
+  version: string;
+  environment: string;
+  fingerprint: string;
+}
+
 export interface UseMobiEdgeOptions {
   /** Bearer token for authorization */
   token: string;
@@ -82,6 +90,8 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
+  const [health, setHealth] = useState<MobiEdgeHealth | null>(null);
+  const [isHealthy, setIsHealthy] = useState<boolean>(false);
 
   // Memoize headers
   const headers = {
@@ -89,6 +99,25 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     'X-Tenant-Id': tenantId,
     'Authorization': `Bearer ${token}`
   };
+
+  const fetchHealth = useCallback(async () => {
+    try {
+      const res = await fetch(`${baseUrl}/health`);
+      if (!res.ok) throw new Error('Health check failed');
+      const data: MobiEdgeHealth = await res.json();
+      setHealth(data);
+      const healthy = data.status === 'online';
+      setIsHealthy(healthy);
+      setIsConnected(healthy);
+      return healthy;
+    } catch (err) {
+      console.error('[MobiEdge] Health check error:', err);
+      setHealth(null);
+      setIsHealthy(false);
+      setIsConnected(false);
+      return false;
+    }
+  }, [baseUrl]);
 
   const fetchCatalog = useCallback(async () => {
     if (!token) return;
@@ -149,11 +178,24 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
 
   // Initial load
   useEffect(() => {
-    fetchCatalog();
-    fetchStatus();
-    if (conversationId) {
-      fetchHistory(conversationId);
-    }
+    let active = true;
+
+    const checkAndLoad = async () => {
+      const healthy = await fetchHealth();
+      if (!healthy || !active) return;
+
+      fetchCatalog();
+      fetchStatus();
+      if (conversationId) {
+        fetchHistory(conversationId);
+      }
+    };
+
+    checkAndLoad();
+
+    return () => {
+      active = false;
+    };
   }, [token, tenantId, baseUrl]);
 
   const addMessage = useCallback((message: Omit<MobiEdgeMessage, 'id' | 'timestamp'>) => {
@@ -193,8 +235,21 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
         })
       });
 
-      if (res.status === 403) throw new Error('Insufficient Haki');
-      if (!res.ok) throw new Error('Inference Failure');
+      if (!res.ok) {
+        let errorDetails = '';
+        try {
+          const errData = await res.json();
+          errorDetails = JSON.stringify(errData, null, 2);
+        } catch {
+          try {
+            const text = await res.text();
+            errorDetails = text || `Status ${res.status}`;
+          } catch {
+            errorDetails = `Status ${res.status}`;
+          }
+        }
+        throw new Error(`Inference Failure\n\n\`\`\`json\n${errorDetails}\n\`\`\``);
+      }
 
       const data = await res.json();
       
@@ -220,13 +275,10 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
       fetchStatus();
     } catch (err) {
       const msg = (err as Error).message;
-      const isHakiError = msg === 'Insufficient Haki';
       
       addMessage({ 
         role: 'assistant', 
-        content: isHakiError 
-          ? '⚡️ INSUFFICIENT HAKI. Sentinel energy depleted. System recharge required.' 
-          : `Error: ${msg}`, 
+        content: `Error: ${msg}`, 
         isError: true,
         model 
       });
@@ -259,7 +311,10 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     isMemoryActive: useMemoryOverride !== undefined 
       ? useMemoryOverride 
       : (status?.tier ? status.tier !== 'BASIC' : false),
-    isConnected
+    isConnected,
+    health,
+    isHealthy,
+    refreshHealth: fetchHealth
   };
 };
 

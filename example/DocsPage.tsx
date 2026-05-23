@@ -2331,6 +2331,7 @@ export const DocsPage: React.FC<DocsPageProps> = ({
 
       {/* The Widget Popup Preview */}
       <MobiChatWidget 
+        containerClassName="fixed bottom-6 right-44 z-[9999]"
         userInitials="CQ" 
         userPlan="PRO" 
         userEmail="carlos@wearemobi.com"

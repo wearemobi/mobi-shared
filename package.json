@@ -1,6 +1,6 @@
 {
   "name": "@wearemobi/shared",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Universal UI & Logic Shield for M.O.B.I.™ Grand Fleet",
   "type": "module",
   "files": [
