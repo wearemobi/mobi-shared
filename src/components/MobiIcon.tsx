@@ -11,7 +11,8 @@ export type MobiIconName =
   | 'cpu' | 'clip' | 'bot' | 'history' | 'zap' | 'check'
   | 'sun' | 'moon' | 'monitor' | 'upload' | 'upload-cloud'
   | 'eye' | 'eye-off' | 'chat' | 'docs' | 'search' | 'loader'
-  | 'cart' | 'items' | 'billing' | 'customers' | 'ia' | 'pos';
+  | 'cart' | 'items' | 'billing' | 'customers' | 'ia' | 'pos'
+  | 'more-vertical' | 'more-horizontal';
 
 interface MobiIconProps {
   /** Identifier of the icon in the M.O.B.I.™ registry */
@@ -76,7 +77,9 @@ const ICON_REGISTRY: Record<MobiIconName, React.ReactNode> = {
   billing: <><rect x="4" y="2" width="16" height="20" rx="2" ry="2" /><line x1="9" y1="9" x2="15" y2="9" /><line x1="9" y1="13" x2="15" y2="13" /><line x1="9" y1="17" x2="15" y2="17" /></>,
   customers: <><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 00-3-3.87" /><path d="M16 3.13a4 4 0 010 7.75" /></>,
   ia: <><circle cx="12" cy="12" r="2" /><circle cx="5" cy="5" r="2" /><circle cx="5" cy="19" r="2" /><circle cx="19" cy="5" r="2" /><circle cx="19" cy="19" r="2" /><line x1="7" y1="7" x2="10.5" y2="10.5" /><line x1="7" y1="17" x2="10.5" y2="13.5" /><line x1="17" y1="7" x2="13.5" y2="10.5" /><line x1="17" y1="17" x2="13.5" y2="13.5" /></>,
-  pos: <><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></>
+  pos: <><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></>,
+  'more-vertical': <><circle cx="12" cy="12" r="1" /><circle cx="12" cy="5" r="1" /><circle cx="12" cy="19" r="1" /></>,
+  'more-horizontal': <><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></>
 };
 
 export const MobiIcon: React.FC<MobiIconProps> = ({ 

@@ -13,7 +13,8 @@ import {
   MobiChatEdge, useMobiEdge,
   MobiNav, MobiHamburgerMenu, MobiDrawer, MobiIcon, MobiAppLogo,
   MobiSectionHeader, MobiBentoGrid, MobiBentoItem,
-  MobiConfirm, MobiQuantityControl, MobiEmojiPicker
+  MobiConfirm, MobiQuantityControl, MobiEmojiPicker,
+  MobiMoreMenu, MobiBentoIndicator
 } from '../src';
 import pkg from '../package.json';
 
@@ -79,20 +80,34 @@ const catalog: CatalogEntry[] = [
     id: 'MobiSectionHeader',
     name: 'MobiSectionHeader',
     category: 'component',
-    description: 'Standardized layout for section introductions with headline badges, titles, and descriptions.',
-    code: `<MobiSectionHeader \n  headline="Category" \n  title="Section Title" \n  description="Detailed explanation..." \n  variant="component" \n/>`,
+    description: 'Standardized layout for section introductions with headline badges, titles, descriptions, icons and actions.',
+    code: `<MobiSectionHeader \n  headline="Category" \n  title="Section Title" \n  description="Detailed explanation..." \n  variant="component"\n  size="lg"\n  icon={<MobiIcon name="monitor" />}\n  actions={<MobiMoreMenu items={[{id: '1', label: 'Action'}]} />}\n/>`,
     render: () => (
       <div className="space-y-8 p-6 bg-mobi-bg rounded-xl border border-mobi-border">
         <MobiSectionHeader 
-          headline="Fleet Component" 
+          headline="Large Variant" 
           title="Reactor Core" 
           description="A specialized module for managing atomic energy state and tactical intelligence orchestration." 
           variant="component"
+          size="lg"
+          icon={<MobiIcon name="monitor" />}
+          actions={<MobiMoreMenu items={[{ id: 'settings', label: 'Core Settings', icon: <MobiIcon name="settings" size={16}/> }]} />}
         />
         <div className="pt-4 border-t border-mobi-border/50">
           <MobiSectionHeader 
+            headline="Medium (Default)"
             title="Simplified Header" 
-            description="Only title and description, no headline badge." 
+            description="Medium size header without icon or actions." 
+            size="md"
+          />
+        </div>
+        <div className="pt-4 border-t border-mobi-border/50">
+          <MobiSectionHeader 
+            headline="Small Variant"
+            title="Widget Title" 
+            description="Compact header for inner sections." 
+            size="sm"
+            actions={<MobiButton size="sm" variant="outline">Action</MobiButton>}
           />
         </div>
       </div>
@@ -2294,6 +2309,68 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
       };
       return <EmojiDemo />;
     }
+  },
+  {
+    id: 'MobiMoreMenu',
+    name: 'MobiMoreMenu',
+    category: 'component',
+    description: 'A streamlined dropdown menu triggered by a 3-dots "more" icon, ideal for action toolbars.',
+    code: `<MobiMoreMenu 
+  items={[
+    { id: 'edit', label: 'Edit' },
+    { id: 'delete', label: 'Delete', danger: true }
+  ]} 
+/>`,
+    render: () => (
+      <div className="flex gap-4">
+        <MobiMoreMenu 
+          items={[
+            { id: 'edit', label: 'Edit Node', icon: <span className="text-xs">✏️</span> },
+            { id: 'delete', label: 'Delete Node', icon: <span className="text-xs">🗑️</span>, danger: true }
+          ]} 
+        />
+        <MobiMoreMenu 
+          horizontal
+          items={[
+            { id: 'settings', label: 'Settings' }
+          ]} 
+        />
+      </div>
+    )
+  },
+  {
+    id: 'MobiBentoIndicator',
+    name: 'MobiBentoIndicator',
+    category: 'component',
+    description: 'A specialized Bento component for dashboard indicators and metrics. Replicates premium metrics cards with values, titles, and icons.',
+    code: `<MobiBentoIndicator 
+  title="Active Users"
+  value="128 / 500"
+  footer="Response SLA: 99.98%"
+/>`,
+    render: () => (
+      <div className="w-full max-w-4xl">
+        <MobiBentoGrid columns={4}>
+          <MobiBentoIndicator 
+            colSpan={2}
+            title="Haki Balance"
+            value="14,250.00 ₡"
+            icon={<MobiIcon name="billing" size={24} className="text-mobi-primary" />}
+          />
+          <MobiBentoIndicator 
+            colSpan={1}
+            value="128 / 500"
+            footer="Active Users"
+          />
+          <MobiBentoIndicator 
+            colSpan={1}
+            value="99.98%"
+            valueColorClass="text-emerald-500"
+            footer="Response SLA"
+          />
+        </MobiBentoGrid>
+      </div>
+    )
   }
 ];
 

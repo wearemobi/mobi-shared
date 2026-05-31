@@ -17,6 +17,7 @@ import { MobiChatEdge, MobiButton, useMobiEdge } from '@wearemobi/shared';
 | Component | Description | Docs |
 |---|---|---|
 | [`MobiAlert`](./MobiAlert.md) | Toast notification with auto-dismiss and progress bar | [Link](./MobiAlert.md) |
+| [`MobiBentoIndicator`](./MobiBentoIndicator.md) | Dashboard metrics tile with title and value | [Link](./MobiBentoIndicator.md) |
 | [`MobiButton`](./MobiButton.md) | Standard button with variants and icon support | [Link](./MobiButton.md) |
 | [`MobiCard`](./MobiCard.md) | Premium content container with elevation | [Link](./MobiCard.md) |
 | [`MobiChatEdge`](./MobiChatEdge.md) | **Full Agent Interface** for Edge Reactor v1 | [Link](./MobiChatEdge.md) |
@@ -29,9 +30,11 @@ import { MobiChatEdge, MobiButton, useMobiEdge } from '@wearemobi/shared';
 | [`MobiLangSwitcher`](./MobiLangSwitcher.md) | Premium language selector (EN/ES) | [Link](./MobiLangSwitcher.md) |
 | [`MobiLogo`](./MobiLogo.md) | Official brand mark | [Link](./MobiLogo.md) |
 | [`MobiLogoHero`](./MobiLogoHero.md) | Theme-aware hero logo | [Link](./MobiLogoHero.md) |
+| [`MobiMoreMenu`](./MobiMoreMenu.md) | Dropdown menu triggered by a 3-dots icon | [Link](./MobiMoreMenu.md) |
 | [`MobiNavbar`](./MobiNavbar.md) | Sticky top navigation bar | [Link](./MobiNavbar.md) |
 | [`MobiPlanBadge`](./MobiPlanBadge.md) | Subscription tier pill indicator | [Link](./MobiPlanBadge.md) |
 | [`MobiQuantityControl`](./MobiQuantityControl.md) | Customizable +/- counter for numerical inputs | [Link](./MobiQuantityControl.md) |
+| [`MobiSectionHeader`](./MobiSectionHeader.md) | Standardized layout for section introductions | [Link](./MobiSectionHeader.md) |
 | [`MobiSentinelMenu`](./MobiSentinelMenu.md) | Data-driven identity dropdown | [Link](./MobiSentinelMenu.md) |
 | [`MobiSwitcher`](./MobiSwitcher.md) | Compact segmented selector | [Link](./MobiSwitcher.md) |
 | [`MobiThemeSwitcher`](./MobiThemeSwitcher.md) | Premium theme selector | [Link](./MobiThemeSwitcher.md) |
