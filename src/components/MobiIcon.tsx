@@ -12,7 +12,10 @@ export type MobiIconName =
   | 'sun' | 'moon' | 'monitor' | 'upload' | 'upload-cloud'
   | 'eye' | 'eye-off' | 'chat' | 'docs' | 'search' | 'loader'
   | 'cart' | 'items' | 'billing' | 'customers' | 'ia' | 'pos'
-  | 'more-vertical' | 'more-horizontal';
+  | 'more-vertical' | 'more-horizontal'
+  | 'kitchen' | 'kitchen-menu' | 'receipt' | 'logbook' | 'reports'
+  | 'add' | 'remove' | 'edit' | 'delete' | 'list-view' | 'grid-view'
+  | 'ready' | 'cancel' | 'stop' | 'calendar' | 'day' | 'time';
 
 interface MobiIconProps {
   /** Identifier of the icon in the M.O.B.I.™ registry */
@@ -79,7 +82,24 @@ const ICON_REGISTRY: Record<MobiIconName, React.ReactNode> = {
   ia: <><circle cx="12" cy="12" r="2" /><circle cx="5" cy="5" r="2" /><circle cx="5" cy="19" r="2" /><circle cx="19" cy="5" r="2" /><circle cx="19" cy="19" r="2" /><line x1="7" y1="7" x2="10.5" y2="10.5" /><line x1="7" y1="17" x2="10.5" y2="13.5" /><line x1="17" y1="7" x2="13.5" y2="10.5" /><line x1="17" y1="17" x2="13.5" y2="13.5" /></>,
   pos: <><rect x="2" y="3" width="20" height="14" rx="2" ry="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></>,
   'more-vertical': <><circle cx="12" cy="12" r="1" /><circle cx="12" cy="5" r="1" /><circle cx="12" cy="19" r="1" /></>,
-  'more-horizontal': <><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></>
+  'more-horizontal': <><circle cx="12" cy="12" r="1" /><circle cx="19" cy="12" r="1" /><circle cx="5" cy="12" r="1" /></>,
+  kitchen: <><path d="M6 13.87A4 4 0 0 1 7.41 6a5.11 5.11 0 0 1 1.05-1.54 5 5 0 0 1 7.08 0A5.11 5.11 0 0 1 16.59 6 4 4 0 0 1 18 13.87V21H6Z"/><line x1="6" y1="17" x2="18" y2="17"/></>,
+  'kitchen-menu': <><path d="m16 2-2.3 2.3a3 3 0 0 0 0 4.2l1.8 1.8a3 3 0 0 0 4.2 0L22 8"/><path d="M15 15 3.3 3.3a4.2 4.2 0 0 0 0 6l7.3 7.3c2.7 2.7 6 2.7 8 0L22 13"/><path d="m2 22 5.5-5.5"/><path d="m8 14 5.5-5.5"/></>,
+  receipt: <><path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6"/><path d="M16 12h-8"/><path d="M16 16h-8"/></>,
+  logbook: <><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></>,
+  reports: <><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></>,
+  add: <><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></>,
+  remove: <><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></>,
+  edit: <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>,
+  delete: <><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></>,
+  'list-view': <><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></>,
+  'grid-view': <><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></>,
+  ready: <><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></>,
+  cancel: <><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></>,
+  stop: <><circle cx="12" cy="12" r="10"/><rect x="9" y="9" width="6" height="6"/></>,
+  calendar: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></>,
+  day: <><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><path d="M8 14h.01"/><path d="M12 14h.01"/><path d="M16 14h.01"/><path d="M8 18h.01"/><path d="M12 18h.01"/><path d="M16 18h.01"/></>,
+  time: <><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></>
 };
 
 export const MobiIcon: React.FC<MobiIconProps> = ({ 
