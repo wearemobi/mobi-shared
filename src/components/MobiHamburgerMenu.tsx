@@ -25,6 +25,10 @@ export interface MobiHamburgerMenuProps {
    * @default 'dropdown'
    */
   mode?: 'dropdown' | 'drawer';
+  /** Icon to show when closed. @default 'burger' */
+  triggerIcon?: React.ReactNode;
+  /** Icon to show when opened. @default 'close' */
+  activeTriggerIcon?: React.ReactNode;
 }
 
 /**
@@ -37,7 +41,9 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
   title,
   className = '',
   variant = 'default',
-  mode = 'dropdown'
+  mode = 'dropdown',
+  triggerIcon = 'burger',
+  activeTriggerIcon = 'close'
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -82,7 +88,11 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
         aria-expanded={isOpen}
         aria-label="Toggle actions"
       >
-        <MobiIcon name={isOpen ? 'close' : 'burger'} size={24} />
+        {typeof (isOpen ? activeTriggerIcon : triggerIcon) === 'string' ? (
+          <MobiIcon name={(isOpen ? activeTriggerIcon : triggerIcon) as any} size={24} />
+        ) : (
+          (isOpen ? activeTriggerIcon : triggerIcon) as React.ReactNode
+        )}
       </button>
 
       {isOpen && mode === 'dropdown' && (
