@@ -105,8 +105,35 @@ export const MobiQuantityControl: React.FC<MobiQuantityControlProps> = ({
     transition-colors flex-shrink-0 cursor-pointer outline-none
   `;
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // Allow empty string while typing
+    if (e.target.value === '') {
+      // We don't propagate empty strings to onChange, but we need local state to allow deleting.
+      // However, since it's fully controlled by `value`, we can't easily allow empty unless we use local state.
+      // For simplicity in a fully controlled component, if they clear it, we force it to min (or 0).
+      onChange(min);
+      return;
+    }
+    
+    const parsed = parseInt(e.target.value, 10);
+    if (!isNaN(parsed)) {
+      let nextValue = parsed;
+      if (max !== undefined && nextValue > max) {
+        nextValue = max;
+      }
+      onChange(nextValue);
+    }
+  };
+
+  const handleBlur = () => {
+    // On blur, ensure the value is at least min
+    if (value < min) {
+      onChange(min);
+    }
+  };
+
   return (
-    <div className={`inline-flex items-center border border-mobi-border bg-mobi-surface rounded-lg font-sans ${containerSizeClass} ${className}`}>
+    <div className={`inline-flex items-center border border-mobi-border bg-mobi-surface rounded-lg font-sans focus-within:ring-2 focus-within:ring-mobi-primary/50 focus-within:border-mobi-primary transition-all ${containerSizeClass} ${className}`}>
       {showMinus ? (
         <button
           type="button"
@@ -122,9 +149,16 @@ export const MobiQuantityControl: React.FC<MobiQuantityControlProps> = ({
         <div className={buttonSizeClass} aria-hidden="true" />
       )}
 
-      <div className="flex-1 text-center font-medium min-w-[2ch] px-2 text-mobi-text selection:bg-mobi-primary/20">
-        {value}
-      </div>
+      <input
+        type="text"
+        inputMode="numeric"
+        pattern="[0-9]*"
+        value={value}
+        onChange={handleInputChange}
+        onBlur={handleBlur}
+        className="flex-1 text-center font-medium min-w-[3ch] max-w-[5ch] px-1 text-mobi-text bg-transparent border-none outline-none selection:bg-mobi-primary/20"
+        aria-label="Quantity"
+      />
 
       <button
         type="button"

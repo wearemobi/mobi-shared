@@ -575,12 +575,16 @@ const catalog: CatalogEntry[] = [
     name: 'MobiCard',
     category: 'component',
     description: 'Premium asset container with header, technical footer, and curated theme-aware color variants.',
-    code: `<MobiCard title="Tactical Operations" variant="tactical" footer="Core Command">
+    code: `<MobiCard title={<span><MobiIcon name="monitor"/> Operations</span>} variant="tactical" footer="Core Command">
   <p>Core tactical overview.</p>
 </MobiCard>`,
     render: () => (
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-4xl">
-        <MobiCard title="Default Variant" variant="default" footer="Asset Frame">
+        <MobiCard 
+          title={<div className="flex items-center gap-2"><MobiIcon name="monitor" size={16}/> Default Variant</div>} 
+          variant="default" 
+          footer="Asset Frame"
+        >
           <p className="text-sm text-mobi-text leading-relaxed">
             Standard crisp M.O.B.I.™ responsive dashboard component container.
           </p>
@@ -609,8 +613,8 @@ const catalog: CatalogEntry[] = [
     category: 'component',
     description: 'Premium, multi-dimensional responsive Bento layout grid. Features hover lift interactions and radial glows.',
     code: `<MobiBentoGrid columns={4}>
-  <MobiBentoItem colSpan={2} rowSpan={2}>
-    <h3>Main Control</h3>
+  <MobiBentoItem colSpan={2} rowSpan={2} title="Main Control" footer={<MobiButton>Sync</MobiButton>}>
+    <p>Body content</p>
   </MobiBentoItem>
   <MobiBentoItem colSpan={2}>
     <h3>Side Widget</h3>
@@ -619,43 +623,44 @@ const catalog: CatalogEntry[] = [
     render: () => (
       <div className="w-full max-w-4xl">
         <MobiBentoGrid columns={4}>
-          <MobiBentoItem colSpan={2} rowSpan={2} className="min-h-[220px]">
-            <div className="flex flex-col justify-between h-full">
-              <div>
-                <MobiBadge variant="info" className="mb-2">Operational Core</MobiBadge>
-                <h3 className="text-lg font-bold text-mobi-text tracking-tight mb-2">Grand Fleet Commander</h3>
-                <p className="text-xs text-mobi-text-muted leading-relaxed">
-                  Decentralized real-time orchestration engine monitoring network status across all active sectors.
-                </p>
+          <MobiBentoItem 
+            colSpan={2} 
+            rowSpan={2} 
+            className="min-h-[220px]"
+            title={<div className="flex items-center gap-2"><MobiBadge variant="info">Operational Core</MobiBadge> Commander</div>}
+            footer={
+              <div className="flex justify-between items-center w-full">
+                <div className="flex gap-2 items-center">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                  <span className="text-[10px] font-mono text-mobi-text-muted uppercase">Sector 4 Node Active</span>
+                </div>
+                <MobiButton size="sm" variant="outline">View Logs</MobiButton>
               </div>
-              <div className="flex gap-2 items-center mt-4">
-                <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-mono text-mobi-text-muted uppercase">Sector 4 Node Active</span>
-              </div>
+            }
+          >
+            <div className="flex flex-col h-full">
+              <p className="text-xs text-mobi-text-muted leading-relaxed">
+                Decentralized real-time orchestration engine monitoring network status across all active sectors.
+              </p>
             </div>
           </MobiBentoItem>
 
-          <MobiBentoItem colSpan={2} className="min-h-[100px]">
+          <MobiBentoItem colSpan={2} className="min-h-[100px]" title="Haki Balance">
             <div className="flex justify-between items-start">
-              <div>
-                <h4 className="text-xs font-bold text-mobi-text uppercase tracking-wider mb-1">Haki Balance</h4>
-                <div className="text-2xl font-black text-mobi-text font-mono">14,250.00 ₡</div>
-              </div>
+              <div className="text-2xl font-black text-mobi-text font-mono">14,250.00 ₡</div>
               <MobiIcon name="billing" size={24} className="text-mobi-primary" />
             </div>
           </MobiBentoItem>
 
-          <MobiBentoItem colSpan={1} className="min-h-[100px]">
-            <div className="flex flex-col justify-between h-full">
-              <span className="text-[10px] uppercase font-bold text-mobi-text-muted">Active Users</span>
-              <div className="text-xl font-bold text-mobi-text font-mono mt-1">128 / 500</div>
+          <MobiBentoItem colSpan={1} className="min-h-[100px]" footer={<span className="text-[10px] uppercase font-bold text-mobi-text-muted">Active Users</span>}>
+            <div className="flex flex-col justify-center h-full">
+              <div className="text-xl font-bold text-mobi-text font-mono">128 / 500</div>
             </div>
           </MobiBentoItem>
 
-          <MobiBentoItem colSpan={1} className="min-h-[100px]">
-            <div className="flex flex-col justify-between h-full">
-              <span className="text-[10px] uppercase font-bold text-mobi-text-muted">Response SLA</span>
-              <div className="text-xl font-bold text-emerald-500 font-mono mt-1">99.98%</div>
+          <MobiBentoItem colSpan={1} className="min-h-[100px]" footer={<span className="text-[10px] uppercase font-bold text-mobi-text-muted">Response SLA</span>}>
+            <div className="flex flex-col justify-center h-full">
+              <div className="text-xl font-bold text-emerald-500 font-mono">99.98%</div>
             </div>
           </MobiBentoItem>
         </MobiBentoGrid>
