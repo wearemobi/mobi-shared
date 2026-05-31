@@ -415,7 +415,8 @@ const catalog: CatalogEntry[] = [
                 collapsible={collapsible}
                 items={[
                   { id: 'dash', label: 'Retail POS', icon: <MobiIcon name="pos" size={18} /> },
-                  { id: 'items', label: 'Items Inventory', icon: <MobiIcon name="items" size={18} /> },
+                  { id: 'items', label: 'Items Inventory', leading: <MobiIcon name="items" size={18} />, badge: 124 },
+                  { id: 'kitchen', label: 'Cocina', leading: <MobiIcon name="kitchen" size={18} />, badge: <span className="text-[10px] bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">2 En Cocina</span> },
                   { id: 'billing', label: 'Transactions Ledger', icon: <MobiIcon name="billing" size={18} /> },
                   { id: 'customers', label: 'Customers Cardex', icon: <MobiIcon name="customers" size={18} /> },
                   { id: 'ia', label: 'Intelligence Engine', icon: <MobiIcon name="ia" size={18} /> }
@@ -2041,7 +2042,7 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
     render: () => {
       const ListViewDemo = () => {
         const [selectedId, setSelectedId] = useState<string | number>('f-1');
-        const [layout, setLayout] = useState<'list' | 'cards'>('list');
+        const [layout, setLayout] = useState<'list' | 'cards' | 'flat'>('list');
 
         const items = [
           {
@@ -2062,10 +2063,11 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
           },
           {
             id: 'f-3',
-            headline: 'Subsector Transporter Beta',
-            description: 'Offline. Emergency thermal buffers exhausted.',
-            leading: <MobiLogo size={20} className="opacity-30" />,
-            trailing: <MobiBadge variant="error" size="sm">Offline</MobiBadge>,
+            headline: 'Recon Interceptor X-9',
+            description: 'Signal lost near outer rim anomaly.',
+            leading: <MobiLogo size={20} className="grayscale opacity-30" />,
+            trailing: <MobiBadge variant="error" size="sm">MIA</MobiBadge>,
+            disabled: true,
             onClick: () => setSelectedId('f-3')
           },
           {
@@ -2080,7 +2082,7 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
 
         return (
           <div className="space-y-6 max-w-lg mx-auto">
-            <div className="flex justify-between items-center bg-mobi-bg/30 border border-mobi-border p-3 rounded-xl">
+            <div className="flex justify-between items-center bg-mobi-bg/30 border border-mobi-border p-3 rounded-xl flex-wrap gap-2">
               <span className="text-xs font-black uppercase text-mobi-text-muted">Display Variant:</span>
               <div className="flex gap-2">
                 <MobiButton
@@ -2098,6 +2100,14 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
                   onClick={() => setLayout('cards')}
                 >
                   Stacked Cards
+                </MobiButton>
+                <MobiButton
+                  size="sm"
+                  variant={layout === 'flat' ? 'solid' : 'outline'}
+                  technical
+                  onClick={() => setLayout('flat')}
+                >
+                  Flat / Clean
                 </MobiButton>
               </div>
             </div>
