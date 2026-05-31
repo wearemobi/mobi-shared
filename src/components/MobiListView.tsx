@@ -21,9 +21,10 @@ export interface MobiListViewProps {
    * Layout display mode
    * - 'cards': separate rounded card containers with subtle borders
    * - 'list': a single unified list separated with divider lines
+   * - 'flat': clean list with only separators, no container borders or background
    * @default 'list'
    */
-  variant?: 'list' | 'cards';
+  variant?: 'list' | 'cards' | 'flat';
   /**
    * Set custom list height limits and enable scroll container
    */
@@ -44,9 +45,12 @@ export const MobiListView: React.FC<MobiListViewProps> = ({
     ? { maxHeight, overflowY: 'auto' }
     : {};
 
-  const baseContainerClasses = variant === 'list'
-    ? 'divide-y divide-mobi-border/30 rounded-2xl border border-mobi-border bg-mobi-surface/40 overflow-hidden'
-    : 'space-y-3';
+  let baseContainerClasses = 'space-y-3';
+  if (variant === 'list') {
+    baseContainerClasses = 'divide-y divide-mobi-border/30 rounded-2xl border border-mobi-border bg-mobi-surface/40 overflow-hidden';
+  } else if (variant === 'flat') {
+    baseContainerClasses = 'divide-y divide-mobi-border/30';
+  }
 
   return (
     <div 
