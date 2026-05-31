@@ -14,7 +14,7 @@ import {
   MobiNav, MobiHamburgerMenu, MobiDrawer, MobiIcon, MobiAppLogo,
   MobiSectionHeader, MobiBentoGrid, MobiBentoItem,
   MobiConfirm, MobiQuantityControl, MobiEmojiPicker,
-  MobiMoreMenu, MobiBentoIndicator
+  MobiMoreMenu, MobiBentoIndicator, MobiDateTime
 } from '../src';
 import pkg from '../package.json';
 
@@ -2374,6 +2374,30 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
             footer="Response SLA"
           />
         </MobiBentoGrid>
+      </div>
+    )
+  },
+  {
+    id: 'MobiDateTime',
+    name: 'MobiDateTime',
+    category: 'component',
+    description: 'A standardized component for displaying dates and times with built-in formatting capabilities, sizing, and interaction support.',
+    code: `<MobiDateTime \n  value={new Date()} \n  mode="datetime" \n  size="md"\n/>`,
+    render: () => (
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center gap-4">
+          <MobiDateTime value={new Date()} mode="date" size="sm" />
+          <MobiDateTime value={new Date()} mode="time" size="md" />
+          <MobiDateTime value={new Date()} mode="datetime" size="lg" />
+        </div>
+        <div className="flex items-center gap-4">
+          <MobiDateTime value={new Date()} format="YYYY-MM-DD HH:mm:ss" />
+          <MobiDateTime 
+            value={new Date()} 
+            format="DD/MM/YYYY" 
+            onClick={() => alert('Clicked date!')} 
+          />
+        </div>
       </div>
     )
   }

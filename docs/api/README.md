@@ -23,6 +23,7 @@ import { MobiChatEdge, MobiButton, useMobiEdge } from '@wearemobi/shared';
 | [`MobiChatEdge`](./MobiChatEdge.md) | **Full Agent Interface** for Edge Reactor v1 | [Link](./MobiChatEdge.md) |
 | [`MobiChatInput`](./MobiChatInput.md) | Advanced command input for agentic logic | [Link](./MobiChatInput.md) |
 | [`MobiConfirm`](./MobiConfirm.md) | Streamlined Yes/No confirmation dialog wrapper | [Link](./MobiConfirm.md) |
+| [`MobiDateTime`](./MobiDateTime.md) | Standardized display for dates and times | [Link](./MobiDateTime.md) |
 | [`MobiEmojiPicker`](./MobiEmojiPicker.md) | Categorized emoji selection via emoji-mart | [Link](./MobiEmojiPicker.md) |
 | [`MobiEnergyMeter`](./MobiEnergyMeter.md) | Haki/Battery level visualizer | [Link](./MobiEnergyMeter.md) |
 | [`MobiFooter`](./MobiFooter.md) | Parametric branding footer with app metadata | [Link](./MobiFooter.md) |
