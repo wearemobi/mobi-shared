@@ -34,6 +34,9 @@ import { MobiNavbar, MobiSentinelMenu, MobiFooter, MobiAlert, useMobiTheme, Mobi
 | `MobiChatEdge` | **(New)** Decentralized agentic chat powered by M.O.B.I.™ Edge Reactor |
 | `MobiNav` | **(New)** Hybrid navigation orchestration (Sidebar + Hamburger Drawer) |
 | `MobiHamburgerMenu` | **(New)** Tactical action dropdown triggered by a hamburger icon |
+| `MobiConfirm` | **(New)** Streamlined wrapper for simple Yes/No confirmation dialogs |
+| `MobiQuantityControl` | **(New)** Customizable +/- counter for numerical inputs |
+| `MobiEmojiPicker` | **(New)** Lightweight, categorized emoji selection via emoji-mart |
 
 ## Hooks
 

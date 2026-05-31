@@ -72,3 +72,7 @@ export * from './components/MobiSectionHeader';
 // v1.4.2 — collapsible navigation, card variants & bento grid
 export * from './components/MobiBentoGrid';
 
+// v1.4.3 — interactive controls & dialogs
+export * from './components/MobiConfirm';
+export * from './components/MobiQuantityControl';
+export * from './components/MobiEmojiPicker';
