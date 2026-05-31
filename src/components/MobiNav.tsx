@@ -103,8 +103,12 @@ export const MobiNav: React.FC<MobiNavProps> = ({
           className="flex items-center gap-3 focus:outline-none hover:opacity-80 transition-opacity active:scale-[0.98] select-none"
           aria-label="Open menu"
         >
-          {title || <MobiLogo size={28} />}
-          <span className="font-bold text-lg tracking-tight">M.O.B.I.™</span>
+          {title ? title : (
+            <>
+              <MobiLogo size={28} />
+              <span className="font-bold text-lg tracking-tight">M.O.B.I.™</span>
+            </>
+          )}
         </button>
         
         <button
