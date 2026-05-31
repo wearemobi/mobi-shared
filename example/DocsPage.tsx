@@ -2398,6 +2398,10 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
             onClick={() => alert('Clicked date!')} 
           />
         </div>
+        <div className="flex items-center gap-4 border-t border-mobi-border/50 pt-4 mt-2">
+          <MobiDateTime live mode="time" size="lg" />
+          <span className="text-mobi-text-muted text-sm font-sans tracking-tight">&larr; Live Updating Time</span>
+        </div>
       </div>
     )
   }

@@ -2,8 +2,13 @@ import React from 'react';
 import { MobiIcon } from './MobiIcon';
 
 export interface MobiDateTimeProps {
-  /** The date to display. Can be a Date object, timestamp, or ISO string. */
-  value: Date | string | number;
+  /** The date to display. Optional if 'live' is true. */
+  value?: Date | string | number;
+  /**
+   * If true, the component will automatically update every second to show the current time.
+   * @default false
+   */
+  live?: boolean;
   /**
    * Display mode. 
    * @default 'datetime'
@@ -31,7 +36,8 @@ export interface MobiDateTimeProps {
  * formatting capabilities, sizing, and interaction support.
  */
 export const MobiDateTime: React.FC<MobiDateTimeProps> = ({
-  value,
+  value = new Date(),
+  live = false,
   mode = 'datetime',
   format,
   size = 'md',
@@ -39,11 +45,25 @@ export const MobiDateTime: React.FC<MobiDateTimeProps> = ({
   className = '',
   showIcon = true,
 }) => {
-  // Parse the input value into a valid Date object
-  const dateObj = value instanceof Date ? value : new Date(value);
+  const [currentDate, setCurrentDate] = React.useState<Date>(
+    value instanceof Date ? value : new Date(value || Date.now())
+  );
+
+  React.useEffect(() => {
+    if (!live) {
+      setCurrentDate(value instanceof Date ? value : new Date(value || Date.now()));
+      return;
+    }
+
+    const interval = setInterval(() => {
+      setCurrentDate(new Date());
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [live, value]);
 
   // Check if date is valid
-  const isValidDate = !isNaN(dateObj.getTime());
+  const isValidDate = !isNaN(currentDate.getTime());
 
   // Formatter fallback logic
   const getFormattedString = (): string => {
@@ -52,17 +72,17 @@ export const MobiDateTime: React.FC<MobiDateTimeProps> = ({
     if (format) {
       // Lightweight custom formatter
       const pad = (n: number) => n.toString().padStart(2, '0');
-      const YYYY = dateObj.getFullYear().toString();
+      const YYYY = currentDate.getFullYear().toString();
       const YY = YYYY.slice(-2);
-      const M = dateObj.getMonth() + 1;
+      const M = currentDate.getMonth() + 1;
       const MM = pad(M);
-      const D = dateObj.getDate();
+      const D = currentDate.getDate();
       const DD = pad(D);
-      const H24 = dateObj.getHours();
+      const H24 = currentDate.getHours();
       const HH = pad(H24);
-      const m = dateObj.getMinutes();
+      const m = currentDate.getMinutes();
       const mm = pad(m);
-      const s = dateObj.getSeconds();
+      const s = currentDate.getSeconds();
       const ss = pad(s);
       const A = H24 >= 12 ? 'PM' : 'AM';
 
@@ -80,14 +100,14 @@ export const MobiDateTime: React.FC<MobiDateTimeProps> = ({
     // System formatting fallback based on mode
     const locale = undefined; // use system locale
     if (mode === 'date') {
-      return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(dateObj);
+      return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(currentDate);
     }
     if (mode === 'time') {
-      return new Intl.DateTimeFormat(locale, { timeStyle: 'short' }).format(dateObj);
+      return new Intl.DateTimeFormat(locale, { timeStyle: 'short' }).format(currentDate);
     }
     
     // datetime
-    return new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(dateObj);
+    return new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(currentDate);
   };
 
   const displayString = getFormattedString();
