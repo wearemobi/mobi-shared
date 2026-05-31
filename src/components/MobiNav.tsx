@@ -8,9 +8,11 @@ import './MobiNav.css';
 export interface NavModule {
   id: string;
   label: string;
-  icon: React.ReactNode;
+  icon?: React.ReactNode;
+  /** Alternative to icon for flexible leading content */
+  leading?: React.ReactNode;
   path?: string;
-  badge?: string | number;
+  badge?: React.ReactNode;
   disabled?: boolean;
   isExternal?: boolean;
 }
@@ -130,14 +132,20 @@ export const MobiNav: React.FC<MobiNavProps> = ({
               key={item.id}
               active={activeId === item.id}
               onClick={() => handleNavigate(item.id)}
-              icon={item.icon}
+              icon={item.icon || item.leading}
             >
               <div className="flex items-center justify-between w-full">
                 <span>{item.label}</span>
                 {item.badge && (
-                  <MobiBadge variant="info" size="sm">
-                    {item.badge}
-                  </MobiBadge>
+                  typeof item.badge === 'string' || typeof item.badge === 'number' ? (
+                    <MobiBadge variant="info" size="sm">
+                      {item.badge}
+                    </MobiBadge>
+                  ) : (
+                    <div className="flex-shrink-0 flex items-center justify-center">
+                      {item.badge}
+                    </div>
+                  )
                 )}
               </div>
             </MobiSidebarItem>
