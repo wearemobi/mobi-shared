@@ -133,19 +133,21 @@ export const MobiSidebarItem: React.FC<{
   active?: boolean;
   onClick?: () => void;
   icon?: React.ReactNode;
+  trailing?: React.ReactNode;
   children: React.ReactNode;
-}> = ({ active, onClick, icon, children }) => {
+}> = ({ active, onClick, icon, trailing, children }) => {
   return (
     <button
       onClick={onClick}
-      className={`flex w-full items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all ${
+      className={`flex w-full items-center gap-3 px-3 py-2 rounded-md text-sm font-medium transition-all outline-none ${
         active 
           ? "bg-mobi-primary text-mobi-bg shadow-sm" 
           : "text-mobi-text-muted hover:bg-mobi-surface-hover hover:text-mobi-text"
       }`}
     >
-      {icon && <span className="shrink-0">{icon}</span>}
-      <span className="truncate">{children}</span>
+      {icon && <span className="shrink-0 flex items-center justify-center">{icon}</span>}
+      <span className="flex-1 truncate text-left">{children}</span>
+      {trailing && <span className="shrink-0 flex items-center justify-end">{trailing}</span>}
     </button>
   );
 };

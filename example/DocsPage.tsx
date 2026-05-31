@@ -416,7 +416,7 @@ const catalog: CatalogEntry[] = [
                 items={[
                   { id: 'dash', label: 'Retail POS', icon: <MobiIcon name="pos" size={18} /> },
                   { id: 'items', label: 'Items Inventory', leading: <MobiIcon name="items" size={18} />, badge: 124 },
-                  { id: 'kitchen', label: 'Cocina', leading: <MobiIcon name="kitchen" size={18} />, badge: <span className="text-[10px] bg-red-500 text-white px-1.5 py-0.5 rounded-full font-bold">2 En Cocina</span> },
+                  { id: 'kitchen', label: 'Cocina', leading: <MobiIcon name="kitchen" size={18} />, badge: <MobiBadge variant="error" size="sm">2 En Cocina</MobiBadge> },
                   { id: 'billing', label: 'Transactions Ledger', icon: <MobiIcon name="billing" size={18} /> },
                   { id: 'customers', label: 'Customers Cardex', icon: <MobiIcon name="customers" size={18} /> },
                   { id: 'ia', label: 'Intelligence Engine', icon: <MobiIcon name="ia" size={18} /> }
