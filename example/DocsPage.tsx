@@ -2213,7 +2213,12 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
           'shield', 'copy', 'sync', 'trash', 'external', 'plus', 'minus', 
           'chevron-right', 'chevron-down', 'chevron-left', 'chevrons-right', 'chevrons-left',
           'cpu', 'clip', 'bot', 'history', 'zap', 'check', 'sun', 'moon', 'monitor',
-          'upload', 'upload-cloud', 'eye', 'eye-off', 'chat', 'docs', 'search'
+          'upload', 'upload-cloud', 'eye', 'eye-off', 'chat', 'docs', 'search', 'loader',
+          'cart', 'items', 'billing', 'customers', 'ia', 'pos',
+          'more-vertical', 'more-horizontal',
+          'kitchen', 'kitchen-menu', 'receipt', 'logbook', 'reports',
+          'add', 'remove', 'edit', 'delete', 'list-view', 'grid-view',
+          'ready', 'cancel', 'stop', 'calendar', 'day', 'time'
         ].map(name => (
           <div key={name} className="flex flex-col items-center gap-3 p-4 bg-mobi-bg/20 border border-mobi-border/30 rounded-xl hover:bg-mobi-surface-hover transition-all group">
             <MobiIcon name={name as any} size={24} className="group-hover:scale-110 transition-transform" />
