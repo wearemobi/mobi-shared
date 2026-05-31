@@ -13,7 +13,7 @@ export interface MobiBentoGridProps {
   className?: string;
 }
 
-export interface MobiBentoItemProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface MobiBentoItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   children: React.ReactNode;
   /**
    * Column footprint span of this item card.
@@ -25,6 +25,14 @@ export interface MobiBentoItemProps extends React.HTMLAttributes<HTMLDivElement>
    * @default 1
    */
   rowSpan?: 1 | 2 | 3 | 'full';
+  /**
+   * Optional title rendered at the top of the bento item.
+   */
+  title?: React.ReactNode;
+  /**
+   * Optional footer rendered at the bottom (e.g. for action buttons).
+   */
+  footer?: React.ReactNode;
   /**
    * Additional styling classes.
    */
@@ -81,6 +89,8 @@ export const MobiBentoItem: React.FC<MobiBentoItemProps> = ({
   children,
   colSpan = 1,
   rowSpan = 1,
+  title,
+  footer,
   className = '',
   ...props
 }) => {
@@ -90,7 +100,7 @@ export const MobiBentoItem: React.FC<MobiBentoItemProps> = ({
   return (
     <div
       className={`
-        relative overflow-hidden rounded-2xl border border-mobi-border bg-mobi-surface p-6
+        relative overflow-hidden rounded-2xl border border-mobi-border bg-mobi-surface p-6 flex flex-col
         transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl hover:border-mobi-primary/30
         group ${colClass} ${rowClass} ${className}
       `}
@@ -102,8 +112,22 @@ export const MobiBentoItem: React.FC<MobiBentoItemProps> = ({
                    transition-all duration-500 group-hover:scale-150 group-hover:bg-mobi-primary/10" 
       />
       
-      <div className="relative z-10 h-full flex flex-col justify-between">
-        {children}
+      <div className="relative z-10 flex flex-col h-full w-full">
+        {title && (
+          <div className="mb-4 text-lg font-bold text-mobi-text tracking-tight font-sans">
+            {title}
+          </div>
+        )}
+        
+        <div className="flex-1">
+          {children}
+        </div>
+
+        {footer && (
+          <div className="mt-6 pt-4 border-t border-mobi-border/50">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );
