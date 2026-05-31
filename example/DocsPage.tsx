@@ -12,7 +12,8 @@ import {
   MobiLoader, MobiWizard, useMobiWizard, MobiListView,
   MobiChatEdge, useMobiEdge,
   MobiNav, MobiHamburgerMenu, MobiDrawer, MobiIcon, MobiAppLogo,
-  MobiSectionHeader, MobiBentoGrid, MobiBentoItem
+  MobiSectionHeader, MobiBentoGrid, MobiBentoItem,
+  MobiConfirm, MobiQuantityControl, MobiEmojiPicker
 } from '../src';
 import pkg from '../package.json';
 
@@ -2201,6 +2202,93 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
         ))}
       </div>
     )
+  },
+  {
+    id: 'MobiConfirm',
+    name: 'MobiConfirm',
+    category: 'component',
+    description: 'Streamlined Yes/No confirmation dialog wrapper around MobiModal.',
+    code: `<MobiConfirm 
+  isOpen={isOpen} 
+  onClose={() => setIsOpen(false)} 
+  onConfirm={() => alert('Confirmed')} 
+  title="Delete Asset" 
+  message="Are you sure you want to proceed? This cannot be undone."
+  intent="danger" 
+/>`,
+    render: () => {
+      const ConfirmDemo = () => {
+        const [open, setOpen] = useState(false);
+        return (
+          <div className="space-y-4">
+            <MobiButton variant="danger" onClick={() => setOpen(true)}>Trigger Deletion Flow</MobiButton>
+            <MobiConfirm
+              isOpen={open}
+              onClose={() => setOpen(false)}
+              onConfirm={() => { alert('Asset deleted'); setOpen(false); }}
+              title="Delete Sovereign Asset"
+              message="Are you sure you want to permanently delete this asset from the fleet registry? This action is irreversible."
+              intent="danger"
+            />
+          </div>
+        );
+      };
+      return <ConfirmDemo />;
+    }
+  },
+  {
+    id: 'MobiQuantityControl',
+    name: 'MobiQuantityControl',
+    category: 'component',
+    description: 'Highly customizable +/- counter for numerical inputs with configurable min, max, and step boundaries.',
+    code: `<MobiQuantityControl 
+  value={quantity} 
+  onChange={setQuantity} 
+  min={0} 
+  max={100} 
+  hideMinusAtMin 
+/>`,
+    render: () => {
+      const QuantityDemo = () => {
+        const [val, setVal] = useState(1);
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col gap-2">
+              <span className="text-[10px] font-bold text-mobi-text-muted uppercase tracking-[0.2em] font-sans">Default Size (MD)</span>
+              <div className="flex gap-4 items-center">
+                <span className="text-sm font-mono font-bold text-mobi-text w-[6ch]">{val} unit{val !== 1 ? 's' : ''}</span>
+                <MobiQuantityControl value={val} onChange={setVal} min={0} max={10} hideMinusAtMin />
+              </div>
+            </div>
+          </div>
+        );
+      };
+      return <QuantityDemo />;
+    }
+  },
+  {
+    id: 'MobiEmojiPicker',
+    name: 'MobiEmojiPicker',
+    category: 'component',
+    description: 'Centralized wrapper around emoji-mart for standardized emoji selection within the M.O.B.I.™ ecosystem.',
+    code: `<MobiEmojiPicker 
+  onSelect={(emoji) => setIcon(emoji.native)} 
+  theme="dark" 
+/>`,
+    render: () => {
+      const EmojiDemo = () => {
+        const [emoji, setEmoji] = useState('🚀');
+        return (
+          <div className="space-y-4 flex flex-col items-start">
+            <div className="text-4xl p-4 bg-mobi-bg border border-mobi-border rounded-xl shadow-sm">{emoji}</div>
+            <div className="max-w-[350px] w-full border border-mobi-border rounded-2xl overflow-hidden shadow-2xl">
+              <MobiEmojiPicker onSelect={(e) => setEmoji(e.native)} theme="auto" />
+            </div>
+          </div>
+        );
+      };
+      return <EmojiDemo />;
+    }
   }
 ];
 
