@@ -21,6 +21,8 @@ import { MobiChatEdge, MobiButton, useMobiEdge } from '@wearemobi/shared';
 | [`MobiCard`](./MobiCard.md) | Premium content container with elevation | [Link](./MobiCard.md) |
 | [`MobiChatEdge`](./MobiChatEdge.md) | **Full Agent Interface** for Edge Reactor v1 | [Link](./MobiChatEdge.md) |
 | [`MobiChatInput`](./MobiChatInput.md) | Advanced command input for agentic logic | [Link](./MobiChatInput.md) |
+| [`MobiConfirm`](./MobiConfirm.md) | Streamlined Yes/No confirmation dialog wrapper | [Link](./MobiConfirm.md) |
+| [`MobiEmojiPicker`](./MobiEmojiPicker.md) | Categorized emoji selection via emoji-mart | [Link](./MobiEmojiPicker.md) |
 | [`MobiEnergyMeter`](./MobiEnergyMeter.md) | Haki/Battery level visualizer | [Link](./MobiEnergyMeter.md) |
 | [`MobiFooter`](./MobiFooter.md) | Parametric branding footer with app metadata | [Link](./MobiFooter.md) |
 | [`MobiHero`](./MobiHero.md) | High-impact header section for landing pages | [Link](./MobiHero.md) |
@@ -29,6 +31,7 @@ import { MobiChatEdge, MobiButton, useMobiEdge } from '@wearemobi/shared';
 | [`MobiLogoHero`](./MobiLogoHero.md) | Theme-aware hero logo | [Link](./MobiLogoHero.md) |
 | [`MobiNavbar`](./MobiNavbar.md) | Sticky top navigation bar | [Link](./MobiNavbar.md) |
 | [`MobiPlanBadge`](./MobiPlanBadge.md) | Subscription tier pill indicator | [Link](./MobiPlanBadge.md) |
+| [`MobiQuantityControl`](./MobiQuantityControl.md) | Customizable +/- counter for numerical inputs | [Link](./MobiQuantityControl.md) |
 | [`MobiSentinelMenu`](./MobiSentinelMenu.md) | Data-driven identity dropdown | [Link](./MobiSentinelMenu.md) |
 | [`MobiSwitcher`](./MobiSwitcher.md) | Compact segmented selector | [Link](./MobiSwitcher.md) |
 | [`MobiThemeSwitcher`](./MobiThemeSwitcher.md) | Premium theme selector | [Link](./MobiThemeSwitcher.md) |
