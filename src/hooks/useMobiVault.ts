@@ -65,7 +65,7 @@ export const useMobiVault = (options: UseMobiVaultOptions = {}) => {
         formData.append('files', file);
       });
 
-      const response = await fetch(`${baseUrl}/api/v1/vault/files`, {
+      const response = await fetch(`${baseUrl}/v1/vault/files`, {
         method: 'PUT',
         body: formData,
       });

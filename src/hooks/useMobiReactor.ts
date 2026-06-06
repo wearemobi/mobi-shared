@@ -67,7 +67,7 @@ export const useMobiReactor = (options: UseMobiReactorOptions = {}) => {
     setLastError(null);
 
     try {
-      const response = await fetch(`${baseUrl}/api/v1/energy/consume`, {
+      const response = await fetch(`${baseUrl}/v1/energy/consume`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(request),
@@ -103,7 +103,7 @@ export const useMobiReactor = (options: UseMobiReactorOptions = {}) => {
         if (value !== undefined) searchParams.append(key, String(value));
       });
 
-      const response = await fetch(`${baseUrl}/api/v1/energy/query?${searchParams.toString()}`);
+      const response = await fetch(`${baseUrl}/v1/energy/query?${searchParams.toString()}`);
 
       if (!response.ok) {
         throw new Error(`Reactor Error: ${response.status} ${response.statusText}`);

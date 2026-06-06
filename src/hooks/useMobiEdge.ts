@@ -122,7 +122,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const fetchCatalog = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await fetch(`${baseUrl}/api/v1/reactor/catalog`, { headers });
+      const res = await fetch(`${baseUrl}/v1/reactor/catalog`, { headers });
       if (!res.ok) throw new Error('Catalog Fetch Failed');
       const data: MobiEdgeCatalogResponse = await res.json();
       
@@ -143,7 +143,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const fetchStatus = useCallback(async () => {
     if (!token) return;
     try {
-      const res = await fetch(`${baseUrl}/api/v1/reactor/status`, { headers });
+      const res = await fetch(`${baseUrl}/v1/reactor/status`, { headers });
       if (!res.ok) throw new Error('Status Fetch Failed');
       const data: MobiEdgeStatus = await res.json();
       setStatus(data);
@@ -157,7 +157,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const fetchHistory = useCallback(async (id: string) => {
     if (!token || !id) return;
     try {
-      const res = await fetch(`${baseUrl}/api/v1/agentic/history/${id}`, { headers });
+      const res = await fetch(`${baseUrl}/v1/agentic/history/${id}`, { headers });
       if (res.ok) {
         const data = await res.json();
         if (data.messages && data.messages.length > 0) {
@@ -223,7 +223,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
         ? useMemoryOverride 
         : (status?.tier !== 'BASIC');
       
-      const res = await fetch(`${baseUrl}/api/v1/agentic/infer`, {
+      const res = await fetch(`${baseUrl}/v1/agentic/infer`, {
         method: 'POST',
         headers,
         body: JSON.stringify({ 
