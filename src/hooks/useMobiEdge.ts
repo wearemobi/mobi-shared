@@ -132,7 +132,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
       
       const aiModels = resources.filter(r => r.resource_kind === 'AI_MODEL');
       if (aiModels.length > 0 && !activeModelId) {
-        const basicModel = aiModels.find(r => r.engine_name === 'BASIC');
+        const basicModel = aiModels.find(r => r.slug === 'mobi-assist-basic' || r.engine_name === 'BASIC');
         setActiveModelId(basicModel?.slug || aiModels[0].slug);
       }
     } catch (err) {
