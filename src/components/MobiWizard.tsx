@@ -24,6 +24,14 @@ export interface MobiWizardProps {
   isFirstStep: boolean;
   isLastStep: boolean;
   /**
+   * Custom label for the complete button
+   */
+  completeLabel?: string;
+  /**
+   * Custom label for the next button
+   */
+  nextLabel?: string;
+  /**
    * Style buttons and cards in technical/monospace style
    */
   technical?: boolean;
@@ -42,6 +50,8 @@ export const MobiWizard: React.FC<MobiWizardProps> = ({
   onComplete,
   isFirstStep,
   isLastStep,
+  completeLabel = 'Complete Sync',
+  nextLabel = 'Next Step',
   technical = false,
   className = '',
 }) => {
@@ -145,7 +155,7 @@ export const MobiWizard: React.FC<MobiWizardProps> = ({
               disabled={currentStep.isValid === false}
               onClick={isLastStep ? onComplete : onNext}
             >
-              {isLastStep ? 'Complete Sync' : 'Next Step'}
+              {isLastStep ? completeLabel : nextLabel}
             </MobiButton>
           </div>
         </div>
