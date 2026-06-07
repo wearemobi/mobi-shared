@@ -17,7 +17,8 @@ export type MobiIconName =
   | 'add' | 'remove' | 'edit' | 'delete' | 'list-view' | 'grid-view'
   | 'ready' | 'cancel' | 'stop' | 'calendar' | 'day' | 'time'
   | 'business' | 'operator' | 'station' | 'transition'
-  | 'help' | 'manual' | 'about';
+  | 'help' | 'manual' | 'about'
+  | 'brain' | 'delivery' | 'categories' | 'tags';
 
 interface MobiIconProps {
   /** Identifier of the icon in the M.O.B.I.™ registry */
@@ -108,7 +109,11 @@ const ICON_REGISTRY: Record<MobiIconName, React.ReactNode> = {
   transition: <><rect width="8" height="8" x="3" y="3" rx="2"/><path d="M7 11v4a2 2 0 0 0 2 2h4"/><rect width="8" height="8" x="13" y="13" rx="2"/></>,
   help: <><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></>,
   manual: <><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></>,
-  about: <><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 16v-4"/><path d="M12 8h.01"/></>
+  about: <><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M12 16v-4"/><path d="M12 8h.01"/></>,
+  brain: <><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M19.938 10.5a4 4 0 0 1 .585.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M19.967 17.484A4 4 0 0 1 18 18"/></>,
+  delivery: <><path d="M10 17h4V5H2v12h3"/><path d="M20 17h2v-3.34a4 4 0 0 0-1.17-2.83L19 9h-5"/><path d="M14 17h1"/><circle cx="7.5" cy="17.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></>,
+  categories: <><path d="M8.3 10a.7.7 0 0 1-.626-1.079L11.4 3a.7.7 0 0 1 1.198-.043L16.3 8.9a.7.7 0 0 1-.572 1.1Z"/><rect x="3" y="14" width="7" height="7" rx="1"/><circle cx="17.5" cy="17.5" r="3.5"/></>,
+  tags: <><path d="M9 5H2v7l6.29 6.29c.94.94 2.48.94 3.42 0l3.58-3.58c.94-.94.94-2.48 0-3.42L9 5Z"/><path d="M6 9.01V9"/><path d="m15 5 6.3 6.3a2.4 2.4 0 0 1 0 3.4L17 19"/></>
 };
 
 export const MobiIcon: React.FC<MobiIconProps> = ({ 
