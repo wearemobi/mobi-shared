@@ -79,3 +79,6 @@ export * from './components/MobiEmojiPicker';
 export * from './components/MobiMoreMenu';
 export * from './components/MobiBentoIndicator';
 export * from './components/MobiDateTime';
+
+// v1.4.4
+export * from './components/MobiChip';

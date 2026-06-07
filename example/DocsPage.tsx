@@ -14,7 +14,8 @@ import {
   MobiNav, MobiHamburgerMenu, MobiDrawer, MobiIcon, MobiAppLogo,
   MobiSectionHeader, MobiBentoGrid, MobiBentoItem,
   MobiConfirm, MobiQuantityControl, MobiEmojiPicker,
-  MobiMoreMenu, MobiBentoIndicator, MobiDateTime
+  MobiMoreMenu, MobiBentoIndicator, MobiDateTime,
+  MobiChip
 } from '../src';
 import pkg from '../package.json';
 
@@ -289,6 +290,28 @@ const catalog: CatalogEntry[] = [
             <MobiUserBadge variant="expanded" initials="CA" name="Carlos Quijano" plan="ULTRA" email="dev@mobi.com" org="M.O.B.I. HQ" />
           </div>
         </div>
+      </div>
+    )
+  },
+  {
+    id: 'MobiChip',
+    name: 'MobiChip',
+    category: 'component',
+    description: 'Generic pill/chip with an avatar circle and optional action slot, typically used for entities or operators.',
+    code: `<MobiChip 
+  label="Operator Name" 
+  variant="primary" 
+  action={<MobiButton variant="ghost" size="sm">Salir</MobiButton>} 
+/>`,
+    render: () => (
+      <div className="flex flex-col gap-4 items-start">
+        <MobiChip label="Carlos Quijano" />
+        <MobiChip 
+          label="Active Operator" 
+          variant="success" 
+          action={<MobiButton variant="ghost" size="sm" onClick={() => alert('Logout')} className="text-mobi-text-muted shrink-0 px-2 min-w-0">Salir</MobiButton>} 
+        />
+        <MobiChip label="Error Node" variant="error" initials="!!" />
       </div>
     )
   },
