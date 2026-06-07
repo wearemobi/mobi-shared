@@ -2229,7 +2229,8 @@ const { activeStep, nextStep, prevStep, isFirstStep, isLastStep } = useMobiWizar
           'kitchen', 'kitchen-menu', 'receipt', 'logbook', 'reports',
           'add', 'remove', 'edit', 'delete', 'list-view', 'grid-view',
           'ready', 'cancel', 'stop', 'calendar', 'day', 'time',
-          'business', 'operator', 'station', 'transition'
+          'business', 'operator', 'station', 'transition',
+          'help', 'manual', 'about'
         ].map(name => (
           <div key={name} className="flex flex-col items-center gap-3 p-4 bg-mobi-bg/20 border border-mobi-border/30 rounded-xl hover:bg-mobi-surface-hover transition-all group">
             <MobiIcon name={name as any} size={24} className="group-hover:scale-110 transition-transform" />
