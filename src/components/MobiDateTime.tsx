@@ -1,172 +1,59 @@
 import React from 'react';
-import { MobiIcon } from './MobiIcon';
+import { format } from 'date-fns';
+import { Calendar as CalendarIcon } from 'lucide-react';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+  Button,
+  Calendar,
+  Label,
+  cn
+} from '@wearemobi/ui';
 
 export interface MobiDateTimeProps {
-  /** The date to display. Optional if 'live' is true. */
-  value?: Date | string | number;
-  /**
-   * If true, the component will automatically update every second to show the current time.
-   * @default false
-   */
-  live?: boolean;
-  /**
-   * Display mode. 
-   * @default 'datetime'
-   */
-  mode?: 'date' | 'time' | 'datetime';
-  /**
-   * Optional custom format string. Supports:
-   * YYYY, YY, MM, DD, HH, mm, ss, A (AM/PM)
-   * If not provided, falls back to the system locale format.
-   */
-  format?: string;
-  /** Size of the display. @default 'md' */
-  size?: 'sm' | 'md' | 'lg';
-  /** Optional click handler for interaction */
-  onClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
-  /** Additional container classes */
+  date?: Date;
+  onDateChange?: (date: Date | undefined) => void;
+  label?: string;
+  placeholder?: string;
   className?: string;
-  /** Whether to show the leading icon. @default true */
-  showIcon?: boolean;
+  disabled?: boolean;
 }
 
-/**
- * MobiDateTime
- * A standardized component for displaying dates and times with built-in
- * formatting capabilities, sizing, and interaction support.
- */
 export const MobiDateTime: React.FC<MobiDateTimeProps> = ({
-  value = new Date(),
-  live = false,
-  mode = 'datetime',
-  format,
-  size = 'md',
-  onClick,
-  className = '',
-  showIcon = true,
+  date,
+  onDateChange,
+  label,
+  placeholder = "Pick a date",
+  className,
+  disabled
 }) => {
-  const [currentDate, setCurrentDate] = React.useState<Date>(
-    value instanceof Date ? value : new Date(value || Date.now())
-  );
-
-  React.useEffect(() => {
-    if (!live) {
-      setCurrentDate(value instanceof Date ? value : new Date(value || Date.now()));
-      return;
-    }
-
-    const interval = setInterval(() => {
-      setCurrentDate(new Date());
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [live, value]);
-
-  // Check if date is valid
-  const isValidDate = !isNaN(currentDate.getTime());
-
-  // Formatter fallback logic
-  const getFormattedString = (): string => {
-    if (!isValidDate) return 'Invalid Date';
-
-    if (format) {
-      // Lightweight custom formatter
-      const pad = (n: number) => n.toString().padStart(2, '0');
-      const YYYY = currentDate.getFullYear().toString();
-      const YY = YYYY.slice(-2);
-      const M = currentDate.getMonth() + 1;
-      const MM = pad(M);
-      const D = currentDate.getDate();
-      const DD = pad(D);
-      const H24 = currentDate.getHours();
-      const HH = pad(H24);
-      const m = currentDate.getMinutes();
-      const mm = pad(m);
-      const s = currentDate.getSeconds();
-      const ss = pad(s);
-      const A = H24 >= 12 ? 'PM' : 'AM';
-
-      return format
-        .replace(/YYYY/g, YYYY)
-        .replace(/YY/g, YY)
-        .replace(/MM/g, MM)
-        .replace(/DD/g, DD)
-        .replace(/HH/g, HH)
-        .replace(/mm/g, mm)
-        .replace(/ss/g, ss)
-        .replace(/A/g, A);
-    }
-
-    // System formatting fallback based on mode
-    const locale = undefined; // use system locale
-    if (mode === 'date') {
-      return new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(currentDate);
-    }
-    if (mode === 'time') {
-      return new Intl.DateTimeFormat(locale, { timeStyle: 'short' }).format(currentDate);
-    }
-    
-    // datetime
-    return new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(currentDate);
-  };
-
-  const displayString = getFormattedString();
-
-  // Determine Icon based on mode
-  const getIconName = () => {
-    if (mode === 'time') return 'time';
-    if (mode === 'date') return 'calendar';
-    return 'calendar';
-  };
-
-  // Sizing definitions
-  const sizeClasses = {
-    sm: {
-      text: 'text-xs',
-      padding: 'px-2 py-1',
-      iconSize: 12,
-      gap: 'gap-1.5'
-    },
-    md: {
-      text: 'text-sm',
-      padding: 'px-3 py-1.5',
-      iconSize: 16,
-      gap: 'gap-2'
-    },
-    lg: {
-      text: 'text-base font-bold',
-      padding: 'px-4 py-2',
-      iconSize: 20,
-      gap: 'gap-2.5'
-    }
-  };
-
-  const selectedSize = sizeClasses[size];
-
-  const interactableClasses = onClick 
-    ? 'cursor-pointer hover:bg-mobi-border/50 hover:border-mobi-primary/50 transition-colors active:scale-[0.98]' 
-    : '';
-
   return (
-    <div 
-      className={`
-        inline-flex items-center rounded-lg border border-mobi-border bg-mobi-surface text-mobi-text font-mono
-        ${selectedSize.padding} ${selectedSize.gap} ${interactableClasses} ${className}
-      `}
-      onClick={onClick}
-    >
-      {showIcon && (
-        <MobiIcon 
-          name={getIconName()} 
-          size={selectedSize.iconSize} 
-          className="text-mobi-text-muted shrink-0" 
-        />
-      )}
-      <span className={`${selectedSize.text} leading-none tracking-tight`}>
-        {displayString}
-      </span>
+    <div className={cn("space-y-1.5 flex flex-col", className)}>
+      {label && <Label className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{label}</Label>}
+      <Popover>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            className={cn(
+              "w-full justify-start text-left font-normal",
+              !date && "text-muted-foreground"
+            )}
+            disabled={disabled}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {date ? format(date, 'PPP') : <span>{placeholder}</span>}
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-[280px] p-0" align="start">
+          <Calendar
+            mode="single"
+            selected={date}
+            onSelect={onDateChange}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
     </div>
   );
 };
-
-export default MobiDateTime;

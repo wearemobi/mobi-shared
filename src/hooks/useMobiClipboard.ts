@@ -19,7 +19,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
  */
 export const useMobiClipboard = () => {
   const [isCopied, setIsCopied] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // Clean up timer on unmount to prevent state update on unmounted component
   useEffect(() => {

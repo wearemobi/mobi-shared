@@ -1,31 +1,29 @@
-import { MobiLogoHero } from './MobiLogoHero';
+import React from 'react';
+import { MobiLogo } from './MobiLogo';
 
 export interface MobiFooterProps {
-  /** Name of the application (e.g. 'Chassis Vite') */
   appName?: string;
-  /** Optional version number (e.g. 'v1.2.1') to display in the footer. */
   version?: string;
 }
 
 export const MobiFooter: React.FC<MobiFooterProps> = ({ appName, version }) => (
   <div className="pt-10 pb-8 flex flex-col items-center justify-center text-center gap-4 opacity-70 hover:opacity-100 transition-opacity duration-500">
-    {/* Compact Central Logo with Link */}
     <a href="https://wearemobi.com" target="_blank" rel="noopener noreferrer" className="hover:scale-105 transition-transform duration-300">
-      <MobiLogoHero size={40} className="mb-0 mx-0" />
+      <MobiLogo size={40} className="mb-0 mx-0" />
     </a>
     
-    <div className="flex flex-col gap-0.5">
-      <p className="text-[11px] font-bold text-mobi-text font-sans tracking-tight">
-        Copyright © 2026 M.O.B.I.™
+    <div className="flex flex-col gap-0">
+      <p className="font-medium text-foreground font-sans text-[10px] leading-tight">
+        Copyright © {new Date().getFullYear()} M.O.B.I.™
       </p>
-      <p className="text-[10px] font-medium text-mobi-text-muted font-sans tracking-tight">
+      <p className="text-muted-foreground font-sans text-[10px] leading-tight">
         (Machine Oriented Brilliant Ideas™)
       </p>
-      <p className="text-[9px] font-bold uppercase tracking-[0.15em] text-mobi-text-muted font-sans">
+      <p className="text-muted-foreground/50 font-sans text-[10px] leading-tight mt-0.5">
         Costa Rica, Centro America.
       </p>
       {(appName || version) && (
-        <p className="text-[9px] font-black uppercase tracking-[0.2em] text-mobi-text-muted/30 font-sans mt-1">
+        <p className="font-bold uppercase tracking-widest text-muted-foreground/40 font-sans mt-2 text-[10px]">
           {appName}{appName && version && ' · '}{version}
         </p>
       )}

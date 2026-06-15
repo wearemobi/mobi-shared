@@ -1,23 +1,18 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { cn } from '@wearemobi/ui';
 
 export interface MobiMarkdownProps {
-  /** The markdown string to render */
-  children: string;
-  /** Additional CSS classes for the container */
+  content: string;
   className?: string;
 }
 
-/**
- * M.O.B.I.™ Markdown Component.
- * Standardized markdown rendering using GitHub Flavored Markdown (GFM).
- */
-export const MobiMarkdown: React.FC<MobiMarkdownProps> = ({ children, className = '' }) => {
+export const MobiMarkdown: React.FC<MobiMarkdownProps> = ({ content, className }) => {
   return (
-    <div className={`mobi-markdown ${className}`}>
+    <div className={cn("prose prose-sm dark:prose-invert max-w-none prose-headings:font-black prose-headings:tracking-tight", className)}>
       <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {children}
+        {content}
       </ReactMarkdown>
     </div>
   );

@@ -1,159 +1,110 @@
 import React from 'react';
-import { MobiIcon } from './MobiIcon';
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from '@wearemobi/ui';
 
 export interface MobiPaginationProps {
-  /** Current page (1-indexed). */
   currentPage: number;
-  /** Total number of pages. */
   totalPages: number;
-  /** Called with the new page number when the user navigates. */
-  onChange: (page: number) => void;
-  /**
-   * Number of page buttons to show (centered around current page).
-   * @default 5
-   */
+  onPageChange: (page: number) => void;
   siblingCount?: number;
-  /**
-   * If true, shows "First" and "Last" buttons.
-   * @default false
-   */
-  showEdges?: boolean;
-  /** Additional class names for the wrapper. */
-  className?: string;
 }
 
-/** Generates the page number array including ellipsis markers. */
-function buildPageRange(current: number, total: number, siblings: number): (number | '...')[] {
-  if (total <= siblings + 4) {
-    return Array.from({ length: total }, (_, i) => i + 1);
-  }
-
-  const left = Math.max(2, current - siblings);
-  const right = Math.min(total - 1, current + siblings);
-  const pages: (number | '...')[] = [1];
-
-  if (left > 2) pages.push('...');
-  for (let i = left; i <= right; i++) pages.push(i);
-  if (right < total - 1) pages.push('...');
-  pages.push(total);
-
-  return pages;
-}
-
-/**
- * M.O.B.I.™ Pagination.
- * Smart page range with ellipsis, First/Last shortcuts, and keyboard navigation.
- *
- * @example
- * ```tsx
- * const [page, setPage] = useState(1);
- *
- * <MobiPagination
- *   currentPage={page}
- *   totalPages={24}
- *   onChange={setPage}
- *   showEdges
- * />
- * ```
- */
 export const MobiPagination: React.FC<MobiPaginationProps> = ({
   currentPage,
   totalPages,
-  onChange,
+  onPageChange,
   siblingCount = 1,
-  showEdges = false,
-  className = '',
 }) => {
-  if (totalPages <= 1) return null;
+  const renderPages = () => {
+    const pages = [];
+    const maxVisiblePages = siblingCount * 2 + 1;
 
-  const pages = buildPageRange(currentPage, totalPages, siblingCount);
+    if (totalPages <= maxVisiblePages + 2) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      pages.push(1);
+      
+      const start = Math.max(2, currentPage - siblingCount);
+      const end = Math.min(totalPages - 1, currentPage + siblingCount);
 
-  const buttonBase =
-    'inline-flex items-center justify-center h-8 min-w-[32px] px-2 rounded-lg text-[11px] font-black font-sans uppercase tracking-widest transition-all active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-mobi-primary/50';
-  const activeClass = 'bg-mobi-primary text-mobi-bg shadow';
-  const inactiveClass = 'text-mobi-text-muted hover:text-mobi-text hover:bg-mobi-surface';
-  const disabledClass = 'opacity-30 cursor-not-allowed';
+      if (start > 2) {
+        pages.push('ellipsis-start');
+      }
 
-  const NavButton: React.FC<{
-    onClick: () => void;
-    disabled: boolean;
-    'aria-label': string;
-    children: React.ReactNode;
-  }> = ({ onClick, disabled, children, ...rest }) => (
-    <button
-      onClick={onClick}
-      disabled={disabled}
-      className={`${buttonBase} ${disabled ? disabledClass : inactiveClass}`}
-      {...rest}
-    >
-      {children}
-    </button>
-  );
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
 
-  return (
-    <nav aria-label="Pagination" className={`flex items-center gap-1 ${className}`}>
-      {/* First */}
-      {showEdges && (
-        <NavButton
-          aria-label="First page"
-          disabled={currentPage === 1}
-          onClick={() => onChange(1)}
-        >
-          <MobiIcon name="chevrons-left" size={14} strokeWidth={2.5} />
-        </NavButton>
-      )}
+      if (end < totalPages - 1) {
+        pages.push('ellipsis-end');
+      }
 
-      {/* Previous */}
-      <NavButton
-        aria-label="Previous page"
-        disabled={currentPage === 1}
-        onClick={() => onChange(currentPage - 1)}
-      >
-        <MobiIcon name="chevron-left" size={14} strokeWidth={2.5} />
-      </NavButton>
+      pages.push(totalPages);
+    }
 
-      {/* Page numbers */}
-      {pages.map((page, i) =>
-        page === '...' ? (
-          <span
-            key={`ellipsis-${i}`}
-            className="inline-flex items-center justify-center h-8 px-1 text-[11px] font-black text-mobi-text-muted font-mono"
-            aria-hidden="true"
-          >
-            …
-          </span>
-        ) : (
-          <button
-            key={page}
-            onClick={() => onChange(page)}
-            aria-label={`Page ${page}`}
-            aria-current={page === currentPage ? 'page' : undefined}
-            className={`${buttonBase} ${page === currentPage ? activeClass : inactiveClass}`}
+    return pages.map((page, idx) => {
+      if (page === 'ellipsis-start' || page === 'ellipsis-end') {
+        return (
+          <PaginationItem key={`${page}-${idx}`}>
+            <PaginationEllipsis />
+          </PaginationItem>
+        );
+      }
+
+      return (
+        <PaginationItem key={page}>
+          <PaginationLink
+            href="#"
+            role="button"
+            isActive={currentPage === page}
+            onClick={(e) => {
+              e.preventDefault();
+              onPageChange(page as number);
+            }}
           >
             {page}
-          </button>
-        )
-      )}
+          </PaginationLink>
+        </PaginationItem>
+      );
+    });
+  };
 
-      {/* Next */}
-      <NavButton
-        aria-label="Next page"
-        disabled={currentPage === totalPages}
-        onClick={() => onChange(currentPage + 1)}
-      >
-        <MobiIcon name="chevron-right" size={14} strokeWidth={2.5} />
-      </NavButton>
-
-      {/* Last */}
-      {showEdges && (
-        <NavButton
-          aria-label="Last page"
-          disabled={currentPage === totalPages}
-          onClick={() => onChange(totalPages)}
-        >
-          <MobiIcon name="chevrons-right" size={14} strokeWidth={2.5} />
-        </NavButton>
-      )}
-    </nav>
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            href="#"
+            role="button"
+            onClick={(e) => {
+              e.preventDefault();
+              if (currentPage > 1) onPageChange(currentPage - 1);
+            }}
+            className={currentPage === 1 ? "pointer-events-none opacity-50" : ""}
+          />
+        </PaginationItem>
+        {renderPages()}
+        <PaginationItem>
+          <PaginationNext
+            href="#"
+            role="button"
+            onClick={(e) => {
+              e.preventDefault();
+              if (currentPage < totalPages) onPageChange(currentPage + 1);
+            }}
+            className={currentPage === totalPages ? "pointer-events-none opacity-50" : ""}
+          />
+        </PaginationItem>
+      </PaginationContent>
+    </Pagination>
   );
 };

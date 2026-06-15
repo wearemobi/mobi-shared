@@ -1,155 +1,92 @@
 import React from 'react';
+import { Tabs, TabsList, TabsTrigger, TabsContent, cn } from '@wearemobi/ui';
 
-export interface MobiTab {
-  /** Unique tab identifier. */
+export interface MobiTabItem {
   id: string;
-  /** Display label. */
-  label: string;
-  /** Optional icon rendered before the label. */
-  icon?: React.ReactNode;
-  /** If true, the tab is not selectable. @default false */
+  label: React.ReactNode;
+  content: React.ReactNode;
   disabled?: boolean;
-  /** Optional badge count or label rendered after the tab label. */
-  badge?: string | number;
+  icon?: React.ReactNode;
 }
 
-export type MobiTabsVariant = 'default' | 'pills' | 'underline';
+export type MobiTabsVariant = 'default' | 'underline' | 'pill';
 
 export interface MobiTabsProps {
-  /** Array of tab definitions. */
-  tabs: MobiTab[];
-  /** ID of the currently active tab. */
-  activeId: string;
-  /** Called with the ID of the newly selected tab. */
-  onChange: (id: string) => void;
-  /**
-   * Visual style variant.
-   * - `default` — bordered segmented control.
-   * - `pills` — rounded pill buttons.
-   * - `underline` — bottom-border indicator, minimal style.
-   * @default 'default'
-   */
+  items: MobiTabItem[];
+  defaultValue?: string;
+  value?: string;
+  onValueChange?: (value: string) => void;
   variant?: MobiTabsVariant;
-  /** Additional class names for the tab bar container. */
+  /** Make tabs span full width equally */
+  fullWidth?: boolean;
   className?: string;
-  /** `aria-label` for the `<nav>` element. @default 'Tabs' */
-  'aria-label'?: string;
 }
 
-/**
- * M.O.B.I.™ Tab Bar.
- * Data-driven tab navigation. Manage panel content yourself by rendering
- * conditionally on `activeId` — this keeps the component stateless and flexible.
- *
- * @example
- * ```tsx
- * const [activeTab, setActiveTab] = useState('overview');
- *
- * <MobiTabs
- *   tabs={[
- *     { id: 'overview', label: 'Overview' },
- *     { id: 'settings', label: 'Settings', icon: <SettingsIcon /> },
- *     { id: 'logs', label: 'Logs', badge: 12 },
- *   ]}
- *   activeId={activeTab}
- *   onChange={setActiveTab}
- *   variant="underline"
- * />
- *
- * {activeTab === 'overview' && <OverviewPanel />}
- * {activeTab === 'settings' && <SettingsPanel />}
- * {activeTab === 'logs' && <LogsPanel />}
- * ```
- */
+const LIST_VARIANTS: Record<MobiTabsVariant, string> = {
+  default: 'bg-muted/50 rounded-lg p-1 border border-border',
+  underline: 'bg-transparent rounded-none p-0 border-b border-border gap-0',
+  pill: 'bg-transparent rounded-none p-0 gap-1',
+};
+
+const TRIGGER_VARIANTS: Record<MobiTabsVariant, string> = {
+  default:
+    'font-bold tracking-tight rounded-md data-[state=active]:shadow-sm transition-all',
+  underline:
+    'font-bold tracking-tight rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 pb-2.5 transition-all',
+  pill:
+    'font-bold tracking-tight rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm px-5 py-1.5 transition-all',
+};
+
 export const MobiTabs: React.FC<MobiTabsProps> = ({
-  tabs,
-  activeId,
-  onChange,
+  items,
+  defaultValue,
+  value,
+  onValueChange,
   variant = 'default',
-  className = '',
-  'aria-label': ariaLabel = 'Tabs',
+  fullWidth = false,
+  className
 }) => {
-  const containerClass = {
-    default: 'flex gap-1 p-1 bg-mobi-bg/50 border border-mobi-border rounded-xl overflow-x-auto max-w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-    pills: 'flex gap-2 overflow-x-auto max-w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-    underline: 'flex gap-0 border-b border-mobi-border overflow-x-auto max-w-full [scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-  }[variant];
-
-  const getTabClass = (tab: MobiTab): string => {
-    const isActive = tab.id === activeId;
-    const isDisabled = tab.disabled;
-
-    const base = 'relative flex items-center gap-2 transition-all font-sans font-bold text-xs uppercase tracking-widest outline-none focus-visible:ring-2 focus-visible:ring-mobi-primary/50 shrink-0';
-
-    if (isDisabled) return `${base} opacity-40 cursor-not-allowed`;
-
-    if (variant === 'default') {
-      return `${base} px-4 py-1.5 rounded-lg ${
-        isActive
-          ? 'bg-mobi-surface shadow-sm text-mobi-text'
-          : 'text-mobi-text-muted/60 hover:text-mobi-text-muted hover:bg-mobi-surface/30'
-      }`;
-    }
-
-    if (variant === 'pills') {
-      return `${base} px-4 py-2 rounded-full ${
-        isActive
-          ? 'bg-mobi-primary text-mobi-bg shadow'
-          : 'text-mobi-text-muted hover:text-mobi-text hover:bg-mobi-surface/50'
-      }`;
-    }
-
-    // underline
-    return `${base} px-4 py-3 -mb-px border-b-2 rounded-none ${
-      isActive
-        ? 'border-mobi-primary text-mobi-text'
-        : 'border-transparent text-mobi-text-muted hover:text-mobi-text hover:border-mobi-border'
-    }`;
-  };
+  const initialValue = defaultValue || (items.length > 0 ? items[0].id : undefined);
 
   return (
-    <nav
-      role="tablist"
-      aria-label={ariaLabel}
-      className={`${containerClass} ${className}`}
+    <Tabs
+      defaultValue={initialValue}
+      value={value}
+      onValueChange={onValueChange}
+      className={cn("w-full", className)}
     >
-      {tabs.map(tab => (
-        <button
-          key={tab.id}
-          role="tab"
-          id={`tab-${tab.id}`}
-          aria-selected={tab.id === activeId}
-          aria-controls={`panel-${tab.id}`}
-          aria-disabled={tab.disabled}
-          tabIndex={tab.disabled ? -1 : tab.id === activeId ? 0 : -1}
-          onClick={() => !tab.disabled && onChange(tab.id)}
-          onKeyDown={(e) => {
-            const tabIds = tabs.filter(t => !t.disabled).map(t => t.id);
-            const currentIdx = tabIds.indexOf(activeId);
-            if (e.key === 'ArrowRight') {
-              const next = tabIds[(currentIdx + 1) % tabIds.length];
-              onChange(next);
-            } else if (e.key === 'ArrowLeft') {
-              const prev = tabIds[(currentIdx - 1 + tabIds.length) % tabIds.length];
-              onChange(prev);
-            }
-          }}
-          className={getTabClass(tab)}
+      <TabsList
+        className={cn(
+          'w-full justify-start overflow-x-auto flex-nowrap',
+          LIST_VARIANTS[variant]
+        )}
+      >
+        {items.map((item) => (
+          <TabsTrigger
+            key={item.id}
+            value={item.id}
+            disabled={item.disabled}
+            className={cn(
+              'whitespace-nowrap',
+              fullWidth ? 'flex-1' : 'sm:flex-none',
+              TRIGGER_VARIANTS[variant]
+            )}
+          >
+            {item.icon && <span className="mr-2 inline-flex">{item.icon}</span>}
+            {item.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+      {items.map((item) => (
+        <TabsContent
+          key={item.id}
+          value={item.id}
+          className="mt-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 rounded-xl"
         >
-          {tab.icon && (
-            <span className="shrink-0" aria-hidden="true">{tab.icon}</span>
-          )}
-          <span>{tab.label}</span>
-          {tab.badge !== undefined && (
-            <span
-              className="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1.5 rounded-full bg-mobi-primary/15 text-mobi-primary text-[9px] font-black"
-              aria-label={`${tab.badge} items`}
-            >
-              {tab.badge}
-            </span>
-          )}
-        </button>
+          {item.content}
+        </TabsContent>
       ))}
-    </nav>
+    </Tabs>
   );
 };
+

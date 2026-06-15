@@ -1,128 +1,199 @@
 import React from 'react';
+import { cn } from '@wearemobi/ui';
 
-export interface MobiListViewItemData {
-  id: string | number;
-  headline: React.ReactNode;
+export interface MobiListViewItem {
+  id: string;
+  title: React.ReactNode;
   description?: React.ReactNode;
   leading?: React.ReactNode;
   trailing?: React.ReactNode;
-  disabled?: boolean;
-  selected?: boolean;
   onClick?: () => void;
+  disabled?: boolean;
+}
+
+export type MobiListViewVariant = 'classic' | 'stacked' | 'flat';
+export type MobiListViewDensity = 'compact' | 'default' | 'comfortable';
+
+export interface MobiListViewProps {
+  items: MobiListViewItem[];
+  /** Visual style */
+  variant?: MobiListViewVariant;
+  /** Spacing density */
+  density?: MobiListViewDensity;
+  /** Currently selected item id — shows accent border */
+  selectedId?: string;
+  /** Callback when an item is clicked */
+  onSelect?: (id: string) => void;
+  /** Empty state message */
+  emptyMessage?: string;
+  /** Footer content below the list (e.g. "Currently Selected: X") */
+  footer?: React.ReactNode;
   className?: string;
 }
 
-export interface MobiListViewProps {
-  /**
-   * List item objects following standard layout specifications
-   */
-  items: MobiListViewItemData[];
-  /**
-   * Layout display mode
-   * - 'cards': separate rounded card containers with subtle borders
-   * - 'list': a single unified list separated with divider lines
-   * - 'flat': clean list with only separators, no container borders or background
-   * @default 'list'
-   */
-  variant?: 'list' | 'cards' | 'flat';
-  /**
-   * Set custom list height limits and enable scroll container
-   */
-  maxHeight?: string | number;
-  /**
-   * Custom CSS classes for the container
-   */
-  className?: string;
-}
+const DENSITY_PADDING: Record<MobiListViewDensity, string> = {
+  compact: 'px-4 py-2',
+  default: 'px-5 py-4',
+  comfortable: 'px-6 py-5',
+};
+
+const DENSITY_GAP: Record<MobiListViewDensity, string> = {
+  compact: 'space-y-2',
+  default: 'space-y-3',
+  comfortable: 'space-y-4',
+};
 
 export const MobiListView: React.FC<MobiListViewProps> = ({
   items,
-  variant = 'list',
-  maxHeight,
-  className = '',
+  variant = 'classic',
+  density = 'default',
+  selectedId,
+  onSelect,
+  emptyMessage = 'No items to display.',
+  footer,
+  className,
 }) => {
-  const containerStyle: React.CSSProperties = maxHeight
-    ? { maxHeight, overflowY: 'auto' }
-    : {};
-
-  let baseContainerClasses = 'space-y-3';
-  if (variant === 'list') {
-    baseContainerClasses = 'divide-y divide-mobi-border/30 rounded-2xl border border-mobi-border bg-mobi-surface/40 overflow-hidden';
-  } else if (variant === 'flat') {
-    baseContainerClasses = 'divide-y divide-mobi-border/30';
+  if (items.length === 0) {
+    return (
+      <div className={cn('py-12 text-center text-sm text-muted-foreground font-medium', className)}>
+        {emptyMessage}
+      </div>
+    );
   }
 
-  return (
-    <div 
-      className={`${baseContainerClasses} ${className}`} 
-      style={containerStyle}
-    >
-      {items.map((item) => {
-        const itemClasses = [
-          'flex items-center gap-4 p-4 text-mobi-text transition-all duration-200 outline-none select-none font-sans',
-          // Interactive states
-          item.onClick && !item.disabled ? 'cursor-pointer hover:bg-mobi-surface-hover/80 active:scale-[0.99]' : '',
-          // Disabled states
-          item.disabled ? 'opacity-40 cursor-not-allowed' : '',
-          // Selection highlights
-          item.selected ? 'bg-mobi-primary/5 border-l-2 border-l-mobi-primary' : '',
-          // Card borders in card mode
-          variant === 'cards' 
-            ? `rounded-2xl border bg-mobi-surface/50 shadow-sm ${
-                item.selected 
-                  ? 'border-mobi-primary' 
-                  : 'border-mobi-border hover:border-mobi-border/80'
-              }` 
-            : '',
-          item.className || '',
-        ].filter(Boolean).join(' ');
+  const handleItemClick = (item: MobiListViewItem) => {
+    if (item.disabled) return;
+    onSelect?.(item.id);
+    item.onClick?.();
+  };
 
-        return (
+  const renderItem = (item: MobiListViewItem, index: number) => {
+    const isSelected = selectedId === item.id;
+    const isClickable = (!!onSelect || !!item.onClick) && !item.disabled;
+
+    const itemContent = (
+      <>
+        {/* Active accent border */}
+        {variant !== 'stacked' && (
           <div
-            key={item.id}
-            className={itemClasses}
-            role={item.onClick ? 'button' : undefined}
-            tabIndex={item.onClick && !item.disabled ? 0 : undefined}
-            onClick={() => {
-              if (item.onClick && !item.disabled) {
-                item.onClick();
-              }
-            }}
-            onKeyDown={(e) => {
-              if (item.onClick && !item.disabled && (e.key === 'Enter' || e.key === ' ')) {
-                e.preventDefault();
-                item.onClick();
-              }
-            }}
-          >
-            {/* Leading slot (Avatar, Icon, or Dot) */}
-            {item.leading && (
-              <div className="flex-shrink-0 flex items-center justify-center">
-                {item.leading}
-              </div>
+            className={cn(
+              'absolute left-0 top-0 bottom-0 w-1 rounded-full transition-all duration-200',
+              isSelected ? 'bg-primary' : 'bg-transparent'
             )}
+          />
+        )}
 
-            {/* Central content slot (Headline & Description) */}
-            <div className="flex-1 min-w-0">
-              <div className="text-sm font-black text-mobi-text truncate">
-                {item.headline}
-              </div>
-              {item.description && (
-                <div className="text-xs text-mobi-text-muted mt-0.5 truncate leading-relaxed">
-                  {item.description}
-                </div>
-              )}
-            </div>
-
-            {/* Trailing slot (Telemetry readouts, dates, action tags) */}
-            {item.trailing && (
-              <div className="flex-shrink-0 flex items-center justify-end text-right">
-                {item.trailing}
-              </div>
-            )}
+        {item.leading && (
+          <div className="flex-shrink-0 flex items-center justify-center">
+            {item.leading}
           </div>
-        );
-      })}
+        )}
+
+        <div className="flex-1 min-w-0">
+          <div
+            className={cn(
+              'text-sm font-bold tracking-tight truncate',
+              item.disabled && 'text-muted-foreground'
+            )}
+          >
+            {item.title}
+          </div>
+          {item.description && (
+            <div
+              className={cn(
+                'text-xs text-muted-foreground font-medium mt-0.5 truncate',
+                item.disabled && 'text-muted-foreground/60'
+              )}
+            >
+              {item.description}
+            </div>
+          )}
+        </div>
+
+        {item.trailing && (
+          <div className="flex-shrink-0 flex items-center">
+            {item.trailing}
+          </div>
+        )}
+      </>
+    );
+
+    // --- Stacked Cards ---
+    if (variant === 'stacked') {
+      return (
+        <div
+          key={item.id}
+          onClick={() => handleItemClick(item)}
+          className={cn(
+            'relative flex items-center gap-3 rounded-xl border transition-all duration-200',
+          DENSITY_PADDING[density],
+            isSelected
+              ? 'border-primary/40 bg-primary/[0.03] shadow-md shadow-primary/5 ring-1 ring-primary/20'
+              : 'border-border bg-card shadow-sm',
+            isClickable && 'cursor-pointer hover:shadow-md hover:border-border/80',
+            item.disabled && 'opacity-40 pointer-events-none'
+          )}
+          role={isClickable ? 'button' : undefined}
+          tabIndex={isClickable ? 0 : undefined}
+          onKeyDown={isClickable ? (e) => { if (e.key === 'Enter') handleItemClick(item); } : undefined}
+        >
+          {/* Left accent for selected stacked card */}
+          <div
+            className={cn(
+              'absolute left-0 top-2 bottom-2 w-1 rounded-full transition-all duration-200',
+              isSelected ? 'bg-primary' : 'bg-transparent'
+            )}
+          />
+          {itemContent}
+        </div>
+      );
+    }
+
+    // --- Classic & Flat ---
+    return (
+      <div
+        key={item.id}
+        onClick={() => handleItemClick(item)}
+        className={cn(
+          'relative flex items-center gap-3 transition-all duration-200',
+          DENSITY_PADDING[density],
+          isClickable && 'cursor-pointer hover:bg-accent/50',
+          item.disabled && 'opacity-40 pointer-events-none',
+          // Divider for classic
+          variant === 'classic' && index < items.length - 1 && 'border-b border-border/40'
+        )}
+        role={isClickable ? 'button' : undefined}
+        tabIndex={isClickable ? 0 : undefined}
+        onKeyDown={isClickable ? (e) => { if (e.key === 'Enter') handleItemClick(item); } : undefined}
+      >
+        {itemContent}
+      </div>
+    );
+  };
+
+  return (
+    <div className={cn('w-full', className)}>
+      {/* Container wrapper for classic variant */}
+      {variant === 'classic' ? (
+        <div className="rounded-xl border border-border bg-card overflow-hidden">
+          {items.map((item, i) => renderItem(item, i))}
+        </div>
+      ) : variant === 'stacked' ? (
+        <div className={DENSITY_GAP[density]}>
+          {items.map((item, i) => renderItem(item, i))}
+        </div>
+      ) : (
+        /* flat */
+        <div>
+          {items.map((item, i) => renderItem(item, i))}
+        </div>
+      )}
+
+      {footer && (
+        <div className="mt-3 px-1 text-xs font-mono text-muted-foreground tracking-wide">
+          {footer}
+        </div>
+      )}
     </div>
   );
 };

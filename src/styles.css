@@ -1,135 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Outfit:wght@400;700;900&family=Roboto:wght@400;700&family=JetBrains+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
-@source "../src";
-@source "../example";
-
-:root {
-  --mobi-bg: #F8FAFC;
-  --mobi-surface: #ffffff;
-  --mobi-surface-hover: #F1F5F9;
-  --mobi-border: #E2E8F0;
-  --mobi-text: #0F172A;
-  --mobi-text-muted: #64748B;
-  --mobi-primary: #0F172A;
-}
-
-.dark {
-  --mobi-bg: #000000;
-  --mobi-surface: #111111;
-  --mobi-surface-hover: #1f1f1f;
-  --mobi-border: #222222;
-  --mobi-text: #F8FAFC;
-  --mobi-text-muted: #94A3B8;
-  --mobi-primary: #F8FAFC;
-}
+@source "../node_modules/@wearemobi/ui/src";
+@import "@wearemobi/ui/styles.css";
 
 @theme {
-  --color-mobi-bg: var(--mobi-bg);
-  --color-mobi-surface: var(--mobi-surface);
-  --color-mobi-surface-hover: var(--mobi-surface-hover);
-  --color-mobi-border: var(--mobi-border);
-  --color-mobi-text: var(--mobi-text);
-  --color-mobi-text-muted: var(--mobi-text-muted);
-  --color-mobi-primary: var(--mobi-primary);
-  
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
   --font-outfit: "Outfit", sans-serif;
-  --font-roboto: "Roboto", sans-serif;
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #f43f5e;
+  --color-info: #3b82f6;
 }
 
-@layer base {
-  body {
-    @apply bg-mobi-bg text-mobi-text antialiased font-sans transition-colors duration-200;
-    margin: 0;
-  }
-}
 
-.dark-invert {
-  @apply dark:invert dark:brightness-200;
-}
-
-.light-invert {
-  @apply invert brightness-0 dark:invert-0 dark:brightness-100;
-}
 
 @keyframes mobi-progress {
-  from { width: 0%; }
-  to { width: 100%; }
-}
-
-/* Mobi Markdown System */
-.mobi-markdown {
-  @apply leading-relaxed;
-}
-
-.mobi-markdown p {
-  @apply mb-4 last:mb-0;
-}
-
-.mobi-markdown ul {
-  @apply list-disc list-inside mb-4 last:mb-0 space-y-1;
-}
-
-.mobi-markdown ol {
-  @apply list-decimal list-inside mb-4 last:mb-0 space-y-1;
-}
-
-.mobi-markdown li {
-  @apply ml-1;
-}
-
-.mobi-markdown h1, .mobi-markdown h2, .mobi-markdown h3 {
-  @apply font-black tracking-tight mb-3 mt-6 first:mt-0 uppercase;
-}
-
-.mobi-markdown h1 { @apply text-lg; }
-.mobi-markdown h2 { @apply text-base; }
-.mobi-markdown h3 { @apply text-sm; }
-
-.mobi-markdown code {
-  @apply px-1.5 py-0.5 bg-mobi-bg/50 rounded-sm font-mono text-[0.9em] border border-mobi-border/30;
-}
-
-.mobi-markdown pre {
-  @apply p-4 bg-mobi-bg/80 border border-mobi-border rounded-sm mb-4 last:mb-0 overflow-x-auto;
-}
-
-.mobi-markdown pre code {
-  @apply p-0 bg-transparent border-none font-mono;
-}
-
-.mobi-markdown blockquote {
-  @apply pl-4 border-l-2 border-mobi-primary italic text-mobi-text-muted mb-4;
-}
-
-.mobi-markdown a {
-  @apply text-mobi-primary underline hover:opacity-80 transition-opacity;
-}
-
-.mobi-markdown strong {
-  @apply font-black text-mobi-text;
-}
-/* Plan Badges - ULTRA IRIDESCENT */
-.mobi-plan-ultra {
-  background: linear-gradient(
-    110deg,
-    #00f2ff 0%,
-    #7000ff 25%,
-    #00f2ff 50%,
-    #7000ff 75%,
-    #00f2ff 100%
-  );
-  background-size: 200% auto;
-  animation: mobi-iridescent 3s linear infinite;
-  color: white !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
-  text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-  box-shadow: 0 0 15px rgba(0, 242, 255, 0.3);
-}
-
-@keyframes mobi-iridescent {
-  to {
-    background-position: 200% center;
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
   }
 }

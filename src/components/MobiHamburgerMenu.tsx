@@ -1,7 +1,15 @@
-import React, { useState, useCallback, useEffect, useRef } from 'react';
+import React from 'react';
 import { MobiDrawer } from './MobiDrawer';
-import { MobiIcon } from './MobiIcon';
-import './MobiHamburgerMenu.css';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+  cn
+} from '@wearemobi/ui';
+import { Menu, X } from 'lucide-react';
 
 export interface MobiMenuItem {
   id: string;
@@ -12,154 +20,53 @@ export interface MobiMenuItem {
 }
 
 export interface MobiHamburgerMenuProps {
-  /** Menu action items */
   items: MobiMenuItem[];
-  /** Optional header title */
   title?: string;
-  /** Additional CSS classes */
   className?: string;
-  /** Variant for the trigger button. @default 'default' */
   variant?: 'default' | 'ghost' | 'primary';
-  /** 
-   * How the menu is presented when opened.
-   * @default 'dropdown'
-   */
   mode?: 'dropdown' | 'drawer';
-  /** Icon to show when closed. @default 'burger' */
   triggerIcon?: React.ReactNode;
-  /** Icon to show when opened. @default 'close' */
   activeTriggerIcon?: React.ReactNode;
 }
 
-/**
- * MobiHamburgerMenu
- * A tactical action dropdown triggered by a hamburger icon.
- * Designed for modular actions and contextual menus across the Grand Fleet.
- */
 export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
   items,
   title,
-  className = '',
+  className,
   variant = 'default',
   mode = 'dropdown',
-  triggerIcon = 'burger',
-  activeTriggerIcon = 'close'
+  triggerIcon = <Menu className="w-5 h-5" />,
+  activeTriggerIcon = <X className="w-5 h-5" />
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  const close = useCallback(() => setIsOpen(false), []);
-
-  // Keyboard: close on Escape
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') close();
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, close]);
-
-  // Click outside to close
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleClickOutside = (e: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        close();
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [isOpen, close]);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   const regularItems = items.filter(i => !i.danger);
   const dangerItems = items.filter(i => i.danger);
 
-  return (
-    <div ref={menuRef} className={`relative inline-block text-left ${className}`}>
-      <button
-        onClick={() => setIsOpen(prev => !prev)}
-        className={`p-2 rounded-xl transition-all active:scale-95 flex items-center justify-center
-          ${variant === 'ghost' ? 'text-mobi-text-muted hover:text-mobi-text hover:bg-mobi-surface-hover' : 
-            variant === 'primary' ? 'bg-mobi-primary text-mobi-bg shadow-lg shadow-mobi-primary/20' : 
-            'bg-mobi-surface border border-mobi-border text-mobi-text hover:bg-mobi-surface-hover'}
-        `}
-        aria-haspopup="true"
-        aria-expanded={isOpen}
-        aria-label="Toggle actions"
-      >
-        {typeof (isOpen ? activeTriggerIcon : triggerIcon) === 'string' ? (
-          <MobiIcon name={(isOpen ? activeTriggerIcon : triggerIcon) as any} size={24} />
-        ) : (
-          (isOpen ? activeTriggerIcon : triggerIcon) as React.ReactNode
-        )}
-      </button>
+  const triggerClass = cn(
+    "p-2 rounded-xl transition-all active:scale-95 flex items-center justify-center outline-none",
+    variant === 'ghost' ? 'text-muted-foreground hover:text-foreground hover:bg-accent' : 
+    variant === 'primary' ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/20' : 
+    'bg-background border border-border text-foreground hover:bg-accent',
+    className
+  );
 
-      {isOpen && mode === 'dropdown' && (
-        <>
-          {/* Mobile Backdrop */}
-          <div 
-            className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden animate-in fade-in duration-300"
-            onClick={close}
-          />
-          
-          <div
-            role="menu"
-            className="mobi-hamburger-dropdown absolute right-0 z-50 mt-2 w-64 origin-top-right overflow-hidden rounded-2xl border border-mobi-border bg-mobi-surface shadow-2xl ring-1 ring-black/5 backdrop-blur-xl animate-in fade-in zoom-in duration-200"
-          >
-            {title && (
-              <div className="px-4 py-3 border-b border-mobi-border/50 bg-mobi-bg/10">
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-mobi-text-muted font-sans">
-                  {title}
-                </span>
-              </div>
-            )}
+  if (mode === 'drawer') {
+    return (
+      <div className={cn("relative inline-block text-left", className)}>
+        <button
+          onClick={() => setIsOpen(prev => !prev)}
+          className={triggerClass}
+          aria-haspopup="true"
+          aria-expanded={isOpen}
+          aria-label="Toggle actions"
+        >
+          {isOpen ? activeTriggerIcon : triggerIcon}
+        </button>
 
-            <div className="p-2 space-y-1">
-              {regularItems.map((item) => (
-                <button
-                  key={item.id}
-                  role="menuitem"
-                  onClick={() => { item.onClick?.(); close(); }}
-                  className="group flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-mobi-text transition-all hover:bg-mobi-surface-hover active:scale-[0.98] font-sans tracking-tight"
-                >
-                  {item.icon && (
-                    <div className="flex h-5 w-5 items-center justify-center text-mobi-text-muted group-hover:text-mobi-text transition-colors" aria-hidden="true">
-                      {item.icon}
-                    </div>
-                  )}
-                  <span className="truncate">{item.label}</span>
-                </button>
-              ))}
-            </div>
-
-            {dangerItems.length > 0 && (
-              <div className="p-2 border-t border-mobi-border/50 bg-mobi-bg/30">
-                {dangerItems.map((item) => (
-                  <button
-                    key={item.id}
-                    role="menuitem"
-                    onClick={() => { item.onClick?.(); close(); }}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm font-bold text-rose-500 transition-all hover:bg-rose-500/5 active:scale-[0.98] font-sans tracking-tight"
-                  >
-                    {item.icon && (
-                      <div className="flex h-5 w-5 items-center justify-center" aria-hidden="true">
-                        {item.icon}
-                      </div>
-                    )}
-                    <span className="truncate">{item.label}</span>
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-        </>
-      )}
-
-      {mode === 'drawer' && (
         <MobiDrawer
           isOpen={isOpen}
-          onClose={close}
+          onClose={() => setIsOpen(false)}
           title={title}
           position="right"
         >
@@ -167,11 +74,11 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
             {regularItems.map((item) => (
               <button
                 key={item.id}
-                onClick={() => { item.onClick?.(); close(); }}
-                className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold text-mobi-text transition-all hover:bg-mobi-surface-hover active:scale-[0.98] font-sans tracking-tight"
+                onClick={() => { item.onClick?.(); setIsOpen(false); }}
+                className="group flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold transition-all hover:bg-accent active:scale-[0.98]"
               >
                 {item.icon && (
-                  <div className="flex h-5 w-5 items-center justify-center text-mobi-text-muted group-hover:text-mobi-text transition-colors">
+                  <div className="flex h-5 w-5 items-center justify-center text-muted-foreground group-hover:text-foreground">
                     {item.icon}
                   </div>
                 )}
@@ -180,12 +87,12 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
             ))}
 
             {dangerItems.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-mobi-border/50">
+              <div className="mt-4 pt-4 border-t border-border/50">
                 {dangerItems.map((item) => (
                   <button
                     key={item.id}
-                    onClick={() => { item.onClick?.(); close(); }}
-                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold text-rose-500 transition-all hover:bg-rose-500/5 active:scale-[0.98] font-sans tracking-tight"
+                    onClick={() => { item.onClick?.(); setIsOpen(false); }}
+                    className="flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm font-bold text-destructive transition-all hover:bg-destructive/5 active:scale-[0.98]"
                   >
                     {item.icon && (
                       <div className="flex h-5 w-5 items-center justify-center">
@@ -199,7 +106,63 @@ export const MobiHamburgerMenu: React.FC<MobiHamburgerMenuProps> = ({
             )}
           </div>
         </MobiDrawer>
-      )}
-    </div>
+      </div>
+    );
+  }
+
+  // Dropdown Mode
+  return (
+    <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
+      <DropdownMenuTrigger className={triggerClass}>
+        {isOpen ? activeTriggerIcon : triggerIcon}
+      </DropdownMenuTrigger>
+      
+      <DropdownMenuContent align="end" className="w-64 rounded-2xl">
+        {title && (
+          <DropdownMenuLabel className="px-4 py-3 border-b text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground">
+            {title}
+          </DropdownMenuLabel>
+        )}
+        
+        <div className="p-2 space-y-1">
+          {regularItems.map((item) => (
+            <DropdownMenuItem
+              key={item.id}
+              onClick={() => item.onClick?.()}
+              className="gap-3 rounded-xl px-3 py-2.5 text-sm font-bold cursor-pointer"
+            >
+              {item.icon && (
+                <div className="flex h-5 w-5 items-center justify-center text-muted-foreground">
+                  {item.icon}
+                </div>
+              )}
+              <span className="truncate">{item.label}</span>
+            </DropdownMenuItem>
+          ))}
+        </div>
+
+        {dangerItems.length > 0 && (
+          <>
+            <DropdownMenuSeparator className="my-1" />
+            <div className="p-2">
+              {dangerItems.map((item) => (
+                <DropdownMenuItem
+                  key={item.id}
+                  onClick={() => item.onClick?.()}
+                  className="gap-3 rounded-xl px-3 py-2 text-sm font-bold text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer"
+                >
+                  {item.icon && (
+                    <div className="flex h-5 w-5 items-center justify-center">
+                      {item.icon}
+                    </div>
+                  )}
+                  <span className="truncate">{item.label}</span>
+                </DropdownMenuItem>
+              ))}
+            </div>
+          </>
+        )}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };

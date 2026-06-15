@@ -1,4 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
+import { buildAuthHeaders } from '../utils/http';
 
 export interface MobiEdgeMessage {
   id: string;
@@ -94,11 +95,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const [isHealthy, setIsHealthy] = useState<boolean>(false);
 
   // Memoize headers
-  const headers = {
-    'Content-Type': 'application/json',
-    'X-Tenant-Id': tenantId,
-    'Authorization': `Bearer ${token}`
-  };
+  const headers = React.useMemo(() => buildAuthHeaders(tenantId, token), [tenantId, token]);
 
   const fetchHealth = useCallback(async () => {
     try {

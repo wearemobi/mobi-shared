@@ -1,159 +1,215 @@
-import React, { useState } from 'react';
-import { MobiSidebar, MobiSidebarItem } from './MobiSidebar';
+import React from 'react';
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuItem,
+  SidebarMenuButton,
+  SidebarMenuBadge,
+  SidebarProvider,
+  SidebarInset,
+  SidebarRail,
+  cn
+} from '@wearemobi/ui';
 import { MobiLogo } from './MobiLogo';
-import { MobiBadge } from './MobiBadge';
-import { MobiIcon } from './MobiIcon';
-import './MobiNav.css';
+import type { MobiSentinelMenuProps } from './MobiSentinelMenu';
+import { MobiSentinelMenu } from './MobiSentinelMenu';
+import { MobiNavbar } from './MobiNavbar';
 
-export interface NavModule {
+/* ─── Nav item contract ─── */
+export interface MobiNavGroup {
+  /** Optional label displayed above a group of items */
+  label?: string;
+  items: MobiNavItem[];
+}
+
+export interface MobiNavItem {
   id: string;
   label: string;
-  icon?: React.ReactNode;
-  /** Alternative to icon for flexible leading content */
-  leading?: React.ReactNode;
-  path?: string;
-  badge?: React.ReactNode;
-  disabled?: boolean;
-  isExternal?: boolean;
+  /** Icon shown in both expanded and collapsed modes */
+  icon: React.ReactNode;
+  badge?: React.ReactNode | string | number;
 }
 
+/* ─── MobiNav props ─── */
 export interface MobiNavProps {
-  /**
-   * Array of navigation module objects.
-   */
-  items: NavModule[];
-  /**
-   * ID of the currently active module for highlighting.
-   */
+  /** Flat item list OR grouped item list */
+  items: MobiNavItem[] | MobiNavGroup[];
   activeId: string;
-  /**
-   * Callback triggered upon module selection.
-   */
   onNavigate: (id: string) => void;
-  /**
-   * Whether to show the Island/Sector metadata (Default: true).
-   */
-  showDNA?: boolean;
-  /**
-   * Branding title or logo for the mobile trigger bar.
-   * @default <MobiLogo size={28} />
-   */
+
+  /** Logo/title area override */
   title?: React.ReactNode;
-  /**
-   * Optional footer content.
-   */
-  footer?: React.ReactNode;
-  /**
-   * Optional action elements inside the footer.
-   */
-  footerActions?: React.ReactNode;
-  /**
-   * Whether the sidebar can be collapsed on all viewports.
-   * @default false
-   */
-  collapsible?: boolean;
-  /**
-   * Callback triggered when the sidebar open state changes.
-   */
-  onToggle?: (isOpen: boolean) => void;
-  /**
-   * Additional CSS classes.
-   */
+
+  /** User info shown in the sidebar footer via MobiSentinelMenu */
+  user?: MobiSentinelMenuProps['user'];
+  userMenuItems?: MobiSentinelMenuProps['items'];
+
+  /** Top bar content rendered inside SidebarInset */
+  navbarLeftContent?: React.ReactNode;
+  navbarRightContent?: React.ReactNode;
+  /** Hide the built-in navbar entirely */
+  hideNavbar?: boolean;
+
+  /** Extra footer content below the user badge */
+  sidebarFooter?: React.ReactNode;
+
+  /** Content to render at the top of the sidebar content area */
+  sidebarContentTop?: React.ReactNode;
+
+  children?: React.ReactNode;
   className?: string;
+  defaultOpen?: boolean;
 }
 
-/**
- * MobiNav Component
- * Tactical navigation orchestration for M.O.B.I.™ Grand Fleet.
- * Adaptive sidebar (desktop) and hamburger drawer (mobile).
- */
+/* ─── Helpers ─── */
+function isGrouped(items: MobiNavItem[] | MobiNavGroup[]): items is MobiNavGroup[] {
+  return items.length > 0 && 'items' in items[0];
+}
+
+function renderBadge(badge: MobiNavItem['badge']) {
+  if (!badge) return null;
+  if (typeof badge === 'string' || typeof badge === 'number') {
+    return <SidebarMenuBadge>{badge}</SidebarMenuBadge>;
+  }
+  return <span className="ml-auto">{badge}</span>;
+}
+
+function NavItems({
+  items,
+  activeId,
+  onNavigate,
+  label,
+}: {
+  items: MobiNavItem[];
+  activeId: string;
+  onNavigate: (id: string) => void;
+  label?: string;
+}) {
+  return (
+    <SidebarGroup>
+      {label && <SidebarGroupLabel className="text-[10px] font-black uppercase tracking-widest text-muted-foreground">{label}</SidebarGroupLabel>}
+      <SidebarMenu>
+        {items.map((item) => (
+          <SidebarMenuItem key={item.id}>
+            <SidebarMenuButton
+              isActive={activeId === item.id}
+              onClick={() => onNavigate(item.id)}
+              tooltip={item.label}
+              className={cn(
+                'gap-3 py-5 font-bold tracking-tight transition-all',
+                activeId === item.id && 'bg-accent text-accent-foreground'
+              )}
+            >
+              <span className="shrink-0 flex items-center justify-center mr-3">{item.icon}</span>
+              <span>{item.label}</span>
+              {renderBadge(item.badge)}
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        ))}
+      </SidebarMenu>
+    </SidebarGroup>
+  );
+}
+
+/* ─── MobiNav — App Shell ─── */
 export const MobiNav: React.FC<MobiNavProps> = ({
   items,
   activeId,
   onNavigate,
   title,
-  footer,
-  footerActions,
-  collapsible = false,
-  onToggle,
-  className = ""
+  user,
+  userMenuItems = [],
+  navbarLeftContent,
+  navbarRightContent,
+  hideNavbar = false,
+  sidebarFooter,
+  sidebarContentTop,
+  children,
+  className,
+  defaultOpen = true,
 }) => {
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
-
-  const handleToggle = (open: boolean) => {
-    setIsMobileOpen(open);
-    if (onToggle) {
-      onToggle(open);
-    }
-  };
-
-  const handleNavigate = (id: string) => {
-    onNavigate(id);
-    handleToggle(false);
-  };
+  const groups: MobiNavGroup[] = isGrouped(items)
+    ? items
+    : [{ items: items as MobiNavItem[] }];
 
   return (
-    <>
-      {/* Mobile/Collapsible Tactical Trigger Bar */}
-      <div className={`sticky top-0 z-30 flex items-center justify-between h-16 px-4 border-b border-mobi-border bg-mobi-surface/80 backdrop-blur-md ${
-        collapsible ? "" : "lg:hidden"
-      }`}>
-        <button
-          onClick={() => handleToggle(true)}
-          className="flex items-center gap-3 focus:outline-none hover:opacity-80 transition-opacity active:scale-[0.98] select-none"
-          aria-label="Open menu"
-        >
-          {title ? title : (
+    <SidebarProvider defaultOpen={defaultOpen} className={cn('min-h-screen', className)}>
+      {/* ── Sidebar ─────────────────────────────────────── */}
+      <Sidebar collapsible="icon">
+        {/* Logo */}
+        <SidebarHeader className="h-16 border-b flex items-center justify-center px-2">
+          {title ? (
+            <div className="group-data-[collapsible=icon]:hidden w-full">{title}</div>
+          ) : (
             <>
-              <MobiLogo size={28} />
-              <span className="font-bold text-lg tracking-tight">M.O.B.I.™</span>
+              <div className="group-data-[collapsible=icon]:hidden flex items-center gap-3 w-full px-2">
+                <MobiLogo size={28} className="shrink-0" />
+                <span className="font-black text-base tracking-tight uppercase leading-none">M.O.B.I.™</span>
+              </div>
+              <div className="hidden group-data-[collapsible=icon]:flex items-center justify-center w-full">
+                <MobiLogo size={24} />
+              </div>
             </>
           )}
-        </button>
-        
-        <button
-          onClick={() => handleToggle(true)}
-          className="p-2 -mr-2 text-mobi-text-muted hover:text-mobi-text focus:outline-none"
-          aria-label="Open menu"
-        >
-          <MobiIcon name="burger" size={28} />
-        </button>
-      </div>
+        </SidebarHeader>
 
-      {/* Unified Navigation Layer (Sidebar + Drawer) */}
-      <MobiSidebar
-        isOpen={isMobileOpen}
-        onClose={() => handleToggle(false)}
-        title={title}
-        footer={footer}
-        footerActions={footerActions}
-        collapsible={collapsible}
-        className={`mobi-nav-container ${className}`}
-      >
-        <div className="flex flex-col gap-1">
-          {items.map((item) => (
-            <MobiSidebarItem
-              key={item.id}
-              active={activeId === item.id}
-              onClick={() => handleNavigate(item.id)}
-              icon={item.icon || item.leading}
-              trailing={
-                item.badge ? (
-                  typeof item.badge === 'string' || typeof item.badge === 'number' ? (
-                    <MobiBadge variant="info" size="sm">
-                      {item.badge}
-                    </MobiBadge>
-                  ) : (
-                    item.badge
-                  )
-                ) : null
-              }
-            >
-              {item.label}
-            </MobiSidebarItem>
+        {/* Nav items */}
+        <SidebarContent>
+          {sidebarContentTop && (
+            <div className="group-data-[collapsible=icon]:hidden">
+              {sidebarContentTop}
+            </div>
+          )}
+          {groups.map((group, i) => (
+            <NavItems
+              key={i}
+              items={group.items}
+              activeId={activeId}
+              onNavigate={onNavigate}
+              label={group.label}
+            />
           ))}
+        </SidebarContent>
+
+        {/* User footer */}
+        {(user || sidebarFooter) && (
+          <SidebarFooter className="border-t p-2 space-y-2">
+            {user && (
+              <MobiSentinelMenu
+                user={user}
+                items={userMenuItems}
+                className="w-full"
+              />
+            )}
+            {sidebarFooter && (
+              <div className="group-data-[collapsible=icon]:hidden">
+                {sidebarFooter}
+              </div>
+            )}
+          </SidebarFooter>
+        )}
+
+        {/* Rail for resize handle on desktop */}
+        <SidebarRail />
+      </Sidebar>
+
+      {/* ── Main Content ─────────────────────────────────── */}
+      <SidebarInset className="flex flex-col flex-1 min-w-0 bg-background min-h-0">
+        {!hideNavbar && (
+          <MobiNavbar
+            leftContent={navbarLeftContent}
+            rightContent={navbarRightContent}
+          />
+        )}
+        <div className="flex-1 overflow-y-auto">
+          {children}
         </div>
-      </MobiSidebar>
-    </>
+      </SidebarInset>
+    </SidebarProvider>
   );
 };

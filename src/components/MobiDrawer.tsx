@@ -1,40 +1,26 @@
-import React, { useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import { MobiIcon } from './MobiIcon';
-import './MobiDrawer.css';
+import React from 'react';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetFooter,
+  cn
+} from '@wearemobi/ui';
 
 export type MobiDrawerPosition = 'left' | 'right' | 'top' | 'bottom';
 
 export interface MobiDrawerProps {
-  /** Controls visibility. */
   isOpen: boolean;
-  /** Called when the drawer should close. */
   onClose: () => void;
-  /** 
-   * Position from which the drawer slides in.
-   * @default 'right'
-   */
   position?: MobiDrawerPosition;
-  /** Optional header title. */
   title?: string;
-  /** Drawer content. */
   children?: React.ReactNode;
-  /** Optional footer content. */
   footer?: React.ReactNode;
-  /** 
-   * Width/Height of the drawer. 
-   * For left/right: width. For top/bottom: height.
-   * @default '320px'
-   */
   size?: string;
-  /** Additional CSS classes for the drawer panel. */
   className?: string;
 }
 
-/**
- * M.O.B.I.™ Drawer
- * A sliding panel that overlays content. Useful for navigation, filters, or modular views.
- */
 export const MobiDrawer: React.FC<MobiDrawerProps> = ({
   isOpen,
   onClose,
@@ -42,82 +28,37 @@ export const MobiDrawer: React.FC<MobiDrawerProps> = ({
   title,
   children,
   footer,
-  size = '320px',
-  className = ''
+  size,
+  className,
 }) => {
-  const panelRef = useRef<HTMLDivElement>(null);
-
-  // Lock body scroll
-  useEffect(() => {
-    if (!isOpen) return;
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.body.style.overflow = '';
-    };
-  }, [isOpen]);
-
-  // Escape key handler
-  useEffect(() => {
-    if (!isOpen) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
-
-  if (!isOpen || typeof document === 'undefined') return null;
-
-  const style: React.CSSProperties = {};
-  if (position === 'left' || position === 'right') style.width = size;
-  else style.height = size;
-
-  return createPortal(
-    <div className={`mobi-drawer-container position-${position}`} role="presentation">
-      {/* Backdrop */}
-      <div 
-        className="mobi-drawer-backdrop animate-in fade-in duration-300" 
-        onClick={onClose} 
-        aria-hidden="true" 
-      />
-
-      {/* Panel */}
-      <div
-        ref={panelRef}
-        role="dialog"
-        aria-modal="true"
-        style={style}
-        className={`mobi-drawer-panel position-${position} ${className} animate-in slide-in-from-${position} duration-300`}
+  return (
+    <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
+      <SheetContent
+        side={position}
+        className={cn(className)}
+        style={{
+          ...(size && (position === 'left' || position === 'right') ? { maxWidth: size, width: '100%' } : {}),
+          ...(size && (position === 'top' || position === 'bottom') ? { maxHeight: size, height: '100%' } : {})
+        }}
       >
-        {/* Header */}
-        {(title || !!onClose) && (
-          <div className="mobi-drawer-header">
-            <h2 className="mobi-drawer-title">{title}</h2>
-            <button
-              onClick={onClose}
-              className="mobi-drawer-close"
-              aria-label="Close"
-            >
-              <MobiIcon name="close" size={20} />
-            </button>
-          </div>
+        {title && (
+          <SheetHeader className="border-b pb-4 mb-4">
+            <SheetTitle className="text-base font-black uppercase tracking-tight">
+              {title}
+            </SheetTitle>
+          </SheetHeader>
         )}
-
-        {/* Body */}
-        <div className="mobi-drawer-body">
+        
+        <div className="flex-1 overflow-y-auto">
           {children}
         </div>
 
-        {/* Footer */}
         {footer && (
-          <div className="mobi-drawer-footer">
+          <SheetFooter className="mt-4 pt-4 border-t border-border">
             {footer}
-          </div>
+          </SheetFooter>
         )}
-      </div>
-    </div>,
-    document.body
+      </SheetContent>
+    </Sheet>
   );
 };
-
-export default MobiDrawer;

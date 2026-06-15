@@ -24,7 +24,7 @@ export default defineConfig({
       fileName: (format) => `mobi-shared.${format === 'es' ? 'js' : 'umd.cjs'}`,
     },
     rollupOptions: {
-      external: ['react', 'react-dom', 'react/jsx-runtime'],
+      external: ['react', 'react-dom', 'react/jsx-runtime', '@wearemobi/ui'],
       output: {
         globals: {
           react: 'React',

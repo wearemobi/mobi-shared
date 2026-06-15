@@ -1,103 +1,112 @@
 import React from 'react';
-import { MobiIcon } from './MobiIcon';
+import { Button, cn } from '@wearemobi/ui';
+import { Loader2 } from 'lucide-react';
 
-export type MobiButtonVariant = 'solid' | 'outline' | 'ghost' | 'danger';
+export type MobiButtonVariant = 'solid' | 'secondary' | 'tertiary' | 'outline' | 'ghost' | 'error' | 'danger';
 
-export interface MobiButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  /**
-   * The visual style of the button.
-   * @default 'solid'
-   */
+export interface MobiButtonProps extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'variant' | 'size'> {
   variant?: MobiButtonVariant;
-  /**
-   * The vertical size and padding of the button.
-   * @default 'md'
-   */
-  size?: 'sm' | 'md' | 'lg';
-  /**
-   * Optional icon to render before the children.
-   */
+  size?: 'sm' | 'md' | 'lg' | 'icon';
   icon?: React.ReactNode;
-  /**
-   * Optional icon to render after the children (e.g. chevron, external link).
-   */
   suffixIcon?: React.ReactNode;
-  /**
-   * If true, shows a spinner and disables the button.
-   * @default false
-   */
   loading?: boolean;
-  /**
-   * If true, uses a monospace font and more precise padding for a technical look.
-   * @default false
-   */
-  technical?: boolean;
+  fullWidth?: boolean;
 }
 
-/**
- * M.O.B.I.™ Standard Button Component.
- * Supports a "technical" mode for engineering-focused UIs,
- * a `loading` state with spinner, and prefix/suffix icons.
- *
- * @example
- * ```tsx
- * <MobiButton variant="solid">Normal Button</MobiButton>
- * <MobiButton variant="outline" technical>Engineering View</MobiButton>
- * <MobiButton variant="solid" loading>Submitting...</MobiButton>
- * ```
- */
-export const MobiButton: React.FC<MobiButtonProps> = ({
-  variant = 'solid',
-  size = 'md',
-  icon,
-  suffixIcon,
-  loading = false,
-  technical = false,
-  children,
-  className = "",
-  disabled,
-  ...props
-}) => {
-  const isDisabled = disabled || loading;
+const shadcnVariantMap: Record<string, 'default' | 'destructive' | 'outline' | 'ghost'> = {
+  solid: 'default',
+  error: 'destructive',
+  danger: 'destructive',
+  outline: 'outline',
+  ghost: 'ghost',
+};
 
-  const baseStyles = "inline-flex items-center justify-center gap-2 transition-all outline-none active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer border-2 border-transparent";
+const sizeMap: Record<'sm' | 'md' | 'lg' | 'icon', 'sm' | 'default' | 'lg' | 'icon'> = {
+  sm: 'sm',
+  md: 'default',
+  lg: 'lg',
+  icon: 'icon',
+};
 
-  const fontStyles = technical
-    ? "font-bold font-mono tracking-tight"
-    : "font-semibold font-sans";
+// Custom class maps for variants that don't map to shadcn
+const customVariantClasses: Record<string, string> = {
+  secondary:
+    'bg-muted text-foreground border border-border hover:bg-muted/70 active:bg-muted/90',
+  tertiary:
+    'bg-primary/10 text-primary border-transparent hover:bg-primary/15 active:bg-primary/20',
+};
 
-  const variantStyles = {
-    solid: "bg-mobi-primary text-mobi-bg hover:opacity-90",
-    outline: "border-mobi-border bg-transparent text-mobi-text hover:border-mobi-primary hover:bg-mobi-primary hover:text-mobi-bg",
-    ghost: "text-mobi-text-muted hover:text-mobi-text hover:bg-mobi-surface/50 border-transparent",
-    danger: "border-red-500/20 bg-red-500/5 text-red-500 hover:bg-red-500/10"
-  };
+const customSizeClasses: Record<'sm' | 'md' | 'lg' | 'icon', string> = {
+  sm: 'h-8 px-3 text-xs rounded-md',
+  md: 'h-9 px-4 text-sm rounded-md',
+  lg: 'h-11 px-6 text-base rounded-md',
+  icon: 'h-9 w-9 rounded-md p-0',
+};
 
-  const sizeStyles = {
-    sm: technical ? "px-3 py-1 rounded-md text-[10px]" : "px-4 py-1.5 rounded-md text-xs",
-    md: technical ? "px-5 py-2 rounded-lg text-xs" : "px-6 py-2.5 rounded-lg text-sm",
-    lg: technical ? "px-7 py-3 rounded-xl text-sm" : "px-8 py-3.5 rounded-xl text-base"
-  };
+const isCustomVariant = (v: MobiButtonVariant) => v === 'secondary' || v === 'tertiary';
+
+export const MobiButton = React.forwardRef<HTMLButtonElement, MobiButtonProps>((
+  {
+    variant = 'solid',
+    size = 'md',
+    icon,
+    suffixIcon,
+    loading = false,
+    fullWidth = false,
+    children,
+    className,
+    disabled,
+    ...props
+  },
+  ref
+) => {
+  const iconContent = loading ? (
+    <Loader2 className="animate-spin shrink-0 h-4 w-4" />
+  ) : (
+    icon && <span className="shrink-0" aria-hidden="true">{icon}</span>
+  );
+  const suffixContent = !loading && suffixIcon && (
+    <span className="shrink-0" aria-hidden="true">{suffixIcon}</span>
+  );
+
+  if (isCustomVariant(variant)) {
+    return (
+      <button
+        ref={ref}
+        disabled={loading || disabled}
+        className={cn(
+          'inline-flex items-center justify-center font-sans font-bold gap-2 transition-colors cursor-pointer disabled:pointer-events-none disabled:opacity-50',
+          customVariantClasses[variant],
+          customSizeClasses[size],
+          fullWidth && 'w-full',
+          className
+        )}
+        {...props}
+      >
+        {iconContent}
+        {children}
+        {suffixContent}
+      </button>
+    );
+  }
 
   return (
-    <button
-      className={`${baseStyles} ${fontStyles} ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
-      disabled={isDisabled}
-      aria-busy={loading}
-      {...props}
-    >
-      {loading ? (
-        <MobiIcon
-          name="loader"
-          size={size === 'sm' ? 12 : size === 'lg' ? 20 : 16}
-          strokeWidth={4}
-          className="animate-spin shrink-0"
-        />
-      ) : (
-        icon && <span className="shrink-0" aria-hidden="true">{icon}</span>
+    <Button
+      ref={ref}
+      variant={shadcnVariantMap[variant]}
+      size={sizeMap[size]}
+      className={cn(
+        'font-sans font-bold gap-2',
+        fullWidth && 'w-full',
+        className
       )}
+      disabled={loading || disabled}
+      {...(props as any)}
+    >
+      {iconContent}
       {children}
-      {!loading && suffixIcon && <span className="shrink-0" aria-hidden="true">{suffixIcon}</span>}
-    </button>
+      {suffixContent}
+    </Button>
   );
-};
+});
+MobiButton.displayName = 'MobiButton';

@@ -1,221 +1,114 @@
 import React from 'react';
-import { MobiIcon } from './MobiIcon';
+import { Checkbox, Switch, Label, cn } from '@wearemobi/ui';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+export type MobiCheckboxVariant = 'default' | 'toggle' | 'radio';
 
-export type MobiCheckboxVariant = 'checkbox' | 'radio' | 'toggle';
-
-export interface MobiCheckboxProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'type' | 'size'> {
-  /**
-   * The input control variant.
-   * - `checkbox` — standard multi-select checkbox.
-   * - `radio` — single-select from a group.
-   * - `toggle` — on/off switch.
-   * @default 'checkbox'
-   */
+export interface MobiCheckboxProps extends Omit<React.ComponentProps<typeof Checkbox>, 'checked'> {
+  label?: React.ReactNode;
+  description?: React.ReactNode;
   variant?: MobiCheckboxVariant;
-  /** Label text rendered next to the control. */
-  label?: string;
-  /** Helper text shown below the label. */
-  description?: string;
-  /** Validation error message. Shows the control in an error state. */
-  error?: string;
-  /** Associates this control with a form label by ID. */
-  'aria-labelledby'?: string;
+  checked?: boolean; // Radix Checkbox supports 'indeterminate', but Switch/Radio do not. Forcing boolean for unified API.
+  error?: React.ReactNode | boolean;
 }
 
-// ─── Sub-renderers ────────────────────────────────────────────────────────────
-
-const CheckboxControl: React.FC<{
-  checked?: boolean;
-  indeterminate?: boolean;
-  disabled?: boolean;
-  error?: boolean;
-}> = ({ checked, disabled, error }) => (
-  <span
-    aria-hidden="true"
-    className={`
-      flex h-4 w-4 shrink-0 items-center justify-center rounded
-      border-2 transition-all duration-150
-      ${checked
-        ? 'bg-mobi-primary border-mobi-primary'
-        : error
-          ? 'border-rose-500 bg-transparent'
-          : 'border-mobi-border bg-transparent'
-      }
-      ${disabled ? 'opacity-40 cursor-not-allowed' : ''}
-    `}
-  >
-    {checked && (
-      <MobiIcon name="check" size={12} strokeWidth={4} className="text-mobi-bg" />
-    )}
-  </span>
-);
-
-const RadioControl: React.FC<{
-  checked?: boolean;
-  disabled?: boolean;
-  error?: boolean;
-}> = ({ checked, disabled, error }) => (
-  <span
-    aria-hidden="true"
-    className={`
-      flex h-4 w-4 shrink-0 items-center justify-center rounded-full
-      border-2 transition-all duration-150
-      ${checked
-        ? 'border-mobi-primary'
-        : error
-          ? 'border-rose-500'
-          : 'border-mobi-border'
-      }
-      ${disabled ? 'opacity-40 cursor-not-allowed' : ''}
-    `}
-  >
-    {checked && (
-      <span className="h-2 w-2 rounded-full bg-mobi-primary" />
-    )}
-  </span>
-);
-
-const ToggleControl: React.FC<{
-  checked?: boolean;
-  disabled?: boolean;
-  error?: boolean;
-}> = ({ checked, disabled, error }) => (
-  <span
-    aria-hidden="true"
-    className={`
-      relative flex h-5 w-9 shrink-0 items-center rounded-full
-      border-2 transition-all duration-200
-      ${checked
-        ? 'bg-mobi-primary border-mobi-primary'
-        : error
-          ? 'border-rose-500 bg-transparent'
-          : 'border-mobi-border bg-transparent'
-      }
-      ${disabled ? 'opacity-40 cursor-not-allowed' : ''}
-    `}
-  >
-    <span
-      className={`
-        absolute h-3 w-3 rounded-full transition-all duration-200
-        ${checked ? 'translate-x-[18px] bg-white' : 'translate-x-[2px] bg-mobi-text-muted'}
-      `}
-    />
-  </span>
-);
-
-// ─── Component ────────────────────────────────────────────────────────────────
-
-/**
- * M.O.B.I.™ Selection Control.
- * Supports checkbox, radio, and toggle variants with unified styling,
- * error states, and full accessibility.
- *
- * @example
- * ```tsx
- * // Checkbox
- * <MobiCheckbox
- *   label="Accept Terms"
- *   description="You agree to our terms of service."
- *   checked={accepted}
- *   onChange={(e) => setAccepted(e.target.checked)}
- * />
- *
- * // Toggle
- * <MobiCheckbox
- *   variant="toggle"
- *   label="Enable notifications"
- *   checked={enabled}
- *   onChange={(e) => setEnabled(e.target.checked)}
- * />
- *
- * // Radio group (controlled externally)
- * {['option-a', 'option-b'].map(opt => (
- *   <MobiCheckbox
- *     key={opt}
- *     variant="radio"
- *     name="my-group"
- *     value={opt}
- *     label={opt}
- *     checked={selected === opt}
- *     onChange={() => setSelected(opt)}
- *   />
- * ))}
- * ```
- */
-export const MobiCheckbox: React.FC<MobiCheckboxProps> = ({
-  variant = 'checkbox',
+export const MobiCheckbox = React.forwardRef<
+  React.ElementRef<typeof Checkbox>,
+  MobiCheckboxProps
+>(({
+  id,
   label,
   description,
-  error,
-  id,
-  disabled,
+  variant = 'default',
+  className,
   checked,
-  className = '',
-  ...inputProps
-}) => {
-  const inputId = id ?? `mobi-check-${Math.random().toString(36).slice(2, 7)}`;
-  const descId = description ? `${inputId}-desc` : undefined;
-  const errId = error ? `${inputId}-err` : undefined;
+  onCheckedChange,
+  error,
+  ...props
+}, ref) => {
+  const generatedId = React.useId();
+  const controlId = id || generatedId;
 
-  const inputType = variant === 'radio' ? 'radio' : 'checkbox';
+  const renderControl = () => {
+    switch (variant) {
+      case 'toggle':
+        return (
+          <Switch 
+            id={controlId} 
+            ref={ref as any}
+            checked={checked} 
+            onCheckedChange={onCheckedChange} 
+            className={cn(error && "border-destructive data-[state=checked]:bg-destructive")}
+            {...(props as any)} 
+          />
+        );
+      case 'radio':
+        return (
+          <button
+            type="button"
+            role="radio"
+            ref={ref as any}
+            id={controlId}
+            aria-checked={checked}
+            data-state={checked ? 'checked' : 'unchecked'}
+            onClick={() => onCheckedChange?.(true)} // Radios only activate
+            className={cn(
+              "peer h-4 w-4 shrink-0 rounded-full border border-primary ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex items-center justify-center data-[state=checked]:border-primary",
+              error && "border-destructive text-destructive data-[state=checked]:border-destructive"
+            )}
+            {...(props as any)}
+          >
+            {checked && <div className={cn("h-2 w-2 rounded-full bg-primary", error && "bg-destructive")} />}
+          </button>
+        );
+      case 'default':
+      default:
+        return (
+          <Checkbox 
+            id={controlId} 
+            ref={ref} 
+            checked={checked} 
+            onCheckedChange={onCheckedChange} 
+            className={cn(error && "border-destructive data-[state=checked]:bg-destructive data-[state=checked]:border-destructive")}
+            {...(props as any)} 
+          />
+        );
+    }
+  };
 
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
-      <label
-        htmlFor={inputId}
-        className={`
-          flex items-center gap-3 cursor-pointer group
-          ${disabled ? 'cursor-not-allowed opacity-60' : ''}
-        `}
-      >
-        {/* Hidden native input */}
-        <input
-          id={inputId}
-          type={inputType}
-          checked={checked}
-          disabled={disabled}
-          aria-describedby={[descId, errId].filter(Boolean).join(' ') || undefined}
-          aria-invalid={!!error}
-          className="sr-only"
-          {...inputProps}
-        />
-
-        {/* Visual control */}
-        {variant === 'checkbox' && (
-          <CheckboxControl checked={checked} disabled={disabled} error={!!error} />
-        )}
-        {variant === 'radio' && (
-          <RadioControl checked={checked} disabled={disabled} error={!!error} />
-        )}
-        {variant === 'toggle' && (
-          <ToggleControl checked={checked} disabled={disabled} error={!!error} />
-        )}
-
-        {/* Label text */}
-        {label && (
-          <span className="text-sm font-bold text-mobi-text font-sans tracking-tight select-none group-hover:text-mobi-text/90 transition-colors">
-            {label}
-          </span>
-        )}
-      </label>
-
-      {/* Description */}
-      {description && !error && (
-        <p id={descId} className="text-xs text-mobi-text-muted font-medium pl-7 font-sans">
-          {description}
-        </p>
-      )}
-
-      {/* Error */}
-      {error && (
-        <p id={errId} role="alert" className="text-xs font-bold text-rose-500 pl-7 font-sans flex items-center gap-1">
-          <MobiIcon name="alert" size={12} strokeWidth={3} />
-          {error}
-        </p>
+    <div className={cn("flex items-start gap-3", className)}>
+      <div className="pt-0.5">
+        {renderControl()}
+      </div>
+      {(label || description || error) && (
+        <div className="grid gap-1.5 leading-none">
+          {label && (
+            <Label
+              htmlFor={controlId}
+              className={cn(
+                "text-sm font-bold tracking-tight cursor-pointer peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                error && "text-destructive"
+              )}
+            >
+              {label}
+            </Label>
+          )}
+          {description && !error && (
+            <p className="text-sm text-muted-foreground">
+              {description}
+            </p>
+          )}
+          {error && typeof error === 'string' && (
+            <p className="text-xs font-medium text-destructive flex items-center gap-1 mt-0.5">
+              <span className="w-1 h-1 rounded-full bg-destructive" /> {error}
+            </p>
+          )}
+          {error && typeof error !== 'string' && typeof error !== 'boolean' && (
+            <div className="text-xs font-medium text-destructive mt-0.5">{error}</div>
+          )}
+        </div>
       )}
     </div>
   );
-};
+});
+MobiCheckbox.displayName = 'MobiCheckbox';

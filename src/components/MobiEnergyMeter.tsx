@@ -1,97 +1,197 @@
 import React from 'react';
+import { cn } from '@wearemobi/ui';
+
+export type MobiEnergyLevel = 'critical' | 'low' | 'medium' | 'high' | 'full';
 
 export interface MobiEnergyMeterProps {
-  /**
-   * Current energy/battery level (0-100).
-   */
+  /** 0–100 value */
   value: number;
-  /**
-   * If true, shows the percentage text next to the meter.
-   * @default true
-   */
-  showPercentage?: boolean;
-  /**
-   * Optional click handler.
-   */
-  onClick?: (value: number) => void;
-  /**
-   * Additional CSS classes for the container.
-   */
-  className?: string;
-  /**
-   * Size variant of the meter.
-   * @default 'md'
-   */
+  /** Optional label */
+  label?: string;
+  /** Show numeric percentage */
+  showValue?: boolean;
+  /** Visual size */
   size?: 'sm' | 'md' | 'lg';
+  /** Override automatic level detection */
+  level?: MobiEnergyLevel;
+  /** Number of cells in the battery. Defaults to 4 */
+  cells?: number;
+  /** Make meter interactive (click to simulate drain/charge) */
+  onClick?: () => void;
+  className?: string;
 }
 
-/**
- * M.O.B.I.™ Standard Energy Meter.
- * A high-visibility battery indicator for monitoring system power and resource consumption.
- * 
- * @example
- * ```tsx
- * <MobiEnergyMeter value={45} size="lg" onClick={(v) => console.log(v)} />
- * ```
- */
+function resolveLevel(value: number): MobiEnergyLevel {
+  if (value <= 10) return 'critical';
+  if (value <= 25) return 'low';
+  if (value <= 50) return 'medium';
+  if (value <= 75) return 'high';
+  return 'full';
+}
+
+const LEVEL_COLORS: Record<MobiEnergyLevel, { cell: string; glow: string; text: string }> = {
+  critical: {
+    cell: 'bg-red-500',
+    glow: 'shadow-[0_0_8px_rgba(239,68,68,0.6)]',
+    text: 'text-red-500',
+  },
+  low: {
+    cell: 'bg-orange-400',
+    glow: 'shadow-[0_0_8px_rgba(251,146,60,0.5)]',
+    text: 'text-orange-400',
+  },
+  medium: {
+    cell: 'bg-amber-400',
+    glow: 'shadow-[0_0_8px_rgba(251,191,36,0.4)]',
+    text: 'text-amber-400',
+  },
+  high: {
+    cell: 'bg-emerald-400',
+    glow: 'shadow-[0_0_8px_rgba(52,211,153,0.4)]',
+    text: 'text-emerald-400',
+  },
+  full: {
+    cell: 'bg-emerald-500',
+    glow: 'shadow-[0_0_10px_rgba(16,185,129,0.5)]',
+    text: 'text-emerald-500',
+  },
+};
+
+const SIZE_CONFIG = {
+  sm: {
+    batteryW: 24,
+    batteryH: 10,
+    nubW: 2,
+    nubH: 4,
+    padding: 1.5,
+    gap: 0.75,
+    fontSize: 'text-[9px]',
+    valueSize: 'text-[9px]',
+    radius: 'rounded-sm',
+  },
+  md: {
+    batteryW: 36,
+    batteryH: 14,
+    nubW: 3,
+    nubH: 6,
+    padding: 2,
+    gap: 1,
+    fontSize: 'text-[10px]',
+    valueSize: 'text-[10px]',
+    radius: 'rounded',
+  },
+  lg: {
+    batteryW: 52,
+    batteryH: 20,
+    nubW: 4,
+    nubH: 8,
+    padding: 3,
+    gap: 1.5,
+    fontSize: 'text-xs',
+    valueSize: 'text-xs',
+    radius: 'rounded-md',
+  },
+};
+
 export const MobiEnergyMeter: React.FC<MobiEnergyMeterProps> = ({
   value,
-  showPercentage = true,
+  label,
+  showValue = false,
+  size = 'md',
+  level: levelOverride,
+  cells = 4,
   onClick,
-  className = "",
-  size = 'md'
+  className,
 }) => {
-  const level = Math.min(Math.max(value, 0), 100);
+  const clamped = Math.max(0, Math.min(100, value));
+  const level = levelOverride ?? resolveLevel(clamped);
+  const colors = LEVEL_COLORS[level];
+  const cfg = SIZE_CONFIG[size];
 
-  const getLevelColor = () => {
-    if (level > 50) return 'bg-emerald-500';
-    if (level > 20) return 'bg-amber-500';
-    return 'bg-rose-500 animate-pulse';
-  };
+  // How many cells to fill
+  const filledCells = Math.round((clamped / 100) * cells);
 
-  const sizeClasses = {
-    sm: { container: 'w-5 h-2.5', pin: '-right-[2px] w-[1px] h-1', text: 'text-[7px]' },
-    md: { container: 'w-6 h-3', pin: '-right-[3px] w-[2px] h-1.5', text: 'text-[8px]' },
-    lg: { container: 'w-10 h-5 border-2', pin: '-right-[5px] w-[3px] h-2.5', text: 'text-[10px]' }
-  };
+  // Cell dimensions: fill the battery interior minus padding and gaps
+  const totalGapWidth = (cells - 1) * cfg.gap;
+  const interiorW = cfg.batteryW - cfg.padding * 2 - totalGapWidth;
+  const cellW = interiorW / cells;
+  const cellH = cfg.batteryH - cfg.padding * 2;
 
-  const currentSize = sizeClasses[size];
-
-  const Component = onClick ? 'button' : 'div';
+  const isCritical = level === 'critical';
 
   return (
-    <Component 
-      onClick={() => onClick?.(level)}
-      className={`
-        flex items-center gap-2 transition-all outline-none group
-        ${onClick ? 'cursor-pointer active:scale-95' : ''}
-        ${className}
-      `}
-    >
-      {showPercentage && (
-        <span className={`
-          font-black font-mono text-mobi-text-muted transition-opacity
-          ${onClick ? 'group-hover:text-mobi-text group-hover:opacity-100' : 'opacity-60'}
-          ${currentSize.text}
-        `}>
-          {Math.round(level)}%
-        </span>
+    <div
+      role="progressbar"
+      aria-valuenow={clamped}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      aria-label={label ?? `Energy: ${clamped}%`}
+      onClick={onClick}
+      className={cn(
+        'inline-flex items-center gap-2',
+        onClick && 'cursor-pointer',
+        className
       )}
-      <div className={`
-        relative border border-mobi-text-muted/30 rounded-[2px] p-[1px] transition-colors
-        ${onClick ? 'group-hover:border-mobi-text-muted/60' : ''}
-        ${currentSize.container}
-      `}>
-        <div 
-          className={`h-full rounded-[1px] transition-all duration-1000 ${getLevelColor()}`}
-          style={{ width: `${level}%` }}
+    >
+      {/* Value / label left side */}
+      {(showValue || label) && (
+        <div className={cn('flex items-center gap-1', cfg.fontSize)}>
+          {showValue && (
+            <span className={cn('font-black font-mono tabular-nums', colors.text)}>
+              {clamped}%
+            </span>
+          )}
+          {label && (
+            <span className="font-medium text-muted-foreground">{label}</span>
+          )}
+        </div>
+      )}
+
+      {/* Battery icon */}
+      <div className="flex items-center">
+        {/* Battery body */}
+        <div
+          className={cn(
+            'relative border-2 border-current flex items-center overflow-hidden',
+            cfg.radius,
+            isCritical ? 'text-red-500' : 'text-border'
+          )}
+          style={{ width: cfg.batteryW, height: cfg.batteryH }}
+        >
+          {/* Cells */}
+          <div
+            className="absolute inset-0 flex items-center"
+            style={{ padding: cfg.padding, gap: cfg.gap }}
+          >
+            {Array.from({ length: cells }).map((_, i) => {
+              const filled = i < filledCells;
+              return (
+                <div
+                  key={i}
+                  className={cn(
+                    'rounded-sm transition-all duration-500',
+                    filled ? cn(colors.cell, filledCells === cells ? colors.glow : '') : 'bg-border/30'
+                  )}
+                  style={{ width: cellW, height: cellH, flexShrink: 0 }}
+                />
+              );
+            })}
+          </div>
+          {/* Critical flash overlay */}
+          {isCritical && (
+            <div className="absolute inset-0 bg-red-500/10 animate-pulse" />
+          )}
+        </div>
+        {/* Battery nub (terminal) */}
+        <div
+          className={cn(
+            'rounded-r-sm',
+            isCritical ? 'bg-red-500/60' : 'bg-border'
+          )}
+          style={{ width: cfg.nubW, height: cfg.nubH }}
+          aria-hidden="true"
         />
-        {/* Battery Pin */}
-        <div className={`
-          absolute top-1/2 -translate-y-1/2 bg-mobi-text-muted/30 rounded-r-[1px]
-          ${currentSize.pin}
-        `} />
       </div>
-    </Component>
+    </div>
   );
 };

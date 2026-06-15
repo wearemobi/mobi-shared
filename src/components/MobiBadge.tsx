@@ -1,79 +1,82 @@
 import React from 'react';
+import { Badge, cn } from '@wearemobi/ui';
+import { cva } from 'class-variance-authority';
+
+const badgeVariants = cva(
+  "gap-1.5 font-semibold font-sans uppercase tracking-wider rounded-full",
+  {
+    variants: {
+      variant: {
+        default: "",
+        outline: "",
+        success: "bg-success bg-opacity-10 text-success border-success border-opacity-20 hover:bg-opacity-20",
+        error: "bg-error bg-opacity-10 text-error border-error border-opacity-20 hover:bg-opacity-20",
+        warning: "bg-warning bg-opacity-10 text-warning border-warning border-opacity-20 hover:bg-opacity-20",
+        info: "bg-info bg-opacity-10 text-info border-info border-opacity-20 hover:bg-opacity-20",
+      },
+      size: {
+        sm: '!px-2 !py-0 !h-4 text-[9px] flex items-center',
+        md: '!px-2.5 !py-0 !h-5 text-[10px] flex items-center',
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "md",
+    },
+  }
+);
+
+const dotVariants = cva(
+  "h-1.5 w-1.5 rounded-full shrink-0",
+  {
+    variants: {
+      variant: {
+        default: "bg-current",
+        outline: "bg-current",
+        success: "bg-success",
+        error: "bg-error",
+        warning: "bg-warning",
+        info: "bg-info",
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
 export type MobiBadgeVariant = 'default' | 'success' | 'error' | 'warning' | 'info' | 'outline';
 export type MobiBadgeSize = 'sm' | 'md';
 
-export interface MobiBadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  /**
-   * Semantic color variant.
-   * @default 'default'
-   */
+export interface MobiBadgeProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'variant'> {
   variant?: MobiBadgeVariant;
-  /**
-   * Size preset.
-   * @default 'md'
-   */
   size?: MobiBadgeSize;
-  /** Optional dot indicator rendered before the label. */
   dot?: boolean;
-  /** Optional icon rendered before the label. */
   icon?: React.ReactNode;
 }
 
-const VARIANT_CLASS: Record<MobiBadgeVariant, string> = {
-  default: 'bg-mobi-surface border border-mobi-border text-mobi-text',
-  success: 'bg-emerald-500/10 border border-emerald-500/20 text-emerald-400',
-  error: 'bg-rose-500/10 border border-rose-500/20 text-rose-400',
-  warning: 'bg-amber-500/10 border border-amber-500/20 text-amber-400',
-  info: 'bg-blue-500/10 border border-blue-500/20 text-blue-400',
-  outline: 'bg-transparent border border-mobi-border text-mobi-text-muted',
-};
-
-const DOT_CLASS: Record<MobiBadgeVariant, string> = {
-  default: 'bg-mobi-text-muted',
-  success: 'bg-emerald-400',
-  error: 'bg-rose-400',
-  warning: 'bg-amber-400',
-  info: 'bg-blue-400',
-  outline: 'bg-mobi-text-muted',
-};
-
-/**
- * M.O.B.I.™ Badge / Chip.
- * Compact status indicator. Supports semantic variants, dot indicators, icons, and custom content.
- *
- * @example
- * ```tsx
- * <MobiBadge variant="success" dot>Online</MobiBadge>
- * <MobiBadge variant="error">Failed</MobiBadge>
- * <MobiBadge variant="info" icon={<InfoIcon />}>In Review</MobiBadge>
- * <MobiBadge>v1.3.6</MobiBadge>
- * ```
- */
 export const MobiBadge: React.FC<MobiBadgeProps> = ({
   variant = 'default',
   size = 'md',
   dot = false,
   icon,
   children,
-  className = '',
+  className,
   ...props
 }) => {
-  const sizeClass = size === 'sm'
-    ? 'px-1.5 py-0.5 text-[9px]'
-    : 'px-2.5 py-1 text-[10px]';
+  // We use shadcn's 'outline' or 'default', but for custom colors we use 'secondary' as base to remove borders,
+  // and let our CVA classes override the colors.
+  const shadcnVariant = variant === 'outline' ? 'outline' : variant === 'default' ? 'default' : 'secondary';
 
   return (
-    <span
-      className={`
-        inline-flex items-center gap-1.5 rounded-full font-black font-sans uppercase tracking-widest
-        ${sizeClass} ${VARIANT_CLASS[variant]} ${className}
-      `}
-      {...props}
+    <Badge
+      variant={shadcnVariant}
+      className={cn(badgeVariants({ variant, size }), className)}
+      {...(props as any)}
     >
       {dot && (
         <span
-          className={`h-1.5 w-1.5 rounded-full shrink-0 ${DOT_CLASS[variant]}`}
+          className={dotVariants({ variant })}
           aria-hidden="true"
         />
       )}
@@ -81,6 +84,6 @@ export const MobiBadge: React.FC<MobiBadgeProps> = ({
         <span className="shrink-0" aria-hidden="true">{icon}</span>
       )}
       {children}
-    </span>
+    </Badge>
   );
 };

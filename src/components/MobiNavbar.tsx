@@ -1,65 +1,78 @@
 import React from 'react';
-import { MobiLogo } from './MobiLogo';
+import {
+  SidebarTrigger,
+  Separator,
+  cn
+} from '@wearemobi/ui';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '@wearemobi/ui';
+
+export interface MobiNavbarBreadcrumb {
+  label: string;
+  href?: string;
+}
 
 export interface MobiNavbarProps {
-  /**
-   * Title text to display next to the logo on tablet and desktop views.
-   * On mobile, only the logo is shown.
-   * @default "M.O.B.I.™"
-   */
-  title?: string;
-  /**
-   * Optional callback triggered when the logo or title is clicked.
-   */
-  onLogoClick?: () => void;
-  /**
-   * Content to render on the right side of the navbar (e.g., buttons, menus).
-   */
+  /** Breadcrumb items — last one is the current page */
+  breadcrumbs?: MobiNavbarBreadcrumb[];
+  /** Custom left slot (replaces breadcrumbs if provided) */
+  leftContent?: React.ReactNode;
+  /** Right-side actions: user menu, search, notifications, etc. */
   rightContent?: React.ReactNode;
-  /**
-   * Additional CSS classes for the container.
-   */
   className?: string;
 }
 
-/**
- * Standard M.O.B.I.™ Top Navigation Bar.
- * Implements the official design system with a sticky, blurred background.
- * Automatically hides text on mobile (below md breakpoint) to prioritize space.
- *
- * @example
- * ```tsx
- * <MobiNavbar 
- *   title="Shared Library" 
- *   onLogoClick={() => navigate('/')} 
- *   rightContent={<MobiSentinelMenu ... />}
- * />
- * ```
- */
 export const MobiNavbar: React.FC<MobiNavbarProps> = ({
-  title = "M.O.B.I.™",
-  onLogoClick,
+  breadcrumbs,
+  leftContent,
   rightContent,
-  className = ""
+  className,
 }) => {
   return (
-    <header className={`sticky top-0 z-10 flex items-center justify-between border-b border-mobi-border bg-mobi-surface/80 px-6 py-4 backdrop-blur-md ${className}`}>
-      <div className="flex items-center gap-3">
-        <button 
-          onClick={onLogoClick} 
-          className="group flex items-center gap-3 transition-opacity hover:opacity-70 outline-none cursor-pointer"
-          aria-label="Go home"
-        >
-          <MobiLogo size={32} />
-          {/* Title is hidden on mobile (below 768px) and shown on md+ screens */}
-          <span className="max-md:hidden md:inline-block text-xl font-bold tracking-tight font-sans whitespace-nowrap">
-            {title}
-          </span>
-        </button>
+    <header
+      className={cn(
+        'flex h-16 shrink-0 items-center justify-between border-b bg-background px-6',
+        className
+      )}
+    >
+      <div className="flex items-center gap-4 h-full">
+        <SidebarTrigger className="-ml-2 h-8 w-8 shrink-0" />
+        <Separator orientation="vertical" className="h-6 shrink-0" />
+        <div className="flex items-center text-sm font-medium truncate">
+          {leftContent ? (
+            leftContent
+          ) : breadcrumbs && breadcrumbs.length > 0 ? (
+            <Breadcrumb>
+              <BreadcrumbList>
+                {breadcrumbs.map((crumb, idx) => {
+                  const isLast = idx === breadcrumbs.length - 1;
+                  return (
+                    <React.Fragment key={crumb.label}>
+                      <BreadcrumbItem>
+                        {isLast || !crumb.href ? (
+                          <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                        ) : (
+                          <a href={crumb.href} className="transition-colors hover:text-foreground text-muted-foreground">{crumb.label}</a>
+                        )}
+                      </BreadcrumbItem>
+                      {!isLast && <BreadcrumbSeparator className="hidden md:block" />}
+                    </React.Fragment>
+                  );
+                })}
+              </BreadcrumbList>
+            </Breadcrumb>
+          ) : null}
+        </div>
       </div>
-      
+
+      {/* Right: actions slot */}
       {rightContent && (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 shrink-0">
           {rightContent}
         </div>
       )}

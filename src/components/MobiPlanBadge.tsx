@@ -1,77 +1,75 @@
 import React from 'react';
+import { cn } from '@wearemobi/ui';
 
-/** Subscription tier identifiers used across the M.O.B.I.™ fleet. */
-export type MobiPlan = 'FREE' | 'BASIC' | 'PRO' | 'ULTRA' | 'CUSTOM' | 'NOT_AVAILABLE';
+export type MobiPlanTier = 'FREE' | 'BASIC' | 'PRO' | 'ULTRA' | 'BUSINESS' | 'ENTERPRISE' | 'CUSTOM' | 'N/A';
 
-interface MobiPlanBadgeProps {
-  /** The active subscription plan. Controls color and label. */
-  plan: MobiPlan;
-  /** Additional CSS classes. */
+export interface MobiPlanBadgeProps {
+  plan: MobiPlanTier;
+  size?: 'sm' | 'md';
   className?: string;
 }
 
-/**
- * Color-coded pill badge indicating a subscription tier.
- * Each plan has a unique color from the MOBI palette.
- *
- * @example
- * ```tsx
- * <MobiPlanBadge plan="PRO" />
- * <MobiPlanBadge plan="ULTRA" className="ml-2" />
- * ```
- */
+const PLAN_STYLES: Record<string, React.CSSProperties> = {
+  FREE: {
+    background: 'transparent',
+    color: '#71717a',
+    border: '1px solid #e4e4e7',
+  },
+  BASIC: {
+    background: 'rgba(16, 185, 129, 0.12)',
+    color: '#059669',
+    border: '1px solid rgba(16, 185, 129, 0.25)',
+  },
+  PRO: {
+    background: 'rgba(59, 130, 246, 0.12)',
+    color: '#2563eb',
+    border: '1px solid rgba(59, 130, 246, 0.25)',
+  },
+  ULTRA: {
+    background: 'linear-gradient(135deg, #8b5cf6, #3b82f6)',
+    color: '#ffffff',
+    border: 'none',
+    boxShadow: '0 4px 12px rgba(139, 92, 246, 0.3)',
+  },
+  BUSINESS: {
+    background: 'rgba(245, 158, 11, 0.12)',
+    color: '#d97706',
+    border: '1px solid rgba(245, 158, 11, 0.25)',
+  },
+  ENTERPRISE: {
+    background: 'rgba(139, 92, 246, 0.12)',
+    color: '#7c3aed',
+    border: '1px solid rgba(139, 92, 246, 0.25)',
+  },
+  CUSTOM: {
+    background: 'rgba(249, 115, 22, 0.12)',
+    color: '#ea580c',
+    border: '1px solid rgba(249, 115, 22, 0.25)',
+  },
+  'N/A': {
+    background: 'rgba(244, 63, 94, 0.12)',
+    color: '#e11d48',
+    border: '1px solid rgba(244, 63, 94, 0.25)',
+  },
+};
+
 export const MobiPlanBadge: React.FC<MobiPlanBadgeProps> = ({
   plan,
-  className = ''
+  size = 'md',
+  className,
 }) => {
-  const planStyles: Record<MobiPlan, { label: string; color: string; bg: string }> = {
-    FREE: {
-      label: 'Free',
-      color: 'text-mobi-text-muted',
-      bg: 'bg-mobi-bg/50'
-    },
-    BASIC: {
-      label: 'Basic',
-      color: 'text-blue-500',
-      bg: 'bg-blue-500/10'
-    },
-    PRO: {
-      label: 'Pro',
-      color: 'text-emerald-500',
-      bg: 'bg-emerald-500/10'
-    },
-    ULTRA: {
-      label: 'Ultra',
-      color: 'text-mobi-primary',
-      bg: 'bg-mobi-primary/10'
-    },
-    CUSTOM: {
-      label: 'Custom',
-      color: 'text-amber-500',
-      bg: 'bg-amber-500/10'
-    },
-    NOT_AVAILABLE: {
-      label: 'N/A',
-      color: 'text-rose-500',
-      bg: 'bg-rose-500/10'
-    }
-  };
-
-  const isUltra = plan === 'ULTRA';
-  const style = planStyles[plan];
+  const styles = PLAN_STYLES[plan] ?? PLAN_STYLES['N/A'];
 
   return (
-    <div className={`
-      inline-flex items-center border px-2 py-0.5 rounded-sm shadow-sm font-sans transition-all
-      ${isUltra ? 'mobi-plan-ultra' : `${style.bg} border-mobi-border/30`}
-      ${className}
-    `}>
-      <span className={`
-        text-[9px] font-black uppercase tracking-[0.15em]
-        ${isUltra ? 'text-white' : style.color}
-      `}>
-        {style.label}
-      </span>
-    </div>
+    <span
+      className={cn(
+        'inline-flex items-center justify-center rounded-full font-semibold uppercase tracking-wide whitespace-nowrap leading-none',
+        size === 'sm' ? 'px-2 py-0.5 text-[9px]' : 'px-2.5 py-0.5 text-[10px]',
+        className
+      )}
+      style={styles}
+    >
+      {plan}
+    </span>
   );
 };

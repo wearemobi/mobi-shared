@@ -1,131 +1,83 @@
 import React from 'react';
+import { cn } from '@wearemobi/ui';
 
-export interface MobiBentoGridProps {
+export interface MobiBentoGridProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode;
-  /**
-   * Number of columns for layout orchestration.
-   * @default 4
-   */
-  columns?: 1 | 2 | 3 | 4 | 5;
-  /**
-   * Additional styling classes.
-   */
-  className?: string;
 }
 
-export interface MobiBentoItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
-  children: React.ReactNode;
-  /**
-   * Column footprint span of this item card.
-   * @default 1
-   */
-  colSpan?: 1 | 2 | 3 | 4 | 'full';
-  /**
-   * Row footprint span of this item card.
-   * @default 1
-   */
-  rowSpan?: 1 | 2 | 3 | 'full';
-  /**
-   * Optional title rendered at the top of the bento item.
-   */
-  title?: React.ReactNode;
-  /**
-   * Optional footer rendered at the bottom (e.g. for action buttons).
-   */
-  footer?: React.ReactNode;
-  /**
-   * Additional styling classes.
-   */
-  className?: string;
-}
-
-const columnsMap = {
-  1: 'grid-cols-1',
-  2: 'grid-cols-1 md:grid-cols-2',
-  3: 'grid-cols-1 md:grid-cols-3',
-  4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
-  5: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-5',
-};
-
-const colSpanMap = {
-  1: 'col-span-1',
-  2: 'md:col-span-2',
-  3: 'md:col-span-3',
-  4: 'md:col-span-4',
-  full: 'col-span-full',
-};
-
-const rowSpanMap = {
-  1: 'row-span-1',
-  2: 'md:row-span-2',
-  3: 'md:row-span-3',
-  full: 'row-span-full',
-};
-
-/**
- * MobiBentoGrid
- * Premium multi-dimensional grid system for sovereign M.O.B.I.™ dashboards.
- */
-export const MobiBentoGrid: React.FC<MobiBentoGridProps> = ({
-  children,
-  columns = 4,
-  className = '',
-}) => {
-  const gridClass = columnsMap[columns] || columnsMap[4];
-
+export const MobiBentoGrid: React.FC<MobiBentoGridProps> = ({ className, children, ...props }) => {
   return (
-    <div className={`grid ${gridClass} gap-6 ${className}`}>
+    <div
+      className={cn(
+        "grid w-full grid-cols-1 md:grid-cols-3 gap-4",
+        className
+      )}
+      {...props}
+    >
       {children}
     </div>
   );
 };
 
-/**
- * MobiBentoItem
- * Modular dashboard asset container for the Bento Grid.
- * Features smooth micro-animations and micro-glow highlights on hover.
- */
+export interface MobiBentoItemProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  title?: React.ReactNode;
+  description?: React.ReactNode;
+  icon?: React.ReactNode;
+  children?: React.ReactNode;
+  clickable?: boolean;
+}
+
 export const MobiBentoItem: React.FC<MobiBentoItemProps> = ({
-  children,
-  colSpan = 1,
-  rowSpan = 1,
+  className,
   title,
-  footer,
-  className = '',
+  description,
+  children,
+  icon,
+  clickable,
   ...props
 }) => {
-  const colClass = colSpanMap[colSpan] || 'col-span-1';
-  const rowClass = rowSpanMap[rowSpan] || 'row-span-1';
+  const isClickable = clickable ?? !!props.onClick;
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (isClickable && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      props.onClick?.(e as any);
+    }
+    props.onKeyDown?.(e);
+  };
 
   return (
     <div
-      className={`
-        relative overflow-hidden rounded-2xl border border-mobi-border bg-mobi-surface p-6 flex flex-col
-        transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-2xl hover:border-mobi-primary/30
-        group ${colClass} ${rowClass} ${className}
-      `}
+      role={isClickable ? "button" : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      onKeyDown={handleKeyDown}
+      className={cn(
+        "relative rounded-3xl group/bento transition-all duration-500 p-6 sm:p-8 bg-white dark:bg-zinc-950 border border-zinc-200/50 dark:border-zinc-800/50 overflow-hidden flex flex-col shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-none",
+        isClickable && "cursor-pointer",
+        className
+      )}
       {...props}
     >
-      {/* Decorative hover radial glow */}
-      <div 
-        className="absolute top-0 right-0 -mr-6 -mt-6 h-24 w-24 rounded-full bg-mobi-primary/5 blur-2xl 
-                   transition-all duration-500 group-hover:scale-150 group-hover:bg-mobi-primary/10" 
-      />
+      {/* Subtle radial glow on hover */}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-zinc-200/50 to-transparent dark:from-white/[0.04] opacity-0 group-hover/bento:opacity-100 transition-opacity duration-500" />
       
-      <div className="relative z-10 flex flex-col h-full w-full">
-        {title && (
-          <div className="mb-4 text-lg font-bold text-mobi-text tracking-tight font-sans">
-            {title}
-          </div>
-        )}
+      <div className="relative z-10 flex flex-col flex-1 h-full">
+        {children}
         
-        <div className="flex-1">
-          {children}
-        </div>
-
-        {footer && (
-          <div className="mt-6 pt-4 border-t border-mobi-border/50">
-            {footer}
+        {/* Legacy support for passing title/description directly */}
+        {(title || description || icon) && (
+          <div className={cn("mt-auto transition-transform duration-300 group-hover/bento:translate-x-1", children ? "pt-6" : "")}>
+            {icon}
+            {title && (
+              <div className="font-bold text-foreground text-lg tracking-tight mb-1">
+                {title}
+              </div>
+            )}
+            {description && (
+              <div className="font-medium text-muted-foreground text-sm leading-relaxed">
+                {description}
+              </div>
+            )}
           </div>
         )}
       </div>

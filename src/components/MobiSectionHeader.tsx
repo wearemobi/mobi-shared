@@ -1,112 +1,49 @@
 import React from 'react';
+import { cn } from '@wearemobi/ui';
 
-export interface MobiSectionHeaderProps {
-  /** Small badge text above the title. */
-  headline?: React.ReactNode;
-  /** Main heading text. */
-  title?: React.ReactNode;
-  /** Subtext or description below the title. */
+export interface MobiSectionHeaderProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
+  title: React.ReactNode;
   description?: React.ReactNode;
-  /** 
-   * Visual variant for the headline badge. 
-   * @default 'neutral'
-   */
-  variant?: 'component' | 'hook' | 'neutral';
-  /** Additional container classes. */
-  className?: string;
-  /** Leading icon shown next to the title. */
-  icon?: React.ReactNode;
-  /** Trailing actions, such as a toolbar or More Menu. */
-  actions?: React.ReactNode;
-  /** Size of the section header. @default 'md' */
-  size?: 'sm' | 'md' | 'lg';
+  action?: React.ReactNode;
+  size?: 'sm' | 'default' | 'lg';
 }
 
-/**
- * M.O.B.I.™ Standard Section Header.
- * Used to introduce components, hooks, or major sections with a consistent 
- * hierarchy (Headline Badge -> Title -> Description).
- */
-export const MobiSectionHeader: React.FC<MobiSectionHeaderProps> = ({
-  headline,
-  title,
-  description,
-  variant = 'neutral',
-  className = '',
-  icon,
-  actions,
-  size = 'md'
-}) => {
-  const getBadgeStyles = () => {
-    switch (variant) {
-      case 'component':
-        return 'bg-emerald-500/10 text-emerald-500';
-      case 'hook':
-        return 'bg-blue-500/10 text-blue-500';
-      default:
-        return 'bg-mobi-border/30 text-mobi-text-muted';
-    }
-  };
+export const MobiSectionHeader = React.forwardRef<HTMLDivElement, MobiSectionHeaderProps>(
+  ({ title, description, action, size = 'default', className, ...props }, ref) => {
+    
+    const sizeClasses = {
+      sm: 'text-lg',
+      default: 'text-2xl',
+      lg: 'text-3xl sm:text-4xl',
+    };
 
-  const sizeClasses = {
-    sm: {
-      title: 'text-2xl',
-      desc: 'text-sm mt-1',
-      spacing: 'mb-6',
-      icon: 'h-6 w-6'
-    },
-    md: {
-      title: 'text-4xl',
-      desc: 'text-base mt-2',
-      spacing: 'mb-10',
-      icon: 'h-8 w-8'
-    },
-    lg: {
-      title: 'text-5xl',
-      desc: 'text-lg mt-3',
-      spacing: 'mb-14',
-      icon: 'h-10 w-10'
-    }
-  };
-
-  return (
-    <div className={`${sizeClasses[size].spacing} ${className}`}>
-      {headline && (
-        <div className="flex items-center gap-3 mb-3">
-          <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-2.5 py-1 rounded-md font-mono ${getBadgeStyles()}`}>
-            {headline}
-          </span>
-        </div>
-      )}
-      
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex-1">
-          {title && (
-            <h2 className={`font-black tracking-tight font-sans text-mobi-text flex items-center gap-3 ${sizeClasses[size].title}`}>
-              {icon && (
-                <div className={`flex items-center justify-center text-mobi-primary ${sizeClasses[size].icon}`}>
-                  {icon}
-                </div>
-              )}
-              {title}
-            </h2>
-          )}
-          
+    return (
+      <div 
+        ref={ref} 
+        className={cn("flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full mb-6", className)}
+        {...props}
+      >
+        <div className="space-y-1.5">
+          <h2 className={cn(
+            "font-black tracking-tight text-foreground", 
+            sizeClasses[size]
+          )}>
+            {title}
+          </h2>
           {description && (
-            <div className={`text-mobi-text-muted font-sans max-w-2xl leading-relaxed ${sizeClasses[size].desc}`}>
+            <div className="text-sm text-muted-foreground font-medium max-w-2xl">
               {description}
             </div>
           )}
         </div>
-        
-        {actions && (
-          <div className="flex items-center gap-2 flex-shrink-0 mt-1">
-            {actions}
+        {action && (
+          <div className="flex items-center gap-3 shrink-0">
+            {action}
           </div>
         )}
       </div>
-    </div>
-  );
-};
+    );
+  }
+);
 
-export default MobiSectionHeader;
+MobiSectionHeader.displayName = 'MobiSectionHeader';

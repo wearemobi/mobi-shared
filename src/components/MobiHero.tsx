@@ -1,82 +1,125 @@
 import React from 'react';
+import { cn } from '@wearemobi/ui';
+import { MobiButton } from './MobiButton';
+
+export interface MobiHeroAction {
+  label: string;
+  onClick?: () => void;
+  variant?: 'solid' | 'outline' | 'ghost';
+  href?: string;
+}
 
 export interface MobiHeroProps {
-  /**
-   * Primary heading text.
-   */
-  title: string;
-  /**
-   * Muted subtitle text shown after the title.
-   */
+  /** Main title — supports ReactNode for mixed typography */
+  title: React.ReactNode;
   subtitle?: React.ReactNode;
-  /**
-   * Optional logo or image to render above the title.
-   * Can be the official <MobiLogoHero /> or any React element.
-   */
-  logo?: React.ReactNode;
-  /**
-   * Descriptive paragraph text. Can be a string or React nodes.
-   */
   description?: React.ReactNode;
-  /**
-   * Optional content to render below the description (e.g., buttons, cards).
-   */
+  /** Logo or visual element above the title */
+  logo?: React.ReactNode;
+  actions?: MobiHeroAction[];
+  /** Alignment */
+  align?: 'left' | 'center';
+  /** Visual size */
+  size?: 'sm' | 'default' | 'lg';
+  /** Extra content below actions (badges, stats, logos) */
   children?: React.ReactNode;
-  /**
-   * Additional CSS classes for the container.
-   */
   className?: string;
 }
 
-/**
- * M.O.B.I.™ Hero Component.
- * A high-impact header section for landing pages.
- * Implements the official typography and spacing from the Core Blueprint.
- *
- * @example
- * ```tsx
- * <MobiHero 
- *   logo={<MobiLogoHero size={160} />}
- *   title="M.O.B.I.™ Shared" 
- *   subtitle="Common UI"
- *   description="Universal UI & Logic Shield for the M.O.B.I.™ Grand Fleet."
- * >
- *   <button>Explore Docs</button>
- * </MobiHero>
- * ```
- */
+const SIZE_CONFIG = {
+  sm: {
+    title: 'text-2xl sm:text-3xl',
+    subtitle: 'text-sm',
+    description: 'text-sm max-w-lg',
+    padding: 'py-12 sm:py-16',
+  },
+  default: {
+    title: 'text-3xl sm:text-4xl md:text-5xl',
+    subtitle: 'text-sm',
+    description: 'text-base max-w-2xl',
+    padding: 'py-16 sm:py-24',
+  },
+  lg: {
+    title: 'text-4xl sm:text-5xl md:text-6xl lg:text-7xl',
+    subtitle: 'text-base',
+    description: 'text-lg max-w-3xl',
+    padding: 'py-24 sm:py-32',
+  },
+};
+
 export const MobiHero: React.FC<MobiHeroProps> = ({
   title,
   subtitle,
-  logo,
   description,
+  logo,
+  actions,
+  align = 'center',
+  size = 'default',
   children,
-  className = ""
+  className,
 }) => {
+  const config = SIZE_CONFIG[size];
+  const alignClass = align === 'center' ? 'items-center text-center' : 'items-start text-left';
+
   return (
-    <section className={`flex flex-col items-center justify-center text-center py-12 md:py-20 ${className}`}>
-      <div className="max-w-2xl">
+    <section className={cn('w-full px-6', config.padding, className)}>
+      <div className={cn('flex flex-col gap-6', alignClass)}>
         {logo && (
-          <div className="mb-8 flex justify-center">
+          <div className="mb-2">
             {logo}
           </div>
         )}
-        
-        <h1 className="text-4xl md:text-6xl font-sans font-bold tracking-tight mb-4 text-mobi-text">
-          {title} {subtitle && <span className="text-mobi-text-muted">{subtitle}</span>}
+
+        <h1
+          className={cn(
+            'font-black tracking-tighter text-foreground leading-[0.95]',
+            config.title
+          )}
+        >
+          {title}
         </h1>
-        
+
+        {subtitle && (
+          <p
+            className={cn(
+              'font-medium text-muted-foreground tracking-wide',
+              config.subtitle
+            )}
+          >
+            {subtitle}
+          </p>
+        )}
+
         {description && (
-          <p className="text-lg md:text-xl text-mobi-text-muted font-sans font-medium mb-8 max-w-lg mx-auto leading-relaxed">
+          <p
+            className={cn(
+              'text-muted-foreground font-medium leading-relaxed',
+              config.description,
+              align === 'center' && 'mx-auto'
+            )}
+          >
             {description}
           </p>
         )}
-        
-        {children && (
-          <div className="flex flex-col items-center">
-            {children}
+
+        {actions && actions.length > 0 && (
+          <div className="flex flex-wrap gap-3 mt-2">
+            {actions.map((action) => (
+              <MobiButton
+                key={action.label}
+                type="button"
+                variant={action.variant || 'solid'}
+                size="lg"
+                onClick={action.onClick}
+                className="min-w-[140px]"
+              >
+                {action.label}
+              </MobiButton>
+            ))}
           </div>
         )}
+
+        {children && <div className="mt-4">{children}</div>}
       </div>
     </section>
   );

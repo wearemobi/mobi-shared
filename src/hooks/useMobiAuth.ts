@@ -38,6 +38,11 @@ export const useMobiAuth = (appId?: string) => {
   });
 
   const login = useCallback((credentials?: unknown) => {
+    /**
+     * @experimental
+     * @internal
+     * This is a stub for JS Bridge v1.19. Do not use in production yet.
+     */
     console.log(`[MOBI-SHARED] Initiating login for App: ${appId}`, credentials);
     // Future implementation of JS Bridge v1.19
   }, [appId]);

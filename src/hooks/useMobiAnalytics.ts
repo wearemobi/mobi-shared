@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 // ─── GA4 Type Declarations ────────────────────────────────────────────────────
 
@@ -110,7 +110,7 @@ export const useMobiAnalytics = ({
   defaultParams = {},
   onEvent
 }: UseMobiAnalyticsOptions) => {
-  const isReady = useRef(false);
+  const [isReady, setIsReady] = useState(false);
 
   // Bootstrap gtag dataLayer and initialize measurement ID
   useEffect(() => {
@@ -132,7 +132,7 @@ export const useMobiAnalytics = ({
       ...defaultParams
     });
 
-    isReady.current = true;
+    setIsReady(true);
   }, [measurementId, disabled, autoPageView]); // defaultParams intentionally excluded (object ref)
 
   /** Internal gtag caller — queues safely even if gtag isn't loaded yet. */
@@ -270,7 +270,7 @@ export const useMobiAnalytics = ({
 
   return {
     /** Whether the gtag function is initialized and ready. */
-    isReady: isReady.current,
+    isReady,
     trackEvent,
     trackPageView,
     trackConversion,
