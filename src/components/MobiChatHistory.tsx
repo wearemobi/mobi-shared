@@ -3,6 +3,7 @@ import { cn } from '@wearemobi/ui';
 import { MobiEdgeMessage } from '../hooks/useMobiEdge';
 import { MobiChatMessage } from './MobiChatMessage';
 import { MobiLoader } from './MobiLoader';
+import { MobiLogo } from './MobiLogo';
 
 export interface MobiChatHistoryProps {
   messages: MobiEdgeMessage[];
