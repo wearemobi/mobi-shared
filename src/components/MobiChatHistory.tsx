@@ -32,12 +32,14 @@ export const MobiChatHistory: React.FC<MobiChatHistoryProps> = ({
         ))}
         
         {isProcessing && (
-          <div className="flex justify-start mb-4">
-            <div className="mr-4 flex-shrink-0 mt-1">
-              <MobiLoader variant="pulse" size="sm" />
+          <div className="flex w-full mb-2 gap-4 justify-start">
+            <div className="flex-shrink-0 mt-0.5">
+              <MobiLogo size={24} className="mb-0 mx-0 opacity-50 animate-pulse" />
             </div>
-            <div className="bg-transparent py-2 flex items-center">
-              <span className="text-sm text-muted-foreground italic">Thinking...</span>
+            <div className="max-w-[85%] flex flex-col items-start justify-center">
+              <div className="py-1">
+                <MobiLoader variant="bars" size="sm" />
+              </div>
             </div>
           </div>
         )}
