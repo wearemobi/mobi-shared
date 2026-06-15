@@ -43,16 +43,16 @@ export const MobiChatMessage: React.FC<MobiChatMessageProps> = ({
   const time = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (
-    <div className={`flex w-full mb-6 ${isUser ? 'justify-end' : 'justify-start'}`}>
+    <div className={`flex w-full mb-2 gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
       {!isUser && (
-        <div className="mr-4 flex-shrink-0 mt-0.5">
+        <div className="flex-shrink-0 mt-0.5">
           <MobiLogo size={24} className="mb-0 mx-0" />
         </div>
       )}
-      <div className={`max-w-[85%] flex flex-col ${isUser ? 'items-end' : 'items-start'}`}>
+      <div className={`max-w-[85%] flex flex-col ${isUser ? 'items-end ml-auto' : 'items-start'}`}>
         <div className={`rounded-2xl ${
           isUser 
-            ? 'bg-muted/50 text-foreground rounded-tr-sm px-5 py-3' 
+            ? 'bg-muted/60 text-foreground rounded-tr-sm px-5 py-3' 
             : 'bg-transparent text-foreground py-1'
         }`}>
           {message.isError ? (
