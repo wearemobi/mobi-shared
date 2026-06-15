@@ -826,7 +826,7 @@ export const catalog = [
             ]}
           />
           
-          <div className="relative border border-border rounded-xl bg-background overflow-hidden min-h-[600px]">
+          <div className="relative border border-border rounded-xl bg-background overflow-hidden min-h-[600px] p-4 md:p-8 flex flex-col">
             {variant === 'fullscreen' ? (
               <div className="absolute inset-0 flex items-center justify-center bg-muted/20">
                 <MobiChat 
@@ -871,6 +871,7 @@ export const catalog = [
                 activeModelId={activeModel}
                 onSelectModel={setActiveModel}
                 suggestions={['Analyze data', 'Generate report']}
+                className="flex-1 w-full"
               />
             )}
           </div>
