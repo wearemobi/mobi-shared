@@ -49,7 +49,7 @@ export * from './components/MobiChatMenu';
 export * from './components/MobiChatModelSelector';
 export * from './components/MobiChatWelcome';
 export * from './components/MobiChatHistory';
-// export * from './components/MobiThemeToggle';
+export * from './components/MobiThemeToggle';
 
 // Hooks
 export * from './hooks';
