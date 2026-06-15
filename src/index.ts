@@ -46,6 +46,8 @@ export * from './components/MobiChat';
 export * from './components/MobiChatMessage';
 export * from './components/MobiChatInput';
 export * from './components/MobiChatMenu';
+export * from './components/MobiSendButton';
+export * from './components/MobiCombobox';
 export * from './components/MobiChatModelSelector';
 export * from './components/MobiChatWelcome';
 export * from './components/MobiChatHistory';

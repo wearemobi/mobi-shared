@@ -1,7 +1,8 @@
 import React, { useRef, useEffect } from 'react';
 import { cn } from '@wearemobi/ui';
-import { Paperclip, ArrowUp } from 'lucide-react';
+import { Paperclip } from 'lucide-react';
 import { MobiButton } from './MobiButton';
+import { MobiSendButton } from './MobiSendButton';
 
 export interface MobiChatInputProps {
   value: string;
@@ -92,19 +93,12 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
         <div className="shrink-0 flex items-center gap-2">
           {modelSelector}
           
-          <MobiButton
-            variant={hasValue ? "solid" : "secondary"}
-            size="icon"
-            onClick={onSend}
+          <MobiSendButton 
+            isActive={hasValue}
             disabled={disabled || !hasValue}
-            className={cn(
-              "rounded-full w-8 h-8 transition-all duration-200",
-              hasValue ? "bg-primary text-primary-foreground hover:bg-primary/90" : "opacity-50"
-            )}
+            onClick={onSend}
             aria-label="Send message"
-          >
-            <ArrowUp className="w-4 h-4" />
-          </MobiButton>
+          />
         </div>
       </div>
     </div>

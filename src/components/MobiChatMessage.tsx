@@ -3,7 +3,6 @@ import { MobiEdgeMessage } from '../hooks/useMobiEdge';
 import { MobiMarkdown } from './MobiMarkdown';
 import { MobiLogo } from './MobiLogo';
 import { AlertCircle, Copy } from 'lucide-react';
-import { cn } from '@wearemobi/ui';
 
 export interface MobiChatMessageProps {
   message: MobiEdgeMessage;

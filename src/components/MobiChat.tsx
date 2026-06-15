@@ -18,6 +18,7 @@ export interface MobiChatProps {
   isProcessing?: boolean;
   onSendMessage: (content: string, modelId?: string) => void;
   onSelectModel?: (id: string) => void;
+  onClose?: () => void;
   
   // Customization
   title?: string;
@@ -41,6 +42,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
   isProcessing,
   onSendMessage,
   onSelectModel,
+  onClose,
   title = 'M.O.B.I. Assistant',
   greeting = 'What\'s the vibe',
   userName,
@@ -92,11 +94,11 @@ export const MobiChat: React.FC<MobiChatProps> = ({
           <MobiChatHistory 
             messages={messages} 
             isProcessing={isProcessing} 
-            className="h-full"
+            className="h-full pb-4"
           />
         )}
       </div>
-      <div className="p-4 pt-2">
+      <div className="p-4 pt-2 shrink-0 bg-background z-10">
         <div className="max-w-3xl mx-auto">
           <MobiChatMenu items={menuItems} open={false} onOpenChange={() => {}}>
             <MobiChatInput 
@@ -108,7 +110,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
               disabled={isProcessing}
             />
           </MobiChatMenu>
-          <div className="text-center mt-2 text-[10px] text-muted-foreground/60">
+          <div className="text-center mt-2 pb-1 text-[10px] text-muted-foreground/60">
             Powered by M.O.B.I.™ Edge
           </div>
         </div>
@@ -128,7 +130,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
               ? 'w-full h-full rounded-none' 
               : 'w-[400px] h-[600px] max-h-[calc(100vh-100px)] mb-4 rounded-2xl'
           )}>
-            <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30 shrink-0">
               <div className="flex items-center gap-2 font-semibold">
                 <MobiLogo size={18} />
                 <span>{title}</span>
@@ -149,7 +151,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
         {!isActualFullscreen && (
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="h-14 w-14 bg-primary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all"
+            className="h-14 w-14 bg-primary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all shrink-0"
           >
             {isOpen ? <X size={24} /> : (triggerIcon || <MessageSquare size={24} />)}
           </button>
@@ -161,10 +163,10 @@ export const MobiChat: React.FC<MobiChatProps> = ({
   // 2. FULLSCREEN VARIANT
   if (variant === 'fullscreen') {
     return (
-      <div className={cn('fixed inset-0 flex bg-background', className)}>
+      <div className={cn('fixed inset-0 flex bg-background z-50', className)}>
         {/* Sidebar (Placeholder for conversations) */}
         <div className="w-64 border-r border-border bg-muted/10 hidden md:flex flex-col">
-          <div className="p-4 border-b border-border">
+          <div className="p-4 border-b border-border shrink-0">
             <MobiButton variant="outline" fullWidth icon={<MessageSquare size={16} />}>
               New Chat
             </MobiButton>
@@ -178,10 +180,18 @@ export const MobiChat: React.FC<MobiChatProps> = ({
         </div>
         
         {/* Main Content */}
-        <div className="flex-1 flex flex-col h-full relative">
-          <div className="md:hidden flex items-center p-4 border-b border-border">
-            <MobiLogo size={20} className="mr-2" />
-            <span className="font-semibold">{title}</span>
+        <div className="flex-1 flex flex-col h-full relative overflow-hidden">
+          <div className="flex items-center justify-between p-4 border-b border-border shrink-0">
+            <div className="flex items-center md:hidden">
+              <MobiLogo size={20} className="mr-2" />
+              <span className="font-semibold">{title}</span>
+            </div>
+            <div className="hidden md:block flex-1" />
+            {onClose && (
+              <button onClick={onClose} className="p-2 hover:bg-muted rounded-md text-muted-foreground ml-auto transition-colors">
+                <X size={18} />
+              </button>
+            )}
           </div>
           {innerContent}
         </div>

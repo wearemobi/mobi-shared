@@ -838,6 +838,7 @@ export const catalog = [
                   activeModelId={activeModel}
                   onSelectModel={setActiveModel}
                   suggestions={['System status', 'Check metrics', 'Deploy updates']}
+                  onClose={() => setVariant('embedded')}
                 />
               </div>
             ) : variant === 'floating' ? (
