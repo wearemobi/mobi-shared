@@ -163,10 +163,10 @@ export const MobiChat: React.FC<MobiChatProps> = ({
   // 2. FULLSCREEN VARIANT
   if (variant === 'fullscreen') {
     return (
-      <div className={cn('fixed inset-0 flex bg-background z-50', className)}>
+      <div className={cn('flex bg-background w-full h-full', className)}>
         {/* Sidebar (Placeholder for conversations) */}
         <div className="w-64 border-r border-border bg-muted/10 hidden md:flex flex-col">
-          <div className="p-4 border-b border-border shrink-0">
+          <div className="px-4 border-b border-border shrink-0 h-[68px] flex items-center">
             <MobiButton variant="outline" fullWidth icon={<MessageSquare size={16} />}>
               New Chat
             </MobiButton>
@@ -181,8 +181,8 @@ export const MobiChat: React.FC<MobiChatProps> = ({
         
         {/* Main Content */}
         <div className="flex-1 flex flex-col h-full relative overflow-hidden">
-          <div className="flex items-center justify-between p-4 border-b border-border shrink-0">
-            <div className="flex items-center md:hidden">
+          <div className="flex items-center justify-between px-4 border-b border-border shrink-0 h-[68px]">
+            <div className="flex items-center">
               <MobiLogo size={20} className="mr-2" />
               <span className="font-semibold">{title}</span>
             </div>
