@@ -166,8 +166,8 @@ export const MobiChat: React.FC<MobiChatProps> = ({
       <div className={cn('flex bg-background w-full h-full', className)}>
         {/* Sidebar (Placeholder for conversations) */}
         <div className="w-64 border-r border-border bg-muted/10 hidden md:flex flex-col">
-          <div className="px-4 border-b border-border shrink-0 h-[68px] flex items-center">
-            <MobiButton variant="outline" fullWidth icon={<MessageSquare size={16} />}>
+          <div className="px-3 border-b border-border shrink-0 h-14 flex items-center">
+            <MobiButton variant="outline" size="sm" fullWidth icon={<MessageSquare size={14} />}>
               New Chat
             </MobiButton>
           </div>
@@ -181,15 +181,15 @@ export const MobiChat: React.FC<MobiChatProps> = ({
         
         {/* Main Content */}
         <div className="flex-1 flex flex-col h-full relative overflow-hidden">
-          <div className="flex items-center justify-between px-4 border-b border-border shrink-0 h-[68px]">
+          <div className="flex items-center justify-between px-4 border-b border-border shrink-0 h-14">
             <div className="flex items-center">
-              <MobiLogo size={20} className="mr-2" />
-              <span className="font-semibold">{title}</span>
+              <MobiLogo size={18} className="mr-2" />
+              <span className="font-semibold text-sm">{title}</span>
             </div>
             <div className="hidden md:block flex-1" />
             {onClose && (
-              <button onClick={onClose} className="p-2 hover:bg-muted rounded-md text-muted-foreground ml-auto transition-colors">
-                <X size={18} />
+              <button onClick={onClose} className="p-1.5 hover:bg-muted rounded-md text-muted-foreground ml-auto transition-colors">
+                <X size={16} />
               </button>
             )}
           </div>
