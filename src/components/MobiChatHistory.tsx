@@ -22,25 +22,27 @@ export const MobiChatHistory: React.FC<MobiChatHistoryProps> = ({
   }, [messages, isProcessing]);
 
   return (
-    <div className={cn("flex flex-col flex-1 overflow-y-auto w-full p-4 space-y-2", className)}>
-      {messages.map((msg, i) => (
-        <MobiChatMessage 
-          key={msg.id || i} 
-          message={msg} 
-        />
-      ))}
-      
-      {isProcessing && (
-        <div className="flex justify-start mb-4">
-          <div className="mr-3 flex-shrink-0 mt-1">
-            <MobiLoader variant="pulse" size="sm" />
+    <div className={cn("flex flex-col flex-1 overflow-y-auto w-full", className)}>
+      <div className="w-full max-w-3xl mx-auto p-4 md:p-6 space-y-6">
+        {messages.map((msg, i) => (
+          <MobiChatMessage 
+            key={msg.id || i} 
+            message={msg} 
+          />
+        ))}
+        
+        {isProcessing && (
+          <div className="flex justify-start mb-4">
+            <div className="mr-4 flex-shrink-0 mt-1">
+              <MobiLoader variant="pulse" size="sm" />
+            </div>
+            <div className="bg-transparent py-2 flex items-center">
+              <span className="text-sm text-muted-foreground italic">Thinking...</span>
+            </div>
           </div>
-          <div className="bg-transparent py-2 flex items-center">
-            <span className="text-sm text-muted-foreground italic">Thinking...</span>
-          </div>
-        </div>
-      )}
-      <div ref={bottomRef} className="h-1" />
+        )}
+        <div ref={bottomRef} className="h-1" />
+      </div>
     </div>
   );
 };
