@@ -42,6 +42,13 @@ export * from './components/MobiHero';
 export * from './components/MobiListView';
 export * from './components/MobiPlanBadge';
 export * from './components/MobiSegmentedControl';
+export * from './components/MobiChat';
+export * from './components/MobiChatMessage';
+export * from './components/MobiChatInput';
+export * from './components/MobiChatMenu';
+export * from './components/MobiChatModelSelector';
+export * from './components/MobiChatWelcome';
+export * from './components/MobiChatHistory';
 // export * from './components/MobiThemeToggle';
 
 // Hooks

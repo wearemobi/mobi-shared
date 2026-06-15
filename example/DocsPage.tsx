@@ -783,6 +783,101 @@ export const catalog = [
     }
   },
   {
+    id: 'MobiChat',
+    name: 'MobiChat',
+    category: 'component',
+    description: 'Gemini-style chat interface with embedded, fullscreen, and floating variants. Features typewriter streaming effect, floating menus, and model selection.',
+    code: `<MobiChat 
+  variant="embedded"
+  messages={messages} 
+  onSendMessage={sendMessage}
+/>`,
+    render: () => {
+      const [messages, setMessages] = React.useState<any[]>([]);
+      const [isProcessing, setIsProcessing] = React.useState(false);
+      const [activeModel, setActiveModel] = React.useState('mobi-fast');
+      const [variant, setVariant] = React.useState<'embedded' | 'fullscreen' | 'floating'>('embedded');
+
+      const handleSend = (content: string) => {
+        setMessages(prev => [...prev, { id: Date.now().toString(), role: 'user', content, timestamp: Date.now() }]);
+        setIsProcessing(true);
+        setTimeout(() => {
+          setMessages(prev => [...prev, { 
+            id: (Date.now() + 1).toString(), 
+            role: 'assistant', 
+            content: 'Hello! I am M.O.B.I.™ Edge. How can I assist you with your operations today? This is a simulated response with a simulated typewriter effect.', 
+            timestamp: Date.now() 
+          }]);
+          setIsProcessing(false);
+        }, 1500);
+      };
+
+      return (
+        <div className="space-y-4">
+          <MobiSegmentedControl
+            label="Variant:"
+            value={variant}
+            onChange={(v) => setVariant(v as any)}
+            options={[
+              { value: 'embedded', label: 'Embedded' },
+              { value: 'fullscreen', label: 'Fullscreen Demo' },
+              { value: 'floating', label: 'Floating' }
+            ]}
+          />
+          
+          <div className="relative border border-border rounded-xl bg-background overflow-hidden min-h-[600px]">
+            {variant === 'fullscreen' ? (
+              <div className="absolute inset-0 flex items-center justify-center bg-muted/20">
+                <MobiChat 
+                  variant="fullscreen"
+                  messages={messages}
+                  isProcessing={isProcessing}
+                  onSendMessage={handleSend}
+                  models={[{ slug: 'mobi-fast', name: 'Flash 1.0' }, { slug: 'mobi-pro', name: 'Pro 2.0' }]}
+                  activeModelId={activeModel}
+                  onSelectModel={setActiveModel}
+                  suggestions={['System status', 'Check metrics', 'Deploy updates']}
+                />
+              </div>
+            ) : variant === 'floating' ? (
+              <div className="absolute inset-0 flex items-center justify-center bg-muted/20">
+                <div className="text-center text-muted-foreground p-8">
+                  Look at the bottom right corner of this container.
+                </div>
+                {/* Floating chat needs an absolute container to position itself in the preview */}
+                <div className="absolute inset-0 pointer-events-none">
+                  <div className="absolute bottom-0 right-0 pointer-events-auto">
+                    <MobiChat 
+                      variant="floating"
+                      messages={messages}
+                      isProcessing={isProcessing}
+                      onSendMessage={handleSend}
+                      models={[{ slug: 'mobi-fast', name: 'Flash 1.0' }]}
+                      activeModelId={activeModel}
+                      onSelectModel={setActiveModel}
+                      suggestions={['Help', 'Support']}
+                    />
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <MobiChat 
+                variant="embedded"
+                messages={messages}
+                isProcessing={isProcessing}
+                onSendMessage={handleSend}
+                models={[{ slug: 'mobi-fast', name: 'Flash 1.0' }, { slug: 'mobi-pro', name: 'Pro 2.0' }]}
+                activeModelId={activeModel}
+                onSelectModel={setActiveModel}
+                suggestions={['Analyze data', 'Generate report']}
+              />
+            )}
+          </div>
+        </div>
+      );
+    }
+  },
+  {
     id: 'MobiLogo',
     name: 'MobiLogo',
     category: 'component',
