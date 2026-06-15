@@ -54,22 +54,7 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
   const hasValue = value.trim().length > 0;
 
   return (
-    <div className="flex items-end gap-2 p-2 rounded-[32px] bg-muted/40 border border-border focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all">
-      {onAttach && (
-        <div className="shrink-0 mb-1 ml-1">
-          <MobiButton
-            variant="ghost"
-            size="icon"
-            onClick={onAttach}
-            disabled={disabled}
-            className="rounded-full w-9 h-9 text-muted-foreground hover:text-foreground"
-            aria-label="Attach file"
-          >
-            <Paperclip className="w-5 h-5" />
-          </MobiButton>
-        </div>
-      )}
-
+    <div className="flex flex-col gap-2 p-3 rounded-2xl bg-muted/40 border border-border focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary/50 transition-all shadow-sm">
       <textarea
         ref={textareaRef}
         value={value}
@@ -77,33 +62,50 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
         onKeyDown={handleKeyDown}
         disabled={disabled}
         placeholder={placeholder}
-        rows={1}
+        rows={2}
         className={cn(
-          "flex-1 bg-transparent border-0 resize-none outline-none py-2.5 px-2 font-sans text-sm text-foreground placeholder:text-muted-foreground overflow-y-auto disabled:opacity-50"
+          "w-full bg-transparent border-0 resize-none outline-none px-1 font-sans text-sm text-foreground placeholder:text-muted-foreground overflow-y-auto disabled:opacity-50"
         )}
         style={{ 
           lineHeight: '24px',
-          minHeight: '44px',
+          minHeight: '48px',
           maxHeight: `${(maxRows * 24) + 16}px`
         }}
       />
 
-      <div className="shrink-0 flex items-center gap-2 mb-1 mr-1">
-        {modelSelector}
-        
-        <MobiButton
-          variant={hasValue ? "solid" : "secondary"}
-          size="icon"
-          onClick={onSend}
-          disabled={disabled || !hasValue}
-          className={cn(
-            "rounded-full w-9 h-9 transition-all duration-200",
-            hasValue ? "bg-primary text-primary-foreground hover:bg-primary/90" : "opacity-50"
+      <div className="flex items-center justify-between w-full mt-1">
+        <div className="shrink-0">
+          {onAttach && (
+            <MobiButton
+              variant="ghost"
+              size="icon"
+              onClick={onAttach}
+              disabled={disabled}
+              className="rounded-full w-8 h-8 text-muted-foreground hover:text-foreground hover:bg-muted"
+              aria-label="Attach file"
+            >
+              <Paperclip className="w-4 h-4" />
+            </MobiButton>
           )}
-          aria-label="Send message"
-        >
-          <ArrowUp className="w-4 h-4" />
-        </MobiButton>
+        </div>
+
+        <div className="shrink-0 flex items-center gap-2">
+          {modelSelector}
+          
+          <MobiButton
+            variant={hasValue ? "solid" : "secondary"}
+            size="icon"
+            onClick={onSend}
+            disabled={disabled || !hasValue}
+            className={cn(
+              "rounded-full w-8 h-8 transition-all duration-200",
+              hasValue ? "bg-primary text-primary-foreground hover:bg-primary/90" : "opacity-50"
+            )}
+            aria-label="Send message"
+          >
+            <ArrowUp className="w-4 h-4" />
+          </MobiButton>
+        </div>
       </div>
     </div>
   );
