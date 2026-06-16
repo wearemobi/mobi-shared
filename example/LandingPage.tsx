@@ -37,6 +37,7 @@ export const LandingPage: React.FC = () => {
     tenantId: EDGE_TENANT_ID,
     agentId: EDGE_AGENT_ID,
     baseUrl: EDGE_BASE_URL,
+    initialModelId: 'mobi-assist-basic',
     persistSession: true,
   });
 
