@@ -1,11 +1,31 @@
 import React from 'react';
-import { MobiHero, MobiButton, MobiLogo, MobiFooter, MobiThemeToggle } from '../src';
+import { MobiHero, MobiButton, MobiLogo, MobiFooter, MobiThemeToggle, MobiChat, useMobiEdge } from '../src';
 import { ArrowRight, Book } from 'lucide-react';
 import { useLocation } from 'wouter';
+
+const EDGE_TOKEN = import.meta.env.VITE_MOBI_EDGE_TOKEN || 'MOBI_PLAYGROUND_TOKEN';
+const EDGE_BASE_URL = import.meta.env.VITE_MOBI_EDGE_BASE_URL || 'http://localhost:8787';
+const EDGE_TENANT_ID = import.meta.env.VITE_MOBI_EDGE_TENANT_ID || 'MOBI';
+const EDGE_AGENT_ID = import.meta.env.VITE_MOBI_EDGE_AGENT_ID || 'support';
 
 export const LandingPage: React.FC = () => {
   const [, setLocation] = useLocation();
   const onEnterDocs = () => setLocation('/docs');
+
+  const {
+    messages,
+    models,
+    activeModelId,
+    setActiveModelId,
+    sendMessage,
+    isProcessing,
+  } = useMobiEdge({
+    token: EDGE_TOKEN,
+    tenantId: EDGE_TENANT_ID,
+    agentId: EDGE_AGENT_ID,
+    baseUrl: EDGE_BASE_URL,
+    persistSession: true,
+  });
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
@@ -73,6 +93,21 @@ export const LandingPage: React.FC = () => {
         </div>
         <MobiFooter />
       </main>
+
+      {/* Floating MobiChat — connected to real MOBI Edge */}
+      <MobiChat
+        variant="floating"
+        messages={messages}
+        models={models}
+        activeModelId={activeModelId}
+        isProcessing={isProcessing}
+        onSendMessage={sendMessage}
+        onSelectModel={setActiveModelId}
+        title="M.O.B.I. Assistant"
+        greeting="What's the vibe"
+        suggestions={['How does this work?', 'Show me the components', 'Status check']}
+        defaultOpen={false}
+      />
     </div>
   );
 };
