@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { buildAuthHeaders } from '../utils/http';
 
 export interface MobiEdgeMessage {
@@ -41,8 +41,10 @@ export interface MobiEdgeHealth {
 }
 
 export interface UseMobiEdgeOptions {
-  /** Bearer token for authorization */
-  token: string;
+  /** Static Bearer token for authorization. If omitted, tokenFetcher will be used if provided. */
+  token?: string;
+  /** Async function to fetch/refresh the token (e.g., M2M auth) */
+  tokenFetcher?: () => Promise<string>;
   /** Tenant ID (defaults to 'MOBI') */
   tenantId?: string;
   /** Base URL for the Edge Reactor API */
@@ -68,7 +70,8 @@ export interface UseMobiEdgeOptions {
  */
 export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const {
-    token,
+    token: staticToken,
+    tokenFetcher,
     tenantId = 'MOBI',
     baseUrl = 'https://edge.sandbox.grandfleet.mobi',
     initialMessages = [],
@@ -94,8 +97,32 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   const [health, setHealth] = useState<MobiEdgeHealth | null>(null);
   const [isHealthy, setIsHealthy] = useState<boolean>(false);
 
-  // Memoize headers
-  const headers = React.useMemo(() => buildAuthHeaders(tenantId, token), [tenantId, token]);
+  const [activeToken, setActiveToken] = useState<string | undefined>(staticToken);
+
+  const resolveToken = useCallback(async () => {
+    if (activeToken) return activeToken;
+    if (staticToken) {
+      setActiveToken(staticToken);
+      return staticToken;
+    }
+    if (tokenFetcher) {
+      try {
+        const fetched = await tokenFetcher();
+        setActiveToken(fetched);
+        return fetched;
+      } catch (err) {
+        console.error('[MobiEdge] Error fetching token:', err);
+        return null;
+      }
+    }
+    return null;
+  }, [activeToken, staticToken, tokenFetcher]);
+
+  const getHeaders = useCallback(async () => {
+    const t = await resolveToken();
+    if (!t) throw new Error('No authentication token available');
+    return buildAuthHeaders(tenantId, t);
+  }, [resolveToken, tenantId]);
 
   const fetchHealth = useCallback(async () => {
     try {
@@ -117,9 +144,9 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
   }, [baseUrl]);
 
   const fetchCatalog = useCallback(async () => {
-    if (!token) return;
     try {
-      const res = await fetch(`${baseUrl}/v1/reactor/catalog`, { headers });
+      const hdrs = await getHeaders();
+      const res = await fetch(`${baseUrl}/v1/reactor/catalog`, { headers: hdrs });
       if (!res.ok) throw new Error('Catalog Fetch Failed');
       const data: MobiEdgeCatalogResponse = await res.json();
       
@@ -135,12 +162,12 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     } catch (err) {
       console.error('[MobiEdge] Catalog error:', err);
     }
-  }, [baseUrl, token, tenantId, activeModelId]);
+  }, [baseUrl, getHeaders, activeModelId]);
 
   const fetchStatus = useCallback(async () => {
-    if (!token) return;
     try {
-      const res = await fetch(`${baseUrl}/v1/reactor/status`, { headers });
+      const hdrs = await getHeaders();
+      const res = await fetch(`${baseUrl}/v1/reactor/status`, { headers: hdrs });
       if (!res.ok) throw new Error('Status Fetch Failed');
       const data: MobiEdgeStatus = await res.json();
       setStatus(data);
@@ -149,12 +176,13 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
       console.error('[MobiEdge] Status error:', err);
       setIsConnected(false);
     }
-  }, [baseUrl, token, tenantId]);
+  }, [baseUrl, getHeaders]);
 
   const fetchHistory = useCallback(async (id: string) => {
-    if (!token || !id) return;
+    if (!id) return;
     try {
-      const res = await fetch(`${baseUrl}/v1/agentic/history/${id}`, { headers });
+      const hdrs = await getHeaders();
+      const res = await fetch(`${baseUrl}/v1/agentic/history/${id}`, { headers: hdrs });
       if (res.ok) {
         const data = await res.json();
         if (data.messages && data.messages.length > 0) {
@@ -171,7 +199,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     } catch (err) {
       console.error('[MobiEdge] History error:', err);
     }
-  }, [baseUrl, token, tenantId]);
+  }, [baseUrl, getHeaders]);
 
   // Initial load
   useEffect(() => {
@@ -180,6 +208,9 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     const checkAndLoad = async () => {
       const healthy = await fetchHealth();
       if (!healthy || !active) return;
+
+      const t = await resolveToken();
+      if (!t || !active) return;
 
       fetchCatalog();
       fetchStatus();
@@ -193,7 +224,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     return () => {
       active = false;
     };
-  }, [token, tenantId, baseUrl]);
+  }, [resolveToken, baseUrl, fetchHealth, fetchCatalog, fetchStatus, fetchHistory, conversationId]);
 
   const addMessage = useCallback((message: Omit<MobiEdgeMessage, 'id' | 'timestamp'>) => {
     const newMessage: MobiEdgeMessage = {
@@ -220,9 +251,10 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
         ? useMemoryOverride 
         : (status?.tier !== 'BASIC');
       
+      const hdrs = await getHeaders();
       const res = await fetch(`${baseUrl}/v1/agentic/infer`, {
         method: 'POST',
-        headers,
+        headers: hdrs,
         body: JSON.stringify({ 
           prompt, 
           model: model || undefined, 
@@ -283,7 +315,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     } finally {
       setIsProcessing(false);
     }
-  }, [baseUrl, token, tenantId, activeModelId, isProcessing, addMessage, fetchStatus, conversationId, status, initialAgentId, sessionKey, persistSession]);
+  }, [baseUrl, getHeaders, activeModelId, isProcessing, addMessage, fetchStatus, conversationId, status, initialAgentId, sessionKey, persistSession, useMemoryOverride]);
 
   const clearHistory = useCallback(() => {
     setMessages([]);
