@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { MobiEdgeMessage } from '../hooks/useMobiEdge';
 import { MobiMarkdown } from './MobiMarkdown';
 import { MobiLogo } from './MobiLogo';
-import { AlertCircle, Copy } from 'lucide-react';
+import { AlertCircle, Copy, Share, RotateCcw } from 'lucide-react';
 
 export interface MobiChatMessageProps {
   message: MobiEdgeMessage;
@@ -75,11 +75,27 @@ export const MobiChatMessage: React.FC<MobiChatMessageProps> = ({
         {showTimestamp && (
           <div className="text-[10px] text-muted-foreground mt-1 px-1 flex items-center gap-2">
             {time}
-            {onCopy && !isUser && !isStreaming && (
-              <button onClick={onCopy} className="hover:text-foreground transition-colors" aria-label="Copy message">
-                <Copy size={12} />
-              </button>
-            )}
+          </div>
+        )}
+
+        {!isUser && !isStreaming && !message.isError && (
+          <div className="flex items-center gap-1 mt-0.5 -ml-1">
+            <button 
+              onClick={() => {
+                if (onCopy) onCopy();
+                else navigator.clipboard.writeText(message.content);
+              }} 
+              className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors" 
+              aria-label="Copy"
+            >
+              <Copy size={13} strokeWidth={2.5} />
+            </button>
+            <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors" aria-label="Share">
+              <Share size={13} strokeWidth={2.5} />
+            </button>
+            <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors" aria-label="Retry">
+              <RotateCcw size={13} strokeWidth={2.5} />
+            </button>
           </div>
         )}
       </div>

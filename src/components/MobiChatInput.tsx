@@ -61,7 +61,6 @@ export const MobiChatInput: React.FC<MobiChatInputProps> = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         onKeyDown={handleKeyDown}
-        disabled={disabled}
         placeholder={placeholder}
         rows={2}
         className={cn(
