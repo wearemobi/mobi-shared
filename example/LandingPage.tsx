@@ -9,6 +9,20 @@ const EDGE_AGENT_ID = import.meta.env.VITE_MOBI_EDGE_AGENT_ID || 'support';
 const M2M_APP_ID = import.meta.env.VITE_MOBI_EDGE_M2M_APP_ID;
 const M2M_APP_SECRET = import.meta.env.VITE_MOBI_EDGE_M2M_APP_SECRET;
 
+const fetchToken = async () => {
+  if (!M2M_APP_ID || !M2M_APP_SECRET) {
+    throw new Error('M2M credentials missing');
+  }
+  const res = await fetch(`${EDGE_BASE_URL}/v1/auth/m2m`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Tenant-Id': EDGE_TENANT_ID },
+    body: JSON.stringify({ app_id: M2M_APP_ID, app_secret: M2M_APP_SECRET })
+  });
+  if (!res.ok) throw new Error('M2M authentication failed');
+  const data = await res.json();
+  return data.access_token;
+};
+
 export const LandingPage: React.FC = () => {
   const [, setLocation] = useLocation();
   const onEnterDocs = () => setLocation('/docs');
@@ -21,19 +35,7 @@ export const LandingPage: React.FC = () => {
     sendMessage,
     isProcessing,
   } = useMobiEdge({
-    tokenFetcher: async () => {
-      if (!M2M_APP_ID || !M2M_APP_SECRET) {
-        throw new Error('M2M credentials missing');
-      }
-      const res = await fetch(`${EDGE_BASE_URL}/v1/auth/m2m`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'X-Tenant-Id': EDGE_TENANT_ID },
-        body: JSON.stringify({ app_id: M2M_APP_ID, app_secret: M2M_APP_SECRET })
-      });
-      if (!res.ok) throw new Error('M2M authentication failed');
-      const data = await res.json();
-      return data.access_token;
-    },
+    tokenFetcher: fetchToken,
     tenantId: EDGE_TENANT_ID,
     agentId: EDGE_AGENT_ID,
     baseUrl: EDGE_BASE_URL,
