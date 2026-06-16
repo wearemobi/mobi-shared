@@ -55,7 +55,7 @@
     "@emoji-mart/react": "^1.1.1",
     "@tailwindcss/postcss": "^4.2.4",
     "@tailwindcss/vite": "^4.2.4",
-    "@wearemobi/ui": "file:../mobi-ui",
+    "@wearemobi/ui": "^0.2.0",
     "class-variance-authority": "^0.7.0",
     "date-fns": "^4.4.0",
     "emoji-mart": "^5.6.0",
