@@ -224,7 +224,8 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     return () => {
       active = false;
     };
-  }, [resolveToken, baseUrl, fetchHealth, fetchCatalog, fetchStatus, fetchHistory, conversationId]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [baseUrl, tenantId, conversationId, staticToken, tokenFetcher]);
 
   const addMessage = useCallback((message: Omit<MobiEdgeMessage, 'id' | 'timestamp'>) => {
     const newMessage: MobiEdgeMessage = {

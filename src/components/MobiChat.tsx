@@ -6,7 +6,7 @@ import { MobiChatWelcome } from './MobiChatWelcome';
 import { MobiChatModelSelector } from './MobiChatModelSelector';
 import { MobiChatMenu } from './MobiChatMenu';
 import { MobiEdgeMessage, MobiEdgeModel } from '../hooks/useMobiEdge';
-import { X, MessageSquare, Maximize2, Minimize2, Image, FileText } from 'lucide-react';
+import { X, MessageSquare, Maximize2, Minimize2, Image, FileText, Bot } from 'lucide-react';
 import { MobiLogo } from './MobiLogo';
 import { MobiButton } from './MobiButton';
 
@@ -122,7 +122,10 @@ export const MobiChat: React.FC<MobiChatProps> = ({
   if (variant === 'floating') {
     const isActualFullscreen = isExpanded;
     return (
-      <div className={cn('fixed z-50', isActualFullscreen ? 'inset-0' : 'bottom-6 right-6 flex flex-col items-end', className)}>
+      <div 
+        className={cn('fixed z-50', isActualFullscreen ? 'inset-0' : 'flex flex-col items-end', className)}
+        style={isActualFullscreen ? {} : { bottom: '24px', right: '24px' }}
+      >
         {isOpen && (
           <div className={cn(
             'bg-background border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 ease-in-out',
@@ -153,7 +156,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
             onClick={() => setIsOpen(!isOpen)}
             className="h-14 w-14 bg-primary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all shrink-0"
           >
-            {isOpen ? <X size={24} /> : (triggerIcon || <MessageSquare size={24} />)}
+            {isOpen ? <X size={24} /> : (triggerIcon || <Bot size={24} />)}
           </button>
         )}
       </div>
