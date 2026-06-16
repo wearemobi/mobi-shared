@@ -55,9 +55,14 @@ export const MobiChatMessage: React.FC<MobiChatMessageProps> = ({
             : 'bg-transparent text-foreground py-1'
         }`}>
           {message.isError ? (
-            <div className="flex items-center text-red-500 gap-2">
-              <AlertCircle size={16} />
-              <span className="text-sm font-semibold whitespace-pre-wrap">{displayedContent}</span>
+            <div className="flex flex-col gap-3 rounded-xl border border-destructive/20 bg-destructive/5 p-4 w-full max-w-full mt-1">
+              <div className="flex items-center text-destructive gap-2 font-semibold text-sm">
+                <AlertCircle size={16} className="shrink-0" />
+                <span>Request Failed</span>
+              </div>
+              <div className="text-sm overflow-hidden w-full [&_pre]:!bg-background/80 [&_pre]:!border-destructive/20">
+                <MobiMarkdown content={displayedContent.replace(/^Error:\s*/, '')} />
+              </div>
             </div>
           ) : (
              isUser ? (
