@@ -84,7 +84,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
 
   const innerContent = (
     <>
-      <div className="flex-1 overflow-hidden relative">
+      <div className="flex-1 overflow-hidden relative flex flex-col">
         {messages.length === 0 ? (
           <MobiChatWelcome 
             greeting={greeting} 
@@ -125,15 +125,14 @@ export const MobiChat: React.FC<MobiChatProps> = ({
     const isActualFullscreen = isExpanded;
     return (
       <div 
-        className={cn('fixed z-50', isActualFullscreen ? 'inset-0' : 'flex flex-col items-end', className)}
-        style={isActualFullscreen ? {} : { bottom: '24px', right: '24px' }}
+        className={cn('fixed z-50', isActualFullscreen ? 'inset-0' : 'inset-0 sm:inset-auto sm:bottom-6 sm:right-6 flex flex-col sm:items-end pointer-events-none', className)}
       >
         {isOpen && (
           <div className={cn(
-            'bg-background border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 ease-in-out',
+            'bg-background sm:border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 ease-in-out pointer-events-auto',
             isActualFullscreen 
               ? 'w-full h-full rounded-none' 
-              : 'w-[400px] h-[600px] max-h-[calc(100vh-100px)] mb-4 rounded-2xl'
+              : 'w-full h-[100dvh] sm:w-[400px] sm:h-[600px] sm:max-h-[calc(100vh-100px)] rounded-none sm:rounded-2xl sm:mb-4'
           )}>
             <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30 shrink-0">
               <div className="flex items-center gap-2 font-semibold">
@@ -141,7 +140,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
                 <span>{title}</span>
               </div>
               <div className="flex items-center gap-1 text-muted-foreground">
-                <button onClick={() => setIsExpanded(!isExpanded)} className="p-1.5 hover:bg-muted rounded-md transition-colors">
+                <button onClick={() => setIsExpanded(!isExpanded)} className="p-1.5 hover:bg-muted rounded-md transition-colors hidden sm:block">
                   {isActualFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
                 </button>
                 <button onClick={() => setIsOpen(false)} className="p-1.5 hover:bg-muted rounded-md transition-colors">
@@ -156,7 +155,10 @@ export const MobiChat: React.FC<MobiChatProps> = ({
         {!isActualFullscreen && (
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="bg-primary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all shrink-0"
+            className={cn(
+              "bg-primary text-primary-foreground rounded-full shadow-lg items-center justify-center hover:scale-105 active:scale-95 transition-all shrink-0 absolute sm:static bottom-6 right-6 sm:bottom-auto sm:right-auto pointer-events-auto",
+              isOpen ? "hidden sm:flex" : "flex"
+            )}
             style={{ width: '56px', height: '56px', padding: '16px' }}
           >
             {isOpen ? <X size={24} /> : (triggerIcon || <Bot size={24} />)}
