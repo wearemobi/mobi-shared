@@ -166,7 +166,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
       <div className={cn('flex bg-background w-full h-full', className)}>
         {/* Sidebar (Placeholder for conversations) */}
         <div className="w-64 border-r border-border bg-muted/10 hidden md:flex flex-col">
-          <div className="px-3 border-b border-border shrink-0 h-14 flex items-center">
+          <div className="px-4 border-b border-border shrink-0 h-14 flex items-center justify-center">
             <MobiButton variant="outline" size="sm" fullWidth icon={<MessageSquare size={14} />}>
               New Chat
             </MobiButton>

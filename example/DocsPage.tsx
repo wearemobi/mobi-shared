@@ -826,7 +826,7 @@ export const catalog = [
             ]}
           />
           
-          <div className="relative border border-border rounded-xl bg-background overflow-hidden min-h-[600px] p-4 md:p-8 flex flex-col">
+          <div className="relative border border-border rounded-xl bg-background overflow-hidden min-h-[700px] p-4 md:p-8 flex flex-col">
             {variant === 'fullscreen' ? (
               <div className="absolute inset-0 flex items-center justify-center bg-muted/20">
                 <MobiChat 
@@ -842,24 +842,23 @@ export const catalog = [
                 />
               </div>
             ) : variant === 'floating' ? (
-              <div className="absolute inset-0 flex items-center justify-center bg-muted/20">
+              <div className="absolute inset-0 flex items-center justify-center bg-muted/20 z-0">
                 <div className="text-center text-muted-foreground p-8">
-                  Look at the bottom right corner of this container.
+                  Click the chat icon in the bottom right.
                 </div>
-                {/* Floating chat needs an absolute container to position itself in the preview */}
+                {/* Floating chat wrapper */}
                 <div className="absolute inset-0 pointer-events-none">
-                  <div className="absolute bottom-0 right-0 pointer-events-auto">
-                    <MobiChat 
-                      variant="floating"
-                      messages={messages}
-                      isProcessing={isProcessing}
-                      onSendMessage={handleSend}
-                      models={[{ slug: 'mobi-fast', name: 'Flash 1.0' }]}
-                      activeModelId={activeModel}
-                      onSelectModel={setActiveModel}
-                      suggestions={['Help', 'Support']}
-                    />
-                  </div>
+                  <MobiChat 
+                    variant="floating"
+                    messages={messages}
+                    isProcessing={isProcessing}
+                    onSendMessage={handleSend}
+                    models={[{ slug: 'mobi-fast', name: 'Flash 1.0' }]}
+                    activeModelId={activeModel}
+                    onSelectModel={setActiveModel}
+                    suggestions={['Help', 'Support']}
+                    className="!absolute pointer-events-auto"
+                  />
                 </div>
               </div>
             ) : (
