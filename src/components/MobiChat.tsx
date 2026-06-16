@@ -154,7 +154,8 @@ export const MobiChat: React.FC<MobiChatProps> = ({
         {!isActualFullscreen && (
           <button 
             onClick={() => setIsOpen(!isOpen)}
-            className="h-14 w-14 bg-primary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all shrink-0"
+            className="bg-primary text-primary-foreground rounded-full shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all shrink-0"
+            style={{ width: '56px', height: '56px', padding: '16px' }}
           >
             {isOpen ? <X size={24} /> : (triggerIcon || <Bot size={24} />)}
           </button>
