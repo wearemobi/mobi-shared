@@ -72,9 +72,11 @@ export const MobiChat: React.FC<MobiChatProps> = ({
     { id: 'image', label: 'Upload image', icon: <Image size={16} />, onClick: () => console.log('image') },
   ];
 
-  const modelSelector = models.length > 0 && onSelectModel ? (
+  const aiModels = models.filter(m => m.resource_kind === 'AI_MODEL');
+
+  const modelSelector = aiModels.length > 0 && onSelectModel ? (
     <MobiChatModelSelector 
-      models={models} 
+      models={aiModels} 
       activeModelId={activeModelId} 
       onSelect={onSelectModel} 
     />
