@@ -124,15 +124,14 @@ export const MobiChat: React.FC<MobiChatProps> = ({
   if (variant === 'floating') {
     const isActualFullscreen = isExpanded;
     return (
-      <div 
-        className={cn('fixed z-50', isActualFullscreen ? 'inset-0' : 'inset-0 sm:inset-auto sm:bottom-6 sm:right-6 flex flex-col sm:items-end pointer-events-none', className)}
-      >
+      <>
         {isOpen && (
           <div className={cn(
-            'bg-background sm:border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 ease-in-out pointer-events-auto',
+            'fixed z-50 bg-background sm:border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 ease-in-out',
             isActualFullscreen 
-              ? 'w-full h-full rounded-none' 
-              : 'w-full h-[100dvh] sm:w-[400px] sm:h-[600px] sm:max-h-[calc(100vh-100px)] rounded-none sm:rounded-2xl sm:mb-4'
+              ? 'inset-0 w-full h-full rounded-none' 
+              : 'inset-0 w-full h-[100dvh] rounded-none sm:top-auto sm:left-auto sm:bottom-24 sm:right-6 sm:w-[400px] sm:h-[600px] sm:max-h-[calc(100vh-120px)] sm:rounded-2xl',
+            className
           )}>
             <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30 shrink-0">
               <div className="flex items-center gap-2 font-semibold">
@@ -156,7 +155,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
           <button 
             onClick={() => setIsOpen(!isOpen)}
             className={cn(
-              "bg-primary text-primary-foreground rounded-full shadow-lg items-center justify-center hover:scale-105 active:scale-95 transition-all shrink-0 absolute sm:static bottom-6 right-6 sm:bottom-auto sm:right-auto pointer-events-auto",
+              "fixed z-50 bottom-6 right-6 bg-primary text-primary-foreground rounded-full shadow-lg items-center justify-center hover:scale-105 active:scale-95 transition-all shrink-0",
               isOpen ? "hidden sm:flex" : "flex"
             )}
             style={{ width: '56px', height: '56px', padding: '16px' }}
@@ -164,7 +163,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
             {isOpen ? <X size={24} /> : (triggerIcon || <Bot size={24} />)}
           </button>
         )}
-      </div>
+      </>
     );
   }
 
