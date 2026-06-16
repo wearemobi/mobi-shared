@@ -24,7 +24,8 @@
     "build:docs": "npm run build:embed && vite build --config vite.config.docs.ts && cp dist-embed/mobi-embed.js docs-dist/ && cp dist-embed/mobi-embed.css docs-dist/ && cp example/embed.html docs-dist/ && sed 's|/src/embed-loader.tsx|/mobi-embed.js|g' docs-dist/embed.html > docs-dist/embed.tmp && mv docs-dist/embed.tmp docs-dist/embed.html",
     "build:embed": "vite build --config vite.config.embed.ts",
     "preview": "vite preview",
-    "example": "vite example --config vite.config.ts --port 5173 --strictPort"
+    "example": "vite example --config vite.config.ts --port 5173 --strictPort",
+    "example:sandbox": "vite example --config vite.config.ts --port 5173 --strictPort --mode sandbox"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
