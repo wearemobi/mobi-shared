@@ -3,7 +3,7 @@ import { MobiHero, MobiButton, MobiLogo, MobiFooter, MobiThemeToggle, MobiChat, 
 import { ArrowRight, Book } from 'lucide-react';
 import { useLocation } from 'wouter';
 
-const EDGE_BASE_URL = import.meta.env.VITE_MOBI_EDGE_BASE_URL || 'http://localhost:8787';
+const EDGE_BASE_URL = import.meta.env.VITE_MOBI_EDGE_BASE_URL || 'https://edge.sandbox.grandfleet.mobi';
 const EDGE_TENANT_ID = import.meta.env.VITE_MOBI_EDGE_TENANT_ID || 'MOBI';
 const EDGE_AGENT_ID = import.meta.env.VITE_MOBI_EDGE_AGENT_ID || 'support';
 const M2M_APP_ID = import.meta.env.VITE_MOBI_EDGE_M2M_APP_ID;
@@ -71,16 +71,15 @@ export const LandingPage: React.FC = () => {
       <main className="flex-1 flex flex-col items-center justify-between w-full min-h-[calc(100vh-60px)]">
         <div className="flex-1 flex flex-col items-center justify-center w-full pb-20 pt-10">
           <MobiHero
-            align="center"
             size="lg"
+            align="center"
             logo={<img src="https://wearemobi.com/logo-light.svg" alt="M.O.B.I.™" width={120} height={120} className="object-contain" />}
-            title={
-              <div className="flex flex-col gap-2 mt-4">
-                <span>M.O.B.I.™ Shared</span>
-                <span className="text-muted-foreground">Common UI</span>
-              </div>
-            }
-            subtitle="Implementing the Core Blueprint v1.0.0. Using the official Chassis assets for seamless integration."
+            title={<>M.O.B.I.™ <span className="text-muted-foreground/50 font-extrabold">Shared</span></>}
+            subtitle="The official React component library for building modern, high-performance interfaces across the M.O.B.I. ecosystem."
+            actions={[
+              { label: 'View Components', variant: 'solid', onClick: () => setLocation('/docs/Icons') },
+              { label: 'Documentation', variant: 'outline', onClick: () => window.open('https://github.com/wearemobi/command-bridge', '_blank') }
+            ]}
           >
             <div className="flex flex-col sm:flex-row gap-8 mt-12 justify-center items-center">
               <div className="p-8 rounded-2xl border border-border bg-card flex flex-col items-center justify-center gap-8 min-w-[240px] shadow-sm">

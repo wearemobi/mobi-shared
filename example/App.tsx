@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { MobiNav, MobiSentinelMenu, MobiLogo, MobiBadge, MobiInput, MobiButton, MobiThemeToggle } from '../src';
-import { Package, Settings, Box, Layout, ArrowRight } from 'lucide-react';
+import { Package, Settings, Box, Layout, ArrowRight, Home } from 'lucide-react';
 import { DocsPage, catalog } from './DocsPage';
 import '../src/styles.css';
 
@@ -34,11 +34,11 @@ const DocsLayout: React.FC = () => {
       activeId={activeId}
       onNavigate={(id) => setLocation(`/docs/${id}`)}
       navbarLeftContent={
-        <div className="flex items-center gap-4 cursor-pointer" onClick={() => setLocation('/')}>
-          <div className="bg-foreground rounded flex items-center justify-center p-1 hover:opacity-80 transition-opacity" style={{ width: 24, height: 24 }}>
-            <MobiLogo size={20} />
-          </div>
-          <span className="text-sm font-bold tracking-tight text-foreground hidden sm:block hover:text-muted-foreground transition-colors">
+        <div className="flex items-center gap-2 cursor-pointer">
+          <MobiButton variant="ghost" size="icon" onClick={() => setLocation('/')}>
+            <Home size={18} />
+          </MobiButton>
+          <span className="text-sm font-bold tracking-tight text-foreground hidden sm:block">
             Component Catalog
           </span>
         </div>

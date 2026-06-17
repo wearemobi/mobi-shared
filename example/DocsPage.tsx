@@ -628,19 +628,17 @@ export const catalog = [
         <MobiBentoGrid className="grid-cols-1 md:grid-cols-4 auto-rows-[minmax(180px,auto)] gap-4 sm:gap-6">
           
           {/* Commander Card */}
-          <MobiBentoItem className="md:col-span-2 md:row-span-2 flex flex-col">
-            <div className="flex items-center gap-3 mb-6">
+          <MobiBentoItem 
+            className="md:col-span-2 md:row-span-2"
+            leading={
               <MobiBadge variant="info" size="sm" className="rounded-full px-3 py-1 text-[10px]">
                 Operational Core
               </MobiBadge>
-              <h3 className="text-xl font-bold tracking-tight">Commander</h3>
-            </div>
-            <p className="text-sm text-muted-foreground font-medium leading-relaxed max-w-[280px]">
-              Decentralized real-time orchestration engine monitoring network status across all active sectors.
-            </p>
-            <div className="mt-auto pt-8">
-              <div className="w-full h-px bg-border mb-4" />
-              <div className="flex items-center justify-between">
+            }
+            title={<span className="text-xl">Commander</span>}
+            description="Decentralized real-time orchestration engine monitoring network status across all active sectors."
+            footer={
+              <div className="flex items-center justify-between w-full">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
                   <span className="text-[10px] font-mono font-bold tracking-widest uppercase text-muted-foreground">
@@ -649,45 +647,35 @@ export const catalog = [
                 </div>
                 <button className="text-xs font-bold hover:underline">View Logs</button>
               </div>
-            </div>
-          </MobiBentoItem>
+            }
+          />
 
           {/* Haki Balance Card */}
-          <MobiBentoItem className="md:col-span-2 md:row-span-1 justify-center">
-            <div className="flex flex-col gap-4">
-              <h3 className="text-sm font-bold tracking-tight">Haki Balance</h3>
-              <div className="flex items-center justify-between">
-                <span className="text-4xl font-black font-mono tracking-tighter">
-                  14,250.00 ₡
-                </span>
-                <div className="p-3 bg-muted text-foreground rounded-xl">
-                  <FileText size={24} />
-                </div>
-              </div>
-            </div>
-          </MobiBentoItem>
+          <MobiBentoIndicator
+            className="md:col-span-2 md:row-span-1"
+            title="Haki Balance"
+            clickable
+            onClick={() => alert('View Ledger')}
+            value={<>14,250.00 <span className="font-sans text-xl">₡</span></>}
+            icon={<div className="p-2 bg-muted text-foreground rounded-lg"><FileText size={18} /></div>}
+          />
 
           {/* Active Users Card */}
-          <MobiBentoItem className="md:col-span-1 md:row-span-1 justify-center text-center" clickable onClick={() => alert('View Active Users List')}>
-            <div className="text-2xl font-bold font-mono tracking-tighter mb-4">
-              128 / 500
-            </div>
-            <div className="w-8 h-px bg-border mx-auto mb-4" />
-            <div className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">
-              Active Users
-            </div>
-          </MobiBentoItem>
+          <MobiBentoIndicator
+            className="md:col-span-1 md:row-span-1"
+            title="Active Users"
+            clickable
+            onClick={() => alert('View Active Users List')}
+            value={<>128 <span className="text-xl text-muted-foreground">/ 500</span></>}
+          />
 
           {/* Response SLA Card */}
-          <MobiBentoItem className="md:col-span-1 md:row-span-1 justify-center text-center">
-            <div className="text-2xl font-bold font-mono tracking-tighter mb-4 text-emerald-500">
-              99.98%
-            </div>
-            <div className="w-8 h-px bg-border mx-auto mb-4" />
-            <div className="text-[10px] font-bold tracking-widest uppercase text-muted-foreground">
-              Response SLA
-            </div>
-          </MobiBentoItem>
+          <MobiBentoIndicator
+            className="md:col-span-1 md:row-span-1"
+            title="Response SLA"
+            value={<span className="text-emerald-500">99.98%</span>}
+            footer="Target: 99.90%"
+          />
 
         </MobiBentoGrid>
       </div>
@@ -702,21 +690,24 @@ export const catalog = [
     render: () => (
       <div className="p-4 sm:p-8 w-full max-w-5xl rounded-3xl grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
         <MobiBentoIndicator
-          title="Haki Balance"
+          title="Total Revenue"
           clickable
           onClick={() => alert('View Ledger')}
-          value={<>14,250.00 <span className="font-sans text-xl">₡</span></>}
-          icon={<div className="p-2 bg-muted text-foreground rounded-lg"><FileText size={18} /></div>}
+          value={<>$1,250.00</>}
+          trailing={<MobiBadge variant="default" size="sm" className="bg-background border-border text-foreground">+12.5%</MobiBadge>}
+          footer={<>Trending up this month <span className="ml-1">↗</span></>}
         />
         <MobiBentoIndicator
-          title="Active Users"
-          value={<>128 <span className="text-xl text-muted-foreground">/ 500</span></>}
-          footer="Response SLA: 99.98%"
+          title="Active Accounts"
+          value={<>45,678</>}
+          trailing={<MobiBadge variant="default" size="sm" className="bg-background border-border text-foreground">+12.5%</MobiBadge>}
+          footer={<>Strong user retention <span className="ml-1">↗</span></>}
         />
         <MobiBentoIndicator
-          title="Response SLA"
-          value={<span className="text-emerald-500">99.98%</span>}
-          footer="Target: 99.90%"
+          title="Growth Rate"
+          value={<>4.5%</>}
+          trailing={<MobiBadge variant="default" size="sm" className="bg-background border-border text-foreground">+4.5%</MobiBadge>}
+          footer={<>Steady performance <span className="ml-1">↗</span></>}
         />
       </div>
     )
@@ -926,12 +917,18 @@ export const catalog = [
     description: 'Premium asset container.',
     code: `<MobiCard title="Operations" variant="tactical">Content</MobiCard>`,
     render: () => (
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <MobiCard variant="default" title="Default Variant" footer="Simple info">
-          <p className="text-sm">Standard card for generic content.</p>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4">
+        <MobiCard 
+          variant="default" 
+          title="Server Status" 
+          leading={<Server size={18} className="text-info" />}
+          trailing={<MobiButton variant="outline" size="sm">Restart</MobiButton>}
+          footer="Last checked: 2 min ago"
+        >
+          <p className="text-sm">All operational systems are nominal.</p>
         </MobiCard>
         <MobiCard variant="tactical" title="Tactical Deep Dark" footer="Sovereign Core">
-          <p className="text-sm text-slate-300">Deep-dark mode container designed for professional tactical interfaces.</p>
+          <p className="text-sm">High contrast variant for dark mode apps.</p>
         </MobiCard>
         <MobiCard variant="success">
           <MobiCard.Header><h3 className="font-bold text-success">Success Compound</h3></MobiCard.Header>

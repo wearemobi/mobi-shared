@@ -23,6 +23,9 @@ export interface MobiBentoItemProps extends Omit<React.HTMLAttributes<HTMLDivEle
   title?: React.ReactNode;
   description?: React.ReactNode;
   icon?: React.ReactNode;
+  leading?: React.ReactNode;
+  trailing?: React.ReactNode;
+  footer?: React.ReactNode;
   children?: React.ReactNode;
   clickable?: boolean;
 }
@@ -33,6 +36,9 @@ export const MobiBentoItem: React.FC<MobiBentoItemProps> = ({
   description,
   children,
   icon,
+  leading,
+  trailing,
+  footer,
   clickable,
   ...props
 }) => {
@@ -62,22 +68,36 @@ export const MobiBentoItem: React.FC<MobiBentoItemProps> = ({
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-zinc-200/50 to-transparent dark:from-white/[0.04] opacity-0 group-hover/bento:opacity-100 transition-opacity duration-500" />
       
       <div className="relative z-10 flex flex-col flex-1 h-full">
-        {children}
         
-        {/* Legacy support for passing title/description directly */}
-        {(title || description || icon) && (
-          <div className={cn("mt-auto transition-transform duration-300 group-hover/bento:translate-x-1", children ? "pt-6" : "")}>
-            {icon}
-            {title && (
-              <div className="font-bold text-foreground text-lg tracking-tight mb-1">
-                {title}
+        {/* Header */}
+        {(title || leading || trailing || icon) && (
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-2">
+              {leading && <div className="text-muted-foreground flex items-center">{leading}</div>}
+              {title && <h3 className="font-bold text-foreground tracking-tight">{title}</h3>}
+            </div>
+            {(trailing || icon) && (
+              <div className="text-muted-foreground flex items-center gap-2">
+                {trailing || icon}
               </div>
             )}
-            {description && (
-              <div className="font-medium text-muted-foreground text-sm leading-relaxed">
-                {description}
-              </div>
-            )}
+          </div>
+        )}
+        
+        {/* Content */}
+        <div className="flex-1 flex flex-col">
+          {description && (
+            <div className="font-medium text-muted-foreground text-sm leading-relaxed mb-4">
+              {description}
+            </div>
+          )}
+          {children}
+        </div>
+
+        {/* Footer */}
+        {footer && (
+          <div className="mt-6 pt-4 border-t border-border/50 text-xs font-medium text-muted-foreground">
+            {footer}
           </div>
         )}
       </div>

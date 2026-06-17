@@ -5,17 +5,20 @@ export interface MobiChatWelcomeProps {
   greeting?: string;
   userName?: string;
   suggestions?: string[];
-  onSuggestionClick?: (s: string) => void;
+  onSuggestionClick?: (suggestion: string) => void;
+  logo?: React.ReactNode;
 }
 
 export const MobiChatWelcome: React.FC<MobiChatWelcomeProps> = ({
-  greeting = "Hello",
-  userName = "Commander",
+  greeting = "What's the vibe",
+  userName,
   suggestions = [],
-  onSuggestionClick
+  onSuggestionClick,
+  logo
 }) => {
   return (
     <div className="flex flex-col items-center justify-center h-full w-full p-6 text-center animate-in fade-in zoom-in duration-500">
+      {logo && <div className="mb-6">{logo}</div>}
       <h1 className="text-4xl md:text-5xl font-black tracking-tighter bg-gradient-to-br from-foreground to-foreground/50 bg-clip-text text-transparent mb-2">
         {greeting}, <span className="text-primary">{userName}</span>
       </h1>

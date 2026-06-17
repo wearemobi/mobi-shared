@@ -9,12 +9,16 @@ export interface MobiChatHistoryProps {
   messages: MobiEdgeMessage[];
   isProcessing?: boolean;
   className?: string;
+  onRetryMessage?: (id: string) => void;
+  assistantAvatar?: React.ReactNode;
 }
 
 export const MobiChatHistory: React.FC<MobiChatHistoryProps> = ({
   messages,
   isProcessing,
-  className
+  className,
+  onRetryMessage,
+  assistantAvatar
 }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
 
@@ -29,6 +33,8 @@ export const MobiChatHistory: React.FC<MobiChatHistoryProps> = ({
           <MobiChatMessage 
             key={msg.id || i} 
             message={msg} 
+            onRetry={onRetryMessage ? () => onRetryMessage(msg.id) : undefined}
+            assistantAvatar={assistantAvatar}
           />
         ))}
         

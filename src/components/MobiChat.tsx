@@ -19,6 +19,7 @@ export interface MobiChatProps {
   onSendMessage: (content: string, modelId?: string) => void;
   onSelectModel?: (id: string) => void;
   onClose?: () => void;
+  onRetry?: (messageId: string) => void;
   
   // Customization
   title?: string;
@@ -26,6 +27,9 @@ export interface MobiChatProps {
   userName?: string;
   suggestions?: string[];
   placeholder?: string;
+  headerLogo?: React.ReactNode;
+  welcomeLogo?: React.ReactNode;
+  assistantAvatar?: React.ReactNode;
   
   // Floating only
   triggerIcon?: React.ReactNode;
@@ -43,11 +47,15 @@ export const MobiChat: React.FC<MobiChatProps> = ({
   onSendMessage,
   onSelectModel,
   onClose,
+  onRetry,
   title = 'M.O.B.I. Assistant',
   greeting = 'What\'s the vibe',
   userName,
   suggestions = [],
   placeholder = 'Ask anything...',
+  headerLogo,
+  welcomeLogo,
+  assistantAvatar,
   triggerIcon,
   defaultOpen = false,
   className
@@ -64,6 +72,23 @@ export const MobiChat: React.FC<MobiChatProps> = ({
 
   const handleSuggestion = (suggestion: string) => {
     onSendMessage(suggestion, activeModelId);
+  };
+
+  const handleRetry = (msgId: string) => {
+    if (onRetry) {
+      onRetry(msgId);
+      return;
+    }
+    // Default logic: find the closest previous user message and send it again
+    const idx = messages.findIndex(m => m.id === msgId);
+    if (idx > 0) {
+      for (let i = idx - 1; i >= 0; i--) {
+        if (messages[i].role === 'user') {
+          onSendMessage(messages[i].content, activeModelId);
+          break;
+        }
+      }
+    }
   };
 
   // Chat Menu Items
@@ -91,11 +116,14 @@ export const MobiChat: React.FC<MobiChatProps> = ({
             userName={userName} 
             suggestions={suggestions} 
             onSuggestionClick={handleSuggestion} 
+            logo={welcomeLogo}
           />
         ) : (
           <MobiChatHistory 
             messages={messages} 
             isProcessing={isProcessing} 
+            onRetryMessage={handleRetry}
+            assistantAvatar={assistantAvatar}
             className="h-full pb-4"
           />
         )}
@@ -137,7 +165,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
           >
             <div className="flex items-center justify-between px-4 py-3 border-b border-border bg-muted/30 shrink-0">
               <div className="flex items-center gap-2 font-semibold">
-                <MobiLogo size={18} />
+                {headerLogo || <MobiLogo size={18} />}
                 <span>{title}</span>
               </div>
               <div className="flex items-center gap-1 text-muted-foreground">
@@ -192,7 +220,11 @@ export const MobiChat: React.FC<MobiChatProps> = ({
         <div className="flex-1 flex flex-col h-full relative overflow-hidden">
           <div className="flex items-center justify-between px-4 border-b border-border shrink-0 h-14">
             <div className="flex items-center">
-              <MobiLogo size={18} className="mr-2" />
+              {headerLogo ? (
+                <div className="mr-2">{headerLogo}</div>
+              ) : (
+                <MobiLogo size={18} className="mr-2" />
+              )}
               <span className="font-semibold text-sm">{title}</span>
             </div>
             <div className="hidden md:block flex-1" />

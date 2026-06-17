@@ -3,7 +3,11 @@ import { Card, CardHeader, CardContent, CardFooter, cn } from '@wearemobi/ui';
 
 export interface MobiCardProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Optional title rendered in the card header. */
-  title?: string;
+  title?: React.ReactNode;
+  /** Optional leading icon or element before the title. */
+  leading?: React.ReactNode;
+  /** Optional trailing actions or element after the title. */
+  trailing?: React.ReactNode;
   /** The content to render inside the card. */
   children: React.ReactNode;
   /** Optional footer content. If omitted, the footer bar is not rendered. */
@@ -25,6 +29,8 @@ const variantStyles = {
 
 const MobiCardBase: React.FC<MobiCardProps> = ({ 
   title, 
+  leading,
+  trailing,
   children, 
   className, 
   footer, 
@@ -40,11 +46,21 @@ const MobiCardBase: React.FC<MobiCardProps> = ({
       )}
       {...(props as any)}
     >
-      {title && (
-        <MobiCardHeader className={cn(variant === 'tactical' ? 'border-slate-800 bg-slate-950/30' : '')}>
-          <h3 className={cn("text-sm font-bold tracking-tight", variant === 'tactical' ? 'text-slate-100' : 'text-foreground')}>
-            {title}
-          </h3>
+      {(title || leading || trailing) && (
+        <MobiCardHeader className={cn("flex flex-row items-center justify-between space-y-0", variant === 'tactical' ? 'border-slate-800 bg-slate-950/30' : '')}>
+          <div className="flex items-center gap-3">
+            {leading}
+            {title && (
+              <h3 className={cn("text-sm font-bold tracking-tight", variant === 'tactical' ? 'text-slate-100' : 'text-foreground')}>
+                {title}
+              </h3>
+            )}
+          </div>
+          {trailing && (
+            <div className="flex items-center gap-2">
+              {trailing}
+            </div>
+          )}
         </MobiCardHeader>
       )}
       <MobiCardContent>

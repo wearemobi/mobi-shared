@@ -2,24 +2,30 @@ import React, { useState, useEffect } from 'react';
 import { MobiEdgeMessage } from '../hooks/useMobiEdge';
 import { MobiMarkdown } from './MobiMarkdown';
 import { MobiLogo } from './MobiLogo';
-import { AlertCircle, Copy, Share, RotateCcw } from 'lucide-react';
+import { AlertCircle, Copy, Share, RotateCcw, Check } from 'lucide-react';
 
 export interface MobiChatMessageProps {
   message: MobiEdgeMessage;
   showTimestamp?: boolean;
   isStreaming?: boolean;
   onCopy?: () => void;
+  onRetry?: () => void;
+  assistantAvatar?: React.ReactNode;
 }
 
 export const MobiChatMessage: React.FC<MobiChatMessageProps> = ({
   message,
   showTimestamp = true,
   isStreaming = false,
-  onCopy
+  onCopy,
+  onRetry,
+  assistantAvatar
 }) => {
   const isUser = message.role === 'user';
   
   const [displayedContent, setDisplayedContent] = useState(isStreaming ? '' : message.content);
+  const [isCopied, setIsCopied] = useState(false);
+  const [isShared, setIsShared] = useState(false);
   
   useEffect(() => {
     if (isStreaming && !isUser) {
@@ -39,16 +45,43 @@ export const MobiChatMessage: React.FC<MobiChatMessageProps> = ({
     }
   }, [message.content, isStreaming, isUser]);
 
+  const handleCopy = async () => {
+    if (onCopy) {
+      onCopy();
+    } else {
+      await navigator.clipboard.writeText(message.content);
+    }
+    setIsCopied(true);
+    setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'M.O.B.I. Assistant',
+          text: message.content,
+        });
+        setIsShared(true);
+        setTimeout(() => setIsShared(false), 2000);
+      } catch (err) {
+        console.error('Share failed', err);
+      }
+    } else {
+      handleCopy();
+    }
+  };
+
   const time = new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
   return (
     <div className={`flex w-full mb-2 gap-4 ${isUser ? 'justify-end' : 'justify-start'}`}>
       {!isUser && (
         <div className="flex-shrink-0 mt-0.5">
-          <MobiLogo size={24} className="mb-0 mx-0" />
+          {assistantAvatar || <MobiLogo size={24} className="mb-0 mx-0" />}
         </div>
       )}
-      <div className={`max-w-[85%] flex flex-col ${isUser ? 'items-end ml-auto' : 'items-start'}`}>
+      <div className={`max-w-[85%] flex flex-col group ${isUser ? 'items-end ml-auto' : 'items-start'}`}>
         <div className={`rounded-2xl ${
           isUser 
             ? 'bg-muted/60 text-foreground rounded-tr-sm px-5 py-3' 
@@ -72,32 +105,39 @@ export const MobiChatMessage: React.FC<MobiChatMessageProps> = ({
              )
           )}
         </div>
-        {showTimestamp && (
-          <div className="text-[10px] text-muted-foreground mt-1 px-1 flex items-center gap-2">
-            {time}
-          </div>
-        )}
+        <div className="flex items-center gap-3 mt-1 px-1">
+          {showTimestamp && (
+            <div className="text-[10px] text-muted-foreground">
+              {time}
+            </div>
+          )}
 
-        {!isUser && !isStreaming && !message.isError && (
-          <div className="flex items-center gap-1 mt-0.5 -ml-1">
-            <button 
-              onClick={() => {
-                if (onCopy) onCopy();
-                else navigator.clipboard.writeText(message.content);
-              }} 
-              className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors" 
-              aria-label="Copy"
-            >
-              <Copy size={13} strokeWidth={2.5} />
-            </button>
-            <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors" aria-label="Share">
-              <Share size={13} strokeWidth={2.5} />
-            </button>
-            <button className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors" aria-label="Retry">
-              <RotateCcw size={13} strokeWidth={2.5} />
-            </button>
-          </div>
-        )}
+          {!isUser && !isStreaming && !message.isError && (
+            <div className="flex items-center gap-1 transition-opacity">
+              <button 
+                onClick={handleCopy} 
+                className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-all active:scale-95" 
+                aria-label="Copy"
+              >
+                {isCopied ? <Check size={13} className="text-green-500" strokeWidth={2.5} /> : <Copy size={13} strokeWidth={2.5} />}
+              </button>
+              <button 
+                onClick={handleShare}
+                className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-all active:scale-95" 
+                aria-label="Share"
+              >
+                {isShared ? <Check size={13} className="text-green-500" strokeWidth={2.5} /> : <Share size={13} strokeWidth={2.5} />}
+              </button>
+              <button 
+                onClick={onRetry}
+                className="p-1.5 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-all active:scale-95" 
+                aria-label="Retry"
+              >
+                <RotateCcw size={13} strokeWidth={2.5} />
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );
