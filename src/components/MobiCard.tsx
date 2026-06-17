@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardHeader, CardContent, CardFooter, cn } from '@wearemobi/ui';
 
-export interface MobiCardProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface MobiCardProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {
   /** Optional title rendered in the card header. */
   title?: React.ReactNode;
   /** Optional leading icon or element before the title. */

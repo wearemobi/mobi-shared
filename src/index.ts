@@ -1,3 +1,4 @@
+import './styles.css';
 export * from './components/MobiLogo';
 export * from './components/MobiButton';
 export * from './components/MobiBadge';
@@ -52,12 +53,15 @@ export * from './components/MobiChatModelSelector';
 export * from './components/MobiChatWelcome';
 export * from './components/MobiChatHistory';
 export * from './components/MobiThemeToggle';
+export * from './components/MobiIcon';
+export * from './components/MobiFormLabel';
 
 // Hooks
 export * from './hooks';
 
 // Providers
 export { MobiThemeProvider, type MobiThemeProviderProps } from './providers/MobiThemeProvider';
+export { SidebarProvider } from '@wearemobi/ui';
 
 // Utils
 export * from './utils/validators';

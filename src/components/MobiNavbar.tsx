@@ -24,6 +24,8 @@ export interface MobiNavbarProps {
   leftContent?: React.ReactNode;
   /** Right-side actions: user menu, search, notifications, etc. */
   rightContent?: React.ReactNode;
+  /** Show the sidebar toggle trigger (requires SidebarProvider wrapper) */
+  showSidebarTrigger?: boolean;
   className?: string;
 }
 
@@ -31,6 +33,7 @@ export const MobiNavbar: React.FC<MobiNavbarProps> = ({
   breadcrumbs,
   leftContent,
   rightContent,
+  showSidebarTrigger = false,
   className,
 }) => {
   return (
@@ -41,8 +44,8 @@ export const MobiNavbar: React.FC<MobiNavbarProps> = ({
       )}
     >
       <div className="flex items-center gap-4 h-full">
-        <SidebarTrigger className="-ml-2 h-8 w-8 shrink-0" />
-        <Separator orientation="vertical" className="h-6 shrink-0" />
+        {showSidebarTrigger && <SidebarTrigger className="-ml-2 h-8 w-8 shrink-0" />}
+        {showSidebarTrigger && <Separator orientation="vertical" className="h-6 shrink-0" />}
         <div className="flex items-center text-sm font-medium truncate">
           {leftContent ? (
             leftContent
