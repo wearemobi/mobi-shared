@@ -5,6 +5,9 @@ import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   envDir: resolve(__dirname),
+  resolve: {
+    dedupe: ['react', 'react-dom', '@wearemobi/ui']
+  },
   plugins: [
     react(),
     tailwindcss(),
