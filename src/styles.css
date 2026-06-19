@@ -1,7 +1,7 @@
+@import "@wearemobi/ui/styles.css";
 @import "tailwindcss";
 @source "./";
 @source "../node_modules/@wearemobi/ui/src";
-@import "@wearemobi/ui/styles.css";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;

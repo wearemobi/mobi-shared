@@ -15,7 +15,8 @@
       "import": "./dist/mobi-shared.js",
       "require": "./dist/mobi-shared.umd.cjs"
     },
-    "./styles.css": "./dist/style.css"
+    "./styles.css": "./dist/style.css",
+    "./src/*": "./src/*"
   },
   "types": "./dist/index.d.ts",
   "scripts": {
