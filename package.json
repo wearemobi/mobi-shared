@@ -4,7 +4,8 @@
   "description": "Universal UI & Logic Shield for M.O.B.I.™ Grand Fleet",
   "type": "module",
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "main": "./dist/mobi-shared.umd.cjs",
   "module": "./dist/mobi-shared.js",
