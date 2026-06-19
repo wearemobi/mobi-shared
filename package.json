@@ -21,7 +21,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npx @tailwindcss/cli -i src/styles.css -o dist/style.css && tsc --emitDeclarationOnly",
+    "build": "vite build && npx @tailwindcss/cli -i src/styles.css -o dist/style.css && node -e \"const fs = require('fs'); const file = 'dist/style.css'; fs.writeFileSync(file, fs.readFileSync(file, 'utf8').replace(/\\/\\*! tailwindcss.*?\\*\\/\\n/g, ''));\" && tsc --emitDeclarationOnly",
     "prepare": "npm run build",
     "build:docs": "vite build --config vite.config.docs.ts",
     "preview": "vite preview",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { MobiBadge } from './MobiBadge';
+
 
 export interface MobiChatWelcomeProps {
   greeting?: string;
@@ -29,14 +29,13 @@ export const MobiChatWelcome: React.FC<MobiChatWelcomeProps> = ({
       {suggestions.length > 0 && (
         <div className="flex flex-wrap items-center justify-center gap-2 max-w-2xl">
           {suggestions.map((s, i) => (
-            <MobiBadge 
+            <button 
               key={i} 
-              variant="outline" 
-              className="cursor-pointer hover:bg-muted/50 transition-colors py-1.5 px-3 text-sm rounded-full"
+              className="cursor-pointer border border-border bg-transparent hover:bg-muted/50 transition-colors py-2 px-4 text-xs font-medium rounded-full text-foreground max-w-full text-center"
               onClick={() => onSuggestionClick?.(s)}
             >
               {s}
-            </MobiBadge>
+            </button>
           ))}
         </div>
       )}

@@ -1,5 +1,5 @@
-@import "@wearemobi/ui/styles.css";
 @import "tailwindcss";
+@import "@wearemobi/ui/styles.css";
 @source "./";
 @source "../node_modules/@wearemobi/ui/src";
 

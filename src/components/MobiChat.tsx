@@ -158,7 +158,7 @@ export const MobiChat: React.FC<MobiChatProps> = ({
             'fixed z-50 bg-background sm:border border-border shadow-2xl overflow-hidden flex flex-col transition-all duration-300 ease-in-out',
             isActualFullscreen 
               ? 'inset-0 w-full h-full rounded-none' 
-              : 'inset-0 w-full h-[100dvh] rounded-none sm:top-auto sm:left-auto sm:w-[400px] sm:h-[600px] sm:max-h-[calc(100vh-120px)] sm:rounded-2xl',
+              : 'inset-0 w-full h-[100dvh] rounded-none sm:top-auto! sm:left-auto! sm:w-[400px]! sm:h-[600px]! sm:max-h-[calc(100vh-120px)]! sm:rounded-2xl!',
             className
           )}
           style={!isActualFullscreen ? { bottom: '96px', right: '24px' } : {}}
