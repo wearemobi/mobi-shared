@@ -41,7 +41,7 @@ export const MobiCombobox: React.FC<MobiComboboxProps> = ({
         {options.map((option) => (
           <DropdownMenuItem
             key={option.value}
-            onClick={() => onValueChange(option.value)}
+            onSelect={() => onValueChange(option.value)}
             className={cn(
               "cursor-pointer py-2 px-3 rounded-lg focus:bg-muted/50",
               option.value === value && "bg-muted/30"

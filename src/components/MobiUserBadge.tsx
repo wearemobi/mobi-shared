@@ -81,7 +81,7 @@ export const MobiUserBadge: React.FC<MobiUserBadgeProps> = ({
       <button
         onClick={onClick}
         className={cn(
-          "flex items-center transition-all hover:bg-accent active:scale-[0.98] focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+          "flex items-center transition-all hover:bg-accent active:scale-[0.98] focus:outline-none",
           isExpanded ? 'p-3 w-full rounded-2xl border bg-card gap-3' : 
           isStacked ? 'flex-col gap-0 bg-transparent rounded-3xl p-6 hover:bg-accent/50' : 'p-0.5 border bg-background gap-3 rounded-full',
           className
