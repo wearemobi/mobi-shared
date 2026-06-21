@@ -61,6 +61,9 @@ export interface MobiNavProps {
   /** Content to render at the top of the sidebar content area */
   sidebarContentTop?: React.ReactNode;
 
+  /** Show the sidebar collapse/expand trigger in the navbar */
+  showSidebarTrigger?: boolean;
+
   children?: React.ReactNode;
   className?: string;
   defaultOpen?: boolean;
@@ -129,6 +132,7 @@ export const MobiNav: React.FC<MobiNavProps> = ({
   hideNavbar = false,
   sidebarFooter,
   sidebarContentTop,
+  showSidebarTrigger = true,
   children,
   className,
   defaultOpen = true,
@@ -204,6 +208,7 @@ export const MobiNav: React.FC<MobiNavProps> = ({
           <MobiNavbar
             leftContent={navbarLeftContent}
             rightContent={navbarRightContent}
+            showSidebarTrigger={showSidebarTrigger}
           />
         )}
         <div className="flex-1 overflow-y-auto">

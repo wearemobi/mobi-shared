@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { buildAuthHeaders } from '../utils/http';
 
 export interface MobiEdgeMessage {
@@ -73,7 +73,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
     token: staticToken,
     tokenFetcher,
     tenantId = 'MOBI',
-    baseUrl = 'https://edge.sandbox.grandfleet.mobi',
+    baseUrl = 'https://edge.engine.sandbox.grandfleet.mobi',
     initialMessages = [],
     initialModelId,
     agentId: initialAgentId = 'mobi-core',
@@ -99,15 +99,20 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
 
   const [activeToken, setActiveToken] = useState<string | undefined>(staticToken);
 
+  const tokenFetcherRef = useRef(tokenFetcher);
+  useEffect(() => {
+    tokenFetcherRef.current = tokenFetcher;
+  }, [tokenFetcher]);
+
   const resolveToken = useCallback(async () => {
     if (activeToken) return activeToken;
     if (staticToken) {
       setActiveToken(staticToken);
       return staticToken;
     }
-    if (tokenFetcher) {
+    if (tokenFetcherRef.current) {
       try {
-        const fetched = await tokenFetcher();
+        const fetched = await tokenFetcherRef.current();
         setActiveToken(fetched);
         return fetched;
       } catch (err) {
@@ -116,7 +121,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
       }
     }
     return null;
-  }, [activeToken, staticToken, tokenFetcher]);
+  }, [activeToken, staticToken]);
 
   const getHeaders = useCallback(async () => {
     const t = await resolveToken();
@@ -225,7 +230,7 @@ export const useMobiEdge = (options: UseMobiEdgeOptions) => {
       active = false;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [baseUrl, tenantId, conversationId, staticToken, tokenFetcher]);
+  }, [baseUrl, tenantId, conversationId, staticToken]);
 
   const addMessage = useCallback((message: Omit<MobiEdgeMessage, 'id' | 'timestamp'>) => {
     const newMessage: MobiEdgeMessage = {

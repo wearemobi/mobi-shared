@@ -16,7 +16,7 @@ import {
   MobiBentoGrid, MobiBentoItem, MobiBentoIndicator, MobiTimeline, MobiCodeBlock, MobiMarkdown, MobiSearchCommand,
   MobiSegmentedControl,
   MobiSectionHeader, MobiMoreMenu,
-  MobiEnergyMeter, MobiHero, MobiListView, MobiPlanBadge,
+  MobiEnergyMeter, MobiHero, MobiListView, MobiPlanBadge, MobiTenantBadge,
   MobiThemeToggle, MobiThemeProvider,
   MobiChat
 } from '../src';
@@ -998,14 +998,44 @@ export const catalog = [
     )
   },
   {
+    id: 'MobiTenantBadge',
+    name: 'MobiTenantBadge',
+    category: 'component',
+    description: 'Tenant or Organization badge with multiple visual variants.',
+    code: `<MobiTenantBadge name="M.O.B.I. HQ" icon="building" variant="outline" />`,
+    render: () => (
+      <div className="flex flex-wrap items-center gap-4 p-4">
+        <MobiTenantBadge name="M.O.B.I. HQ" icon="building" variant="outline" />
+        <MobiTenantBadge name="Acme Corp" icon="building" variant="solid" />
+        <MobiTenantBadge name="Stark Ind." icon="building" variant="ghost" />
+        <MobiTenantBadge name="Global Dynamics" icon="box" variant="glass" />
+      </div>
+    )
+  },
+  {
     id: 'MobiUserBadge',
     name: 'MobiUserBadge',
     category: 'component',
-    description: 'User identity badge.',
+    description: 'User identity badge supporting multiple layouts including tenant badge embedding.',
     code: `<MobiUserBadge initials="CQ" plan="PRO" email="dev@mobi.com" />`,
     render: () => (
       <div className="space-y-4 w-full max-w-sm">
-        <MobiUserBadge variant="expanded" initials="CQ" name="Carlos Quijano" plan="PRO" email="dev@mobi.com" org="M.O.B.I. HQ" />
+        <MobiUserBadge 
+          variant="expanded" 
+          initials="CQ" 
+          name="Carlos Quijano" 
+          plan="PRO" 
+          email="dev@mobi.com" 
+          tenantBadge={<MobiTenantBadge name="M.O.B.I. HQ" icon="building" variant="ghost" className="-ml-2" />} 
+        />
+        <MobiUserBadge 
+          variant="stacked" 
+          initials="CQ" 
+          name="Carlos Quijano" 
+          plan="ULTRA" 
+          email="dev@mobi.com" 
+          tenantBadge={<MobiTenantBadge name="M.O.B.I. HQ" icon="building" variant="ghost" className="-ml-2" />} 
+        />
         <div className="flex items-center gap-4">
           <MobiUserBadge variant="condensed" initials="CQ" plan="PRO" email="dev@mobi.com" />
           <MobiUserBadge variant="micro" initials="CQ" plan="FREE" email="dev@mobi.com" />

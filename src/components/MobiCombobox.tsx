@@ -37,7 +37,7 @@ export const MobiCombobox: React.FC<MobiComboboxProps> = ({
         <span className="text-xs font-bold font-sans tracking-wide text-foreground">{displayLabel}</span>
         <ChevronDown className="w-3.5 h-3.5 text-muted-foreground" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48 rounded-xl p-1 shadow-lg border-border/50">
+      <DropdownMenuContent align="end" className="w-[var(--radix-dropdown-menu-trigger-width)] min-w-[16rem] rounded-xl p-1 shadow-lg border-border/50">
         {options.map((option) => (
           <DropdownMenuItem
             key={option.value}

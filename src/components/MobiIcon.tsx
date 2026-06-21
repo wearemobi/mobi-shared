@@ -1,7 +1,7 @@
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 
-export type MobiIconName = 'user' | 'users' | 'server' | 'box' | 'bot' | 'shield' | 'monitor' | 'zap' | 'info' | 'loader' | 'copy' | 'plus' | 'settings' | 'logout' | 'external' | 'pos' | 'items' | 'customers' | 'app-window';
+export type MobiIconName = 'user' | 'users' | 'server' | 'box' | 'bot' | 'shield' | 'monitor' | 'zap' | 'info' | 'loader' | 'copy' | 'plus' | 'settings' | 'logout' | 'external' | 'pos' | 'items' | 'customers' | 'app-window' | 'home' | 'building' | 'blocks' | 'grid';
 
 export interface MobiIconProps extends React.SVGProps<SVGSVGElement> {
   name: MobiIconName | string;
@@ -28,7 +28,11 @@ export const MobiIcon: React.FC<MobiIconProps> = ({ name, size = 24, className, 
     pos: LucideIcons.Terminal,
     items: LucideIcons.Package,
     customers: LucideIcons.Users,
-    'app-window': LucideIcons.AppWindow
+    'app-window': LucideIcons.AppWindow,
+    home: LucideIcons.Home,
+    building: LucideIcons.Building,
+    blocks: LucideIcons.Blocks,
+    grid: LucideIcons.LayoutGrid
   };
   const Icon = iconMap[name as string] || LucideIcons.HelpCircle;
   return <Icon size={size} className={className} {...(props as any)} />;

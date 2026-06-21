@@ -96,7 +96,7 @@ export const MobiButton = React.forwardRef<HTMLButtonElement, MobiButtonProps>((
       variant={shadcnVariantMap[variant]}
       size={sizeMap[size]}
       className={cn(
-        'font-sans font-bold gap-2',
+        'font-sans font-bold gap-2 cursor-pointer',
         fullWidth && 'w-full',
         className
       )}

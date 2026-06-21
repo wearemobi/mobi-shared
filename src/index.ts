@@ -16,6 +16,7 @@ export * from './components/MobiErrorBoundary';
 export * from './components/MobiSectionHeader';
 export * from './components/MobiMoreMenu';
 export * from './components/MobiUserBadge';
+export * from './components/MobiTenantBadge';
 export * from './components/MobiHamburgerMenu';
 export * from './components/MobiDrawer';
 export * from './components/MobiFooter';
