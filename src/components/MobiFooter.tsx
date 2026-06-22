@@ -23,7 +23,7 @@ export const MobiFooter: React.FC<MobiFooterProps> = ({ appName, version }) => (
         Costa Rica, Centro America.
       </p>
       {(appName || version) && (
-        <p className="font-bold uppercase tracking-widest text-muted-foreground/40 font-sans mt-2 text-[10px]">
+        <p className="font-normal uppercase tracking-wider text-muted-foreground/20 font-sans mt-2 text-[10px]">
           {appName}{appName && version && ' · '}{version}
         </p>
       )}
