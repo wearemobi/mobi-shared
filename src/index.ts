@@ -69,3 +69,5 @@ export * from './utils/validators';
 export * from './utils/http';
 export * from './utils/input';
 export * from './utils/menu';
+export * from './components/MobiChipGroup';
+export * from '@wearemobi/ui';

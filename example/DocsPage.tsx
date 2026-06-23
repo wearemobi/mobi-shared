@@ -11,7 +11,7 @@ import {
   MobiNav, MobiHamburgerMenu, MobiDrawer,
   MobiConfirm,
   MobiTable, MobiTabs,
-  MobiTooltip, MobiSkeleton, MobiProgress, MobiPagination, MobiChip,
+  MobiTooltip, MobiSkeleton, MobiProgress, MobiPagination, MobiChip, MobiChipGroup,
   MobiCheckbox, MobiDropdown, MobiSwitcher, MobiQuantityControl, MobiDateTime,
   MobiBentoGrid, MobiBentoItem, MobiBentoIndicator, MobiTimeline, MobiCodeBlock, MobiMarkdown, MobiSearchCommand,
   MobiSegmentedControl,
@@ -449,6 +449,31 @@ export const catalog = [
         <MobiChip label="Info" variant="info" />
       </div>
     )
+  },
+  {
+    id: 'MobiChipGroup',
+    name: 'MobiChipGroup',
+    category: 'component',
+    description: 'Toggleable chip group for single or multiple selection.',
+    code: `<MobiChipGroup options={[{ value: '1', label: 'Option 1' }]} value={['1']} onChange={console.log} />`,
+    render: () => {
+      const [selected, setSelected] = React.useState<string[]>(['react']);
+      return (
+        <div className="flex flex-col gap-4 p-4">
+          <MobiChipGroup
+            options={[
+              { value: 'react', label: 'React' },
+              { value: 'vue', label: 'Vue' },
+              { value: 'angular', label: 'Angular' }
+            ]}
+            value={selected}
+            onChange={setSelected}
+            multiple={true}
+          />
+          <p className="text-xs text-muted-foreground">Selected: {selected.join(', ')}</p>
+        </div>
+      );
+    }
   },
   {
     id: 'MobiCheckbox',
