@@ -71,3 +71,4 @@ export * from './utils/input';
 export * from './utils/menu';
 export * from './components/MobiChipGroup';
 export * from '@wearemobi/ui';
+export * from './components/MobiLanguageToggle';

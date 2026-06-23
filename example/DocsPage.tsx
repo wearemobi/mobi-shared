@@ -18,7 +18,8 @@ import {
   MobiSectionHeader, MobiMoreMenu,
   MobiEnergyMeter, MobiHero, MobiListView, MobiPlanBadge, MobiTenantBadge,
   MobiThemeToggle, MobiThemeProvider,
-  MobiChat
+  MobiChat,
+  MobiLanguageToggle
 } from '../src';
 import { LayoutDashboard, Users, Settings, Shield, AlertTriangle, Activity, Wifi, Database, Server, ChevronRight, FileText } from 'lucide-react';
 
