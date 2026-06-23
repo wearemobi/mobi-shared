@@ -25,7 +25,7 @@ export interface MobiTabsProps {
 const LIST_VARIANTS: Record<MobiTabsVariant, string> = {
   default: 'bg-muted/50 rounded-lg p-1 border border-border',
   underline: 'bg-transparent rounded-none p-0 border-b border-border gap-0',
-  pill: 'bg-transparent rounded-none p-0 gap-1',
+  pill: 'bg-transparent rounded-none p-1.5 gap-1 h-auto overflow-visible',
 };
 
 const TRIGGER_VARIANTS: Record<MobiTabsVariant, string> = {
@@ -34,7 +34,7 @@ const TRIGGER_VARIANTS: Record<MobiTabsVariant, string> = {
   underline:
     'font-bold tracking-tight rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-4 pb-2.5 transition-all',
   pill:
-    'font-bold tracking-tight rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm px-5 py-1.5 transition-all',
+    'font-bold tracking-tight rounded-full data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm px-5 py-2.5 transition-all',
 };
 
 export const MobiTabs: React.FC<MobiTabsProps> = ({

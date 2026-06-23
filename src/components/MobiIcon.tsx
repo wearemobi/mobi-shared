@@ -1,7 +1,7 @@
 import React from 'react';
 import * as LucideIcons from 'lucide-react';
 
-export type MobiIconName = 'user' | 'users' | 'server' | 'box' | 'bot' | 'shield' | 'monitor' | 'zap' | 'info' | 'loader' | 'copy' | 'plus' | 'settings' | 'logout' | 'external' | 'pos' | 'items' | 'customers' | 'app-window' | 'home' | 'building' | 'blocks' | 'grid' | 'globe' | 'activity' | 'refresh';
+export type MobiIconName = 'user' | 'users' | 'server' | 'box' | 'bot' | 'shield' | 'monitor' | 'zap' | 'info' | 'loader' | 'copy' | 'plus' | 'add' | 'settings' | 'logout' | 'external' | 'pos' | 'items' | 'customers' | 'app-window' | 'home' | 'building' | 'blocks' | 'grid' | 'globe' | 'activity' | 'refresh' | 'check' | 'check_circle' | 'cancel';
 
 export interface MobiIconProps extends React.SVGProps<SVGSVGElement> {
   name: MobiIconName | string;
@@ -18,6 +18,10 @@ export const MobiIcon: React.FC<MobiIconProps> = ({ name, size = 24, className, 
     loader: LucideIcons.Loader2,
     copy: LucideIcons.Copy,
     plus: LucideIcons.Plus,
+    add: LucideIcons.Plus,
+    check: LucideIcons.Check,
+    check_circle: LucideIcons.CheckCircle,
+    cancel: LucideIcons.X,
     settings: LucideIcons.Settings,
     logout: LucideIcons.LogOut,
     user: LucideIcons.User,
