@@ -3,7 +3,7 @@ import { Badge, cn } from '@wearemobi/ui';
 import { cva } from 'class-variance-authority';
 
 const badgeVariants = cva(
-  "gap-1.5 font-semibold font-sans uppercase tracking-wider rounded-full",
+  "inline-flex items-center justify-center w-fit gap-1.5 font-semibold font-sans uppercase tracking-wider rounded-full",
   {
     variants: {
       variant: {
@@ -15,8 +15,8 @@ const badgeVariants = cva(
         info: "bg-info/10 text-info border-info/20 hover:bg-info/20",
       },
       size: {
-        sm: '!px-2 !py-0 !h-4 text-[9px] flex items-center',
-        md: '!px-2.5 !py-0 !h-5 text-[10px] flex items-center',
+        sm: '!px-2.5 !py-0.5 !h-5 text-[9px]',
+        md: '!px-3.5 !py-1 !h-6 text-[10px]',
       },
     },
     defaultVariants: {
