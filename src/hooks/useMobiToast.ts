@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { toast as sonnerToast } from '@wearemobi/ui';
 
 export interface MobiToastItem {
@@ -9,7 +10,7 @@ export interface MobiToastItem {
 }
 
 export const useMobiToast = () => {
-  const toast = {
+  const toast = useMemo(() => ({
     success: (message: string, title?: string, duration?: number) => {
       sonnerToast.success(title || message, {
         description: title ? message : undefined,
@@ -44,8 +45,8 @@ export const useMobiToast = () => {
       } else {
         toast.info(options.message, options.title, options.duration);
       }
-    },
-  };
+    }
+  }), []);
 
   return { toast, dismiss: sonnerToast.dismiss, clearAll: sonnerToast.dismiss };
 };
