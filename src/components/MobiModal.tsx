@@ -24,11 +24,11 @@ export interface MobiModalProps {
 }
 
 const SIZE_MAP: Record<MobiModalSize, string> = {
-  sm: 'sm:max-w-sm',
-  md: 'sm:max-w-lg',
-  lg: 'sm:max-w-2xl',
-  xl: 'sm:max-w-4xl',
-  full: 'w-screen h-screen max-w-none m-0 rounded-none'
+  sm: 'sm:!max-w-sm',
+  md: 'sm:!max-w-lg',
+  lg: 'sm:!max-w-2xl',
+  xl: 'sm:!max-w-4xl',
+  full: 'w-screen h-screen !max-w-none m-0 rounded-none'
 };
 
 export const MobiModal: React.FC<MobiModalProps> = ({
