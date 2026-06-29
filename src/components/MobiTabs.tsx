@@ -25,7 +25,7 @@ export interface MobiTabsProps {
 const LIST_VARIANTS: Record<MobiTabsVariant, string> = {
   default: 'bg-muted/50 rounded-lg p-1 border border-border',
   underline: 'bg-transparent rounded-none p-0 border-b border-border gap-0',
-  pill: 'bg-transparent rounded-none p-1.5 gap-1 h-auto overflow-visible',
+  pill: 'bg-transparent rounded-none p-1.5 gap-1 h-auto',
 };
 
 const TRIGGER_VARIANTS: Record<MobiTabsVariant, string> = {
@@ -53,12 +53,13 @@ export const MobiTabs: React.FC<MobiTabsProps> = ({
       defaultValue={initialValue}
       value={value}
       onValueChange={onValueChange}
-      className={cn("w-full", className)}
+      className={cn("w-full max-w-full", className)}
     >
       <TabsList
         className={cn(
-          'w-full justify-start overflow-x-auto flex-nowrap',
-          LIST_VARIANTS[variant]
+          'w-full justify-start overflow-x-auto flex-nowrap scrollbar-hide [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]',
+          LIST_VARIANTS[variant],
+          fullWidth ? 'w-full grid auto-cols-fr grid-flow-col' : 'inline-flex'
         )}
       >
         {items.map((item) => (
@@ -67,7 +68,7 @@ export const MobiTabs: React.FC<MobiTabsProps> = ({
             value={item.id}
             disabled={item.disabled}
             className={cn(
-              'whitespace-nowrap',
+              'whitespace-nowrap shrink-0',
               fullWidth ? 'flex-1' : 'sm:flex-none',
               TRIGGER_VARIANTS[variant]
             )}

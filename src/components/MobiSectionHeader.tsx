@@ -20,12 +20,12 @@ export const MobiSectionHeader = React.forwardRef<HTMLDivElement, MobiSectionHea
     return (
       <div 
         ref={ref} 
-        className={cn("flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between w-full mb-6", className)}
+        className={cn("flex flex-row items-start sm:items-center justify-between gap-4 w-full mb-6", className)}
         {...props}
       >
-        <div className="space-y-1.5">
+        <div className="space-y-1.5 flex-1 min-w-0">
           <h2 className={cn(
-            "font-black tracking-tight text-foreground", 
+            "font-black tracking-tight text-foreground leading-tight", 
             sizeClasses[size]
           )}>
             {title}
